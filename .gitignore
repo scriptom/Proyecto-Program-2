@@ -1,0 +1,6 @@
+*.sln
+*.vcxproj
+*.vcxproj.user
+.vs/
+.vscode/
+.git/
