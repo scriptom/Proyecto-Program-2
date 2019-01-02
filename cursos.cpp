@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 //#include <locale.h>
 #include "cursos.h"
 #include "materias.h"
 #include "functions.h"
 
+
 Curso *Cur = NULL;
+CursosY *IndCurso = NULL;
 static const char *HorariosArr[3] = { "Matutino", "Vespertino", "Nocturno" };
 
 const char *horStr(Horario h) {
@@ -305,4 +308,11 @@ Curso *extraerCurso(Curso *C, int codigo) {
 
 	// regresamos
 	return extraido;
+}
+
+void InsertarIndCurso(Curso *Agregado){
+	int Existe; 
+	// Se verifica si el año se encuentra en el indice para introducirlo a la lista correspondiente, sino se creara una nueva lista del año correspondiente
+	if (VerificarExistencia(Agregado->ano)){
+		insertarCurso(IndCurso
 }

@@ -9,6 +9,8 @@
 */
 extern Curso *Cur;
 
+extern CursosY *IndCurso;
+
 /*
 	Devuelve la representacion en string de un horario (naturalmente un enum)
 	Parametros:
@@ -136,4 +138,11 @@ void Buscar(int,Curso**);
 		Curso **P : La lista de cursos a vaciar
 */
 void vaciarListaCursos(Curso**);
+
+/*
+	Inserta en la lista de indice de curso
+	Parametros:
+		Curso *Agregado: Es el curso que se agregara al indice
+*/
+void InsertarIndCurso(Curso *);
 #endif
