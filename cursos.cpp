@@ -328,7 +328,7 @@ void InsertarCursosS(CursosS** Cab, Curso *Agregar){
 		P->curso = Agregar;
 		P->alumnos = NULL;
 		P->prox = NULL;
-	if (!Cab) *Cab = P;
+	if (!*Cab) *Cab = P;
 	else{ 
 		CursosS *T = *Cab;	
 		while (T->prox){
@@ -338,20 +338,24 @@ void InsertarCursosS(CursosS** Cab, Curso *Agregar){
 	}
 }
 
-CursosY *CrearCursosY(unsigned short ano){
+CursosY *CrearCursosY(unsigned short ano) {
 	CursosY *T = new CursosY;
 	CursosY *Puntero = IndCurso;
-		T->ano = ano;
-		T->cursosDictados = NULL;
-		T->prox = NULL;
-	if (!(IndCurso)) return T;
+	T->ano = ano;
+	T->cursosDictados = NULL;
+	T->prox = NULL;
+
+	if (!(IndCurso)) {
+		IndCurso = T;
+		return T;
+	}
 	else {
-		  if ((T->ano) > (Puntero->ano)){
+		if ((T->ano) > (Puntero->ano)){
 			T->prox=Puntero;
 			return T;
-		 }
-		else{
-			while (Puntero){
+		}
+		else {
+			while (Puntero) {
 				if (((Puntero->prox)->ano) < (T->ano)){
 					T->prox = Puntero->prox;
 					Puntero->prox = T;
