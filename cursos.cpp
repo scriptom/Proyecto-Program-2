@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-//#include <locale.h>
+#include <locale.h>
+#include "alumnos.h"
 #include "cursos.h"
 #include "materias.h"
 #include "functions.h"
@@ -374,4 +375,13 @@ void InsertarIndCurso(Curso *Agregado){
 	if  (!(Existe))
 		Existe = CrearCursosY(Agregado->ano);
 	InsertarCursosS(&(Existe->cursosDictados),Agregado);	
+}
+
+void MostrarNotaAlumno(CursosS *Curso,int cedula){
+	Materia *MateriaDeseada = NULL;
+	MateriaDeseada =  obtenerMateriaPorCodigo(Mat,(Curso->curso)->codMat);
+	CursosA *Alumno = EstaInscrito(Curso->alumnos,cedula);
+	printf("\n Nombre de la materia: %s \n",MateriaDeseada->nombre);
+	printf("\n La nota del alumno en la materia es: %c \n",Alumno->nota);
+	printCurso(Curso->curso,1);
 }

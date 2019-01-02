@@ -157,4 +157,11 @@ void InsertarCursosS(CursosS **,Curso*);
 
 CursosY *CrearCursosY(unsigned short);
 
+/*
+	Muestra la nota  o estado de un alumno en un curso
+	Parametros:
+		CursosS *Curso: Es el puntero del indice de Cursos donde se encuentra dicho alumno inscrito para la impresion de la informacion del curso
+*/
+void MostrarNotaAlumno(CursosS*)
+
 #endif

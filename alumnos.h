@@ -130,5 +130,12 @@ void consultarAlumno(Alumno **, int);
 		Alumno **P : La lista de alumnos a vaciar
 */
 void vaciarListaAlumnos(Alumno**);
+/*
+	Verifica si un alumno especifico se encuentra inscrito en un curso utilizando la cedula
+	Parametros:
+		CursosA *Puntero: Es la lista de alumnos en la cual se buscara
+		Int Cedula: Es la cedula que se utilizara para la busqueda
+*/
+CursosA *EstaInscrito(CursosA*,int);
  
 #endif
