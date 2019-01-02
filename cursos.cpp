@@ -107,6 +107,9 @@ Curso *crearCurso() {
 	C->prox = NULL;
 
 	// devolvemos
+
+	InsertarIndCurso(C);
+	
 	return C;
 }
 
@@ -310,9 +313,61 @@ Curso *extraerCurso(Curso *C, int codigo) {
 	return extraido;
 }
 
-void InsertarIndCurso(Curso *Agregado){
-	int Existe; 
+CursosY *obtenerPunteroInd( unsigned short Ano){
+	CursosY *T = IndCurso;
+	while (T){
+		if ((T->ano) == Ano)
+			return T;
+		else {T = T->prox;}
+	}
+	return NULL;
+}
+
+void InsertarCursosS(CursosS** Cab, Curso *Agregar){
+	CursosS *P = new CursosS;
+		P->curso = Agregar;
+		P->alumnos = NULL;
+		P->prox = NULL;
+	if (!Cab) *Cab = P;
+	else{ 
+		CursosS *T = *Cab;	
+		while (T->prox){
+			T = T->prox;
+		}
+		T->prox = P;
+	}
+}
+
+CursosY *CrearCursosY(unsigned short ano){
+	CursosY *T = new CursosY;
+	CursosY *Puntero = IndCurso;
+		T->ano = ano;
+		T->cursosDictados = NULL;
+		T->prox = NULL;
+	if (!(IndCurso)) return T;
+	else {
+		  if ((T->ano) > (Puntero->ano)){
+			T->prox=Puntero;
+			return T;
+		 }
+		else{
+			while (Puntero){
+				if (((Puntero->prox)->ano) < (T->ano)){
+					T->prox = Puntero->prox;
+					Puntero->prox = T;
+					return T;
+				    }
+				else{Puntero->prox;} 
+	        }
+        }
+	  }
+}
+
+void InsertarIndCurso(Curso *Agregado){ 
+	CursosY *Existe = NULL;
 	// Se verifica si el año se encuentra en el indice para introducirlo a la lista correspondiente, sino se creara una nueva lista del año correspondiente
-	if (VerificarExistencia(Agregado->ano)){
-		insertarCurso(IndCurso
+	Existe = obtenerPunteroInd(Agregado->ano);
+	if  (!(Existe))
+		Existe = CrearCursosY(Agregado->ano);
+	InsertarCursosS(&(Existe->cursosDictados),Agregado);	
 }

@@ -145,4 +145,16 @@ void vaciarListaCursos(Curso**);
 		Curso *Agregado: Es el curso que se agregara al indice
 */
 void InsertarIndCurso(Curso *);
+/*
+	Verifica y devuelve el puntero que coincida con el año deseado de la lista de indice de cursos
+*/
+CursosY *obtenerPunteroInd( unsigned short);
+
+/*
+	
+*/
+void InsertarCursosS(CursosS **,Curso*);
+
+CursosY *CrearCursosY(unsigned short);
+
 #endif
