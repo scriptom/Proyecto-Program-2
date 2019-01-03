@@ -398,3 +398,13 @@ void inscribirEnCurso(int cedula, int codigo) {
 		alumnos->prox = new CursosA;
 	}
 }
+
+CursosA *EstaInscrito(CursosA* Puntero,int Cedula){
+	CursosA *T = Puntero;
+	while (T){
+		if (((T->alumno)->cedula) == Cedula)
+			return T;
+		else T= T->prox;
+	}
+	return NULL;
+}

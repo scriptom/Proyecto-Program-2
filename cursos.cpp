@@ -1,10 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+<<<<<<< HEAD
+=======
+#include <locale.h>
+#include <locale.h>
+#include "alumnos.h"
+>>>>>>> Robert
 #include "cursos.h"
 #include "materias.h"
 #include "functions.h"
 #include <locale.h>
+
 
 Curso *Cur = NULL;
 CursosY *IndCurso = NULL;
@@ -106,6 +113,9 @@ Curso *crearCurso() {
 	C->prox = NULL;
 
 	// devolvemos
+
+	InsertarIndCurso(C);
+	
 	return C;
 }
 
@@ -314,3 +324,108 @@ Curso *extraerCurso(Curso *C, int codigo) {
 	return extraido;
 }
 
+CursosY *obtenerPunteroInd( unsigned short Ano){
+	CursosY *T = IndCurso;
+	while (T){
+		if ((T->ano) == Ano)
+			return T;
+		else {T = T->prox;}
+	}
+	return NULL;
+}
+
+void InsertarCursosS(CursosS** Cab, Curso *Agregar){
+	CursosS *P = new CursosS;
+		P->curso = Agregar;
+		P->alumnos = NULL;
+		P->prox = NULL;
+	if (!*Cab) *Cab = P;
+	else{ 
+		CursosS *T = *Cab;	
+		while (T->prox){
+			T = T->prox;
+		}
+		T->prox = P;
+	}
+}
+
+CursosY *CrearCursosY(unsigned short ano) {
+	CursosY *T = new CursosY;
+	CursosY *Puntero = IndCurso;
+	T->ano = ano;
+	T->cursosDictados = NULL;
+	T->prox = NULL;
+
+	if (!(IndCurso)) {
+		IndCurso = T;
+		return T;
+	}
+	else {
+		if ((T->ano) > (Puntero->ano)){
+			T->prox=Puntero;
+			return T;
+		}
+		else {
+			while (Puntero) {
+				if (((Puntero->prox)->ano) < (T->ano)){
+					T->prox = Puntero->prox;
+					Puntero->prox = T;
+					return T;
+				    }
+				else{Puntero->prox;} 
+	        }
+        }
+	  }
+}
+
+void InsertarIndCurso(Curso *Agregado){ 
+	CursosY *Existe = NULL;
+	// Se verifica si el año se encuentra en el indice para introducirlo a la lista correspondiente, sino se creara una nueva lista del año correspondiente
+	Existe = obtenerPunteroInd(Agregado->ano);
+	if  (!(Existe))
+		Existe = CrearCursosY(Agregado->ano);
+	InsertarCursosS(&(Existe->cursosDictados),Agregado);	
+}
+
+void MostrarNotaAlumno(CursosS *Curso,CursosA *AlumnoBuscado){
+	Materia *MateriaDeseada = NULL;
+	MateriaDeseada =  obtenerMateriaPorCodigo(Mat,(Curso->curso)->codMat);
+	printf("\n Nombre de la materia: %s \n",MateriaDeseada->nombre);
+	printf("\n La nota del alumno en la materia es: %c \n",AlumnoBuscado->nota);
+	printCurso(Curso->curso,1);
+}
+
+void ImprimirRegistroAlumnoCursosS(CursosS *Cab,int Cedula){
+	CursosS *T= Cab;
+	CursosA *AlumnoBuscado = NULL;
+	while (T){
+		AlumnoBuscado = EstaInscrito(T->alumnos,Cedula);
+		if (AlumnoBuscado)
+			MostrarNotaAlumno(T,AlumnoBuscado);
+		T = T->prox;
+	}
+}
+
+CursosS *BuscarPrimeraCoincidencia(CursosS *Cab,int Cedula){
+	CursosS *T = Cab;
+	CursosA *AlumnoBuscado = NULL;
+	while (T){
+		AlumnoBuscado = EstaInscrito(T->alumnos,Cedula);
+		if (AlumnoBuscado) return T;
+		T = T->prox;
+	}
+	return NULL;
+}
+
+void ImprimirRecordAcademicoAlumno(int Cedula){
+	CursosY *T = IndCurso;
+	CursosS *Puntero = NULL;
+	while (T){
+		Puntero = BuscarPrimeraCoincidencia(T->cursosDictados,Cedula);
+		if (Puntero){
+			printf("\n Cursos del %i: \n",T->ano);
+			ImprimirRegistroAlumnoCursosS(T->cursosDictados,Cedula);
+		}
+		T = T->prox;
+	}
+}

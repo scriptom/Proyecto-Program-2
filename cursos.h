@@ -1,13 +1,15 @@
 #ifndef CURSOS_H
 #define CURSOS_H
 
-#include "estructuras.cpp";
+#include "estructuras.cpp"
 /* Declaraciones relacionados con Cursos */
 
 /*
 	Variable global, a ser utilizada a lo largo del programa como la lista de Cursos
 */
 extern Curso *Cur;
+
+extern CursosY *IndCurso;
 
 /*
 	Variable global, a ser utilizada a lo largo del programa como el índice de cursos
@@ -148,5 +150,64 @@ void Buscar(int,Curso**);
 		Curso **P : La lista de cursos a vaciar
 */
 void vaciarListaCursos(Curso**);
+
+/*
+	Inserta en la lista de indice de curso
+	Parametros:
+		Curso *Agregado: Es el curso que se agregara al indice
+*/
+void InsertarIndCurso(Curso *);
+/*
+	Verifica y devuelve el puntero que coincida con el año deseado de la lista de indice de cursos
+	Parametros:
+		Unsigned shot ano: Es el año que se desea buscar en el indice de cursos
+*/
+CursosY *obtenerPunteroInd( unsigned short);
+
+/*
+	Agrega un curso a la lista de cursos de un año determinado
+	Parametros:
+		CursosS **Cab: Es la lista de cursos de un año especifico en donde se agregara el curso
+		Curso *Agregar: Es el curso que se va a agregar
+*/
+void InsertarCursosS(CursosS **,Curso*);
+
+/*
+	Crea un nuevo año en la lista de indice de cursos para agregar los cursos que se dicten en dicho año
+	Parametros:
+		Unsigned short ano: Es el año que se va a agregar en el indice de cursos
+*/
+CursosY *CrearCursosY(unsigned short);
+
+/*
+	Muestra la nota  o estado de un alumno en un curso
+	Parametros:
+		CursosS *Curso: Es el puntero del indice de Cursos donde se encuentra dicho alumno inscrito para la impresion de la informacion del curso
+		CursosA *AlumnoBuscado: Es el punto al registro del alumno donde se almacena la nota y el estado
+*/
+void MostrarNotaAlumno(CursosS*,CursosA*);
+
+/*
+	Recorre una lista de CursosS buscando si el alumno esta inscrito en ese curso para imprimir su record academico
+	Parametros:
+		CursosS *Cab: Es la cabeza de la lista en donde se buscara todas las coincidencias del alumno
+		Int Cedula: Es la cedula que se utilizara para buscar al alumno;
+*/
+void ImprimirRegistroAlumnoCursosS(CursosS *,int);
+
+/*
+	Busca el primer curso en el que esta inscrito el alumno deseado, para verificar si estuvo inscrito en ese año academico
+	Parametros:
+		CursosS *Cab: Es la lista de Cursos que hubo en ese año
+		Int Cedula: Es el alumno que se desea buscar
+*/
+CursosS *BuscarPrimeraCoincidencia(CursosS,int);
+
+/*
+	Recorre todo el indice de cursos buscando si el alumno esta inscrito en almenos un curso de ese año, para imprimir su record academico
+	Parametros:
+		Int Cedula: Es la cedula del alumno que se desea buscar
+*/
+void ImprimirRecordAcademicoAlumno(int);
 
 #endif
