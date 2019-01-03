@@ -2,7 +2,7 @@
 #define ALUMNOS_H
 
 #include <stdio.h>
-#include "estructuras.cpp";
+#include "estructuras.cpp"
 /* Declaraciones relacionados con alumnos */
 
 /*

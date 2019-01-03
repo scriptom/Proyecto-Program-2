@@ -377,11 +377,45 @@ void InsertarIndCurso(Curso *Agregado){
 	InsertarCursosS(&(Existe->cursosDictados),Agregado);	
 }
 
-void MostrarNotaAlumno(CursosS *Curso,int cedula){
+void MostrarNotaAlumno(CursosS *Curso,CursosA *AlumnoBuscado){
 	Materia *MateriaDeseada = NULL;
 	MateriaDeseada =  obtenerMateriaPorCodigo(Mat,(Curso->curso)->codMat);
-	CursosA *Alumno = EstaInscrito(Curso->alumnos,cedula);
 	printf("\n Nombre de la materia: %s \n",MateriaDeseada->nombre);
-	printf("\n La nota del alumno en la materia es: %c \n",Alumno->nota);
+	printf("\n La nota del alumno en la materia es: %c \n",AlumnoBuscado->nota);
 	printCurso(Curso->curso,1);
+}
+
+void ImprimirRegistroAlumnoCursosS(CursosS *Cab,int Cedula){
+	CursosS *T= Cab;
+	CursosA *AlumnoBuscado = NULL;
+	while (T){
+		AlumnoBuscado = EstaInscrito(T->alumnos,Cedula);
+		if (AlumnoBuscado)
+			MostrarNotaAlumno(T,AlumnoBuscado);
+		T = T->prox;
+	}
+}
+
+CursosS *BuscarPrimeraCoincidencia(CursosS *Cab,int Cedula){
+	CursosS *T = Cab;
+	CursosA *AlumnoBuscado = NULL;
+	while (T){
+		AlumnoBuscado = EstaInscrito(T->alumnos,Cedula);
+		if (AlumnoBuscado) return T;
+		T = T->prox;
+	}
+	return NULL;
+}
+
+void ImprimirRecordAcademicoAlumno(int Cedula){
+	CursosY *T = IndCurso;
+	CursosS *Puntero = NULL;
+	while (T){
+		Puntero = BuscarPrimeraCoincidencia(T->cursosDictados,Cedula);
+		if (Puntero){
+			printf("\n Cursos del %i: \n",T->ano);
+			ImprimirRegistroAlumnoCursosS(T->cursosDictados,Cedula);
+		}
+		T = T->prox;
+	}
 }

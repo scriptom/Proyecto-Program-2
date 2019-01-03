@@ -93,7 +93,7 @@ Materia *obtenerMateriaPorCodigo(Materia *, int);
 		Materia *M : La lista de materias donde buscar
 		int n : La cantidad de veces que tiene que moverse en la lista para llegar a la posicion deseada
 */
-Materia *obtenerEnesimaMateria(Materia, int);
+Materia *obtenerEnesimaMateria(Materia*, int);
 
 /*
 	Obtiene la cantidad de elementos que se tiene en una lista de materias
