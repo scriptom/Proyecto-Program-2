@@ -2,7 +2,8 @@
 #define ALUMNOS_H
 
 #include <stdio.h>
-#include "estructuras.cpp";
+#include "estructuras.cpp"
+
 /* Declaraciones relacionados con alumnos */
 
 /*
@@ -131,4 +132,13 @@ void consultarAlumno(Alumno **, int);
 */
 void vaciarListaAlumnos(Alumno**);
  
+
+/*
+	Inscribe un alumno en un curso
+	Parametros:
+		int cedula : La cedula del alumno a inscribir
+		int codigo : El codigo del curso donde inscribir
+*/
+void inscribirEnCurso(int, int);
+
 #endif

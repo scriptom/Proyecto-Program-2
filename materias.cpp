@@ -124,12 +124,12 @@ void modificarMateria(Materia **P) {
 				break;
 			case 4:
 				printf("Introduzca la nueva cantidad de créditos de %s. Actual: %d: ", (*P)->nombre, (*P)->creditos);
-				scanf("%c", (*P)->creditos);
+				scanf("%hhd", (*P)->creditos);
 				miflush();
 				break;
 			case 5:
 				printf("Introduzca el nuevo semestre mínimo para %s. Actual: %d: ", (*P)->nombre, (*P)->semestre);
-				scanf("%c", (*P)->semestre);
+				scanf("%hhd", (*P)->semestre);
 				break;
 			default:
 				printf("Opción no reconocida. Vuelva a intentar\n");

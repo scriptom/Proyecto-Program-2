@@ -10,6 +10,11 @@
 extern Curso *Cur;
 
 /*
+	Variable global, a ser utilizada a lo largo del programa como el índice de cursos
+*/
+extern CursosY *IndCurso;
+
+/*
 	Devuelve la representacion en string de un horario (naturalmente un enum)
 	Parametros:
 		Horario h : El horario neto para buscar su equivalente string
@@ -22,6 +27,13 @@ const char *horStr(Horario);
 	Retorno: Curso * : El nuevo Curso creado
 */
 Curso *crearCurso(void);
+
+/*
+	Añade un curso al índice. Si el indice no está inicializado, lo crea
+	Parametros:
+		Curso *C: El curso a insertar en el índice
+*/
+void agregarAIndice(Curso *C);
 
 /*
 	Utilidad para mostrar los datos de un Curso en pantalla, mediante un formato definido
@@ -136,4 +148,5 @@ void Buscar(int,Curso**);
 		Curso **P : La lista de cursos a vaciar
 */
 void vaciarListaCursos(Curso**);
+
 #endif

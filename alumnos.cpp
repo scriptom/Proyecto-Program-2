@@ -4,6 +4,8 @@
 #include "alumnos.h"
 #include "functions.h"
 #include <locale.h>
+#include <wchar.h>
+#include "cursos.h"
 
 /*
 	La documentacion acerca de lo que hace cada funcion esta en alumnos.h
@@ -12,8 +14,8 @@
 
 Alumno *Al = NULL;
 
-
 Fecha crearFecha() {
+	TILDES;
 	// asumimos que la fecha es invalida inicialmente
 	int esValida = 0;
 	// fecha a devolver
@@ -61,6 +63,7 @@ void printAlumno(Alumno *A, int detalle) {
 }
 
 void printListaAlumno(Alumno *A, int detalle) {
+	TILDES;
 	// solamente actuamos si la lista no esta vacia
 	if (!A) {
 		printf("\tLista vacía\n");
@@ -137,6 +140,7 @@ Alumno *obtenerAlumnosPorNombre(Alumno *P, char *nombre ) {
 }
 
 Alumno *crearAlumno(void) {
+	TILDES;
 	// declaramos el nuevo alumno a insertar, y un auxiliar para saber si el alumno existe
 	Alumno *A = new Alumno, *existe = NULL;
 
@@ -349,4 +353,48 @@ Alumno *extraerAlumno(Alumno *A, int cedula) {
 
 	// regresamos
 	return extraido;
+}
+
+void inscribirEnCurso(int cedula, int codigo) {
+	// (posiblemente) el curso con el codigo pasado
+	Curso *C = obtenerCursoPorCodigo(Cur, codigo);
+	// (posiblemente) el alumno con la cedula pasado
+	Alumno *A = obtenerAlumnoPorCedula(Al, cedula);
+	// copia del indice de cursos por año
+	CursosY *cursos = IndCurso;
+	// copia del indice de cursos dictados
+	CursosS *indice = NULL;
+	// copia de la lista de alumnos en un curso
+	CursosA *alumnos = NULL;
+	if (C && A) {
+		// sacamos una copia de los cursos dictados
+		indice = IndCurso->cursosDictados;
+		while ( indice ) {
+			// buscamos el 
+			if (indice->curso &&
+				indice->curso->codigo == C->codigo) break;
+			indice = indice->prox;
+		}
+
+		if ( ! indice ) {
+			indice = new CursosS;
+			indice->alumnos = NULL;
+			indice->prox = NULL;
+			indice->curso = C;
+		}
+
+		if ( ! indice->alumnos ) {
+			indice->alumnos = new CursosA;
+			indice->alumnos->prox = NULL;
+			indice->alumnos->alumno = NULL;
+			indice->alumnos->estatus = '\0';
+			indice->alumnos->nota = -1;
+		}
+
+		alumnos = indice->alumnos;
+		while ( alumnos->prox )
+			alumnos = alumnos->prox;
+
+		alumnos->prox = new CursosA;
+	}
 }

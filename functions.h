@@ -1,8 +1,7 @@
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
 
-// Macro para habilitar tildes de manera rapida
-#define TILDES setlocale(LC_ALL, NULL)
+#define TILDES setlocale(LC_ALL, "")
 
 /**
  * Devuelve un string totalmente en minusculas

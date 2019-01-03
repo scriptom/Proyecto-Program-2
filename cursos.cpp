@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <locale.h>
 #include "cursos.h"
 #include "materias.h"
 #include "functions.h"
+#include <locale.h>
 
 Curso *Cur = NULL;
+CursosY *IndCurso = NULL;
 static const char *HorariosArr[3] = { "Matutino", "Vespertino", "Nocturno" };
 
 const char *horStr(Horario h) {
@@ -29,6 +30,7 @@ void printCurso(Curso *C, int detalle) {
 }
 
 void printListaCurso(Curso *C, int detalle) {
+	TILDES;
 	// solamente actuamos si la lista no esta vacia
 	if (!C) {
 		printf("\tLista vacía\n");
@@ -111,9 +113,14 @@ void insertarCurso(Curso **P, Curso *C) {
 	// como es insercion por cola, tenemos que volver nulo el proximo del elemento a insertar
 	if ( C->prox ) C->prox = NULL;
 	// si la cabeza es nulo, entonces asignamos el nuevo como cabeza
-	if (!(*P)) *P = C;
+	if (!(*P)) {
+		*P = C;
+		agregarAIndice(C);
+	}
 	// si el siguiente es nulo, estamos en el ultimo elemento, insertemos
-	else if (!(*P)->prox) (*P)->prox = C;
+	else if (!(*P)->prox) {
+		(*P)->prox = C;
+	}
 	// llamamos recursivamente si estamos en cualquier otro punto de la lista
 	else insertarCurso(&(*P)->prox, C);
 }
@@ -306,3 +313,4 @@ Curso *extraerCurso(Curso *C, int codigo) {
 	// regresamos
 	return extraido;
 }
+

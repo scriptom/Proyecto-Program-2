@@ -4,10 +4,13 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <locale.h>
+#include <wchar.h>
 #include "functions.h"
 /************************/
 /* DECLARACIONES VARIAS */
 /************************/
+
+
 
 char *minusculas(const char *str) {
 	// creamos un nuevo string para no alterar el parametro.

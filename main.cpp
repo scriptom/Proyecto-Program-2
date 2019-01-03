@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <wchar.h>
 #include <locale.h>
 
 /* 
@@ -48,6 +49,7 @@ void guardarEnArchivos(void);
 
 void main()
 {
+	TILDES;
 	int opt = -1;
 	cargarDeArchivos();
 	do {
