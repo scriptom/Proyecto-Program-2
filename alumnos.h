@@ -3,10 +3,6 @@
 
 #include <stdio.h>
 #include "estructuras.cpp"
-<<<<<<< HEAD
-
-=======
->>>>>>> Robert
 /* Declaraciones relacionados con alumnos */
 
 /*

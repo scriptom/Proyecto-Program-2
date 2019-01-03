@@ -366,9 +366,16 @@ void inscribirEnCurso(int cedula, int codigo) {
 	CursosS *indice = NULL;
 	// copia de la lista de alumnos en un curso
 	CursosA *alumnos = NULL;
+	// (posiblemente) un puntero a los cursos de un año
+	CursosY *cursosAno = NULL;
 	if (C && A) {
 		// sacamos una copia de los cursos dictados
-		indice = IndCurso->cursosDictados;
+		cursosAno = obtenerPunteroInd(C->ano);
+		if (!cursosAno)
+			cursosAno = CrearCursosY(C->ano);
+		
+		indice = cursosAno->cursosDictados;
+
 		while ( indice ) {
 			// buscamos el 
 			if (indice->curso &&
