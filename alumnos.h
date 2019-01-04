@@ -172,4 +172,9 @@ AlumC *crearIndiceAl(Alumno *);
 */
 void insertarAlumC(AlumC*);
 
+/*
+	Busca a un alumno en una lista de CursosA
+*/
+int BuscarAlumnoCursosA(CursosA *,Alumno*);
+
 #endif

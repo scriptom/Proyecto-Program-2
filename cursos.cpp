@@ -408,16 +408,25 @@ CursosS *BuscarPrimeraCoincidencia(CursosS *Cab,int Cedula){
 	return NULL;
 }
 
-void ImprimirRecordAcademicoAlumno(int Cedula){
+void ImprimirRecordAcademicoAlumno(){
 	CursosY *T = IndCurso;
 	CursosS *Puntero = NULL;
+	short existe = 0;
+	int Cedula = 0;
+	printf("\nIntroduzca el numero de cedula del alumno a buscar\n");
+	scanf("%i",&Cedula);	system("Pause");
 	while (T){
 		Puntero = BuscarPrimeraCoincidencia(T->cursosDictados,Cedula);
+		if (Puntero) existe = 1;
 		if (Puntero){
 			printf("\n Cursos del %i: \n",T->ano);
 			ImprimirRegistroAlumnoCursosS(T->cursosDictados,Cedula);
 		}
 		T = T->prox;
+	}
+	if (!existe){
+		printf("\nEl alumno no esta inscrito en ningun curso registrado\n");
+		system("Pause");
 	}
 }
 
@@ -425,6 +434,59 @@ void BuscarCursosPorNombre(){
 	char Nombre[30];
 	impCabezado();
 	printf("Introduzca el nombre de la materia que se desea buscar\n");
-	scanf("%s",Nombre);
+	scanf("%s%*c",Nombre);
 	BuscarCursos(Nombre);
+	system("Pause");
+}
+
+CursosS *obtenerCursos(CursosS *Cab,int codigo){
+	CursosS *T = Cab;
+	while (T){
+		if (((T->curso)->codMat)==codigo) return T;
+		T = T->prox;
+	}
+	return NULL;
+}
+
+void BuscarRepeticionesDeCursos(){
+	int Cedula = 0;
+	Alumno *AlumnoBuscado;
+	Materia *MateriaBuscada;
+	int Codigo = 0;
+	int SN = 1,existe = 0;
+	CursosS *Curso = NULL;
+	CursosY *T = IndCurso;
+	do
+	{
+		printf("\nIntroduzca la cedula del alumno al cual desea consultar\n");
+		scanf("%i",&Cedula);
+		AlumnoBuscado = obtenerAlumnoPorCedula(Al,Cedula);
+		if (!AlumnoBuscado){
+			SN = impSiNo("El alumno no existe, ¿Desea introducir otra cedula?");
+			if (!SN) break;
+			}
+	} while (!AlumnoBuscado);
+	do
+	{
+		printf("\nIntroduzca el codigo de la materia\n");
+		scanf("%i",&Codigo);
+		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
+		if (!MateriaBuscada){
+			SN = impSiNo("La materia no existe, ¿Desea introducir otro codigo?");
+			if (!SN) break;
+			}
+	} while (!MateriaBuscada);
+	while (T){
+		Curso = obtenerCursos(T->cursosDictados,Codigo);
+
+		if ((Curso) && (BuscarAlumnoCursosA(Curso->alumnos,AlumnoBuscado))){
+			printf("\nCurso del año: %i\n",T->ano);
+			printCurso(Curso->curso,detalle());
+			existe = 1;
+		}
+	}
+	if (!existe){
+		printf("\nEl alumno no ha cursado esta materia ninguna vez\n");
+		system("Pause");
+	}
 }

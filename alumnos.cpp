@@ -455,3 +455,12 @@ void insertarAlumC( AlumC *nodo ) {
 		global->prox = nodo;
 	}
 }
+
+int BuscarAlumnoCursosA(CursosA *Cab,Alumno *AlumnoBuscado){
+	CursosA *T = Cab;
+	while (T){
+		if (T->alumno == AlumnoBuscado) return 1;
+		T->prox;
+	}
+	return 0;
+}
