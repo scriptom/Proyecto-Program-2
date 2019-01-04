@@ -194,7 +194,7 @@ void ImprimirRegistroAlumnoCursosS(CursosS *,int);
 		CursosS *Cab: Es la lista de Cursos que hubo en ese año
 		Int Cedula: Es el alumno que se desea buscar
 */
-CursosS *BuscarPrimeraCoincidencia(CursosS,int);
+CursosS *BuscarPrimeraCoincidencia(CursosS*,int);
 
 /*
 	Recorre todo el indice de cursos buscando si el alumno esta inscrito en almenos un curso de ese año, para imprimir su record academico

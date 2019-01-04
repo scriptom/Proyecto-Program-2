@@ -2,12 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#include <locale.h>
 #include "alumnos.h"
 #include "cursos.h"
 #include "materias.h"
 #include "functions.h"
-#include <locale.h>
 
 
 Curso *Cur = NULL;
@@ -54,13 +52,11 @@ Curso *crearCurso() {
 	int codigoCurso = -1, codigoMateria = -1, horario = -1, reintentar = 1;
 	unsigned short ano = 0;
 
-	miflush(); // limpiamos el buffer de entrada
 	do {
 		do {
 			//  solicitamos el codigo de la materia del curso
 			printf("Introduzca el código de la materia: ");
-			scanf("%i", &codigoMateria);
-			miflush();
+			scanf("%i%*c", &codigoMateria);
 			if ( ! obtenerMateriaPorCodigo(Mat, codigoMateria)) {
 				printf("No existe ninguna materia con el código \"%i\"\n", codigoMateria);
 				if ( ! impSiNo("Desea reintentar?")) return NULL;
@@ -71,7 +67,7 @@ Curso *crearCurso() {
 		do {
 			// solicitamos el ano de la Curso
 			printf("Año que representa este curso: ");
-			scanf("%hu", &ano);
+			scanf("%hu%*c", &ano);
 			if ( ano < 1970) printf("El año introducido es inválido, introduzca otro\n");
 		} while ( ano < 1970 );
 
@@ -83,7 +79,6 @@ Curso *crearCurso() {
 			if ( ! impSiNo("Desea reintentar?")) return NULL;
 		}
 	} while (existe);
-	miflush(); // despues de una llamada a scanf, hay que limpiar el buffer
 	// podemos guardar los datos
 	C->ano = ano;
 	C->codMat = codigoMateria;
@@ -91,20 +86,17 @@ Curso *crearCurso() {
 
 	// solicitamos el numero de lapso que ocupa la Curso
 	printf("Número de lapso: ");
-	scanf("%hhd", &(C->lapso));
+	scanf("%hhd%*c", &(C->lapso));
 
-	miflush(); // despues de una llamada a scanf, hay que limpiar el buffer
 	do {
 		// solicitamos el horario en el que se debe estar para cursar la Curso
 		impMenu("Horario de este curso", 3, "Matutino", "Vespertino", "Nocturno");
-		scanf("%d", &horario);
+		scanf("%d%*c", &horario);
 		if ( ( horario < 1  ) || ( horario > 3 ) ) printf("Opción no reconocida, por favor seleccione una opción válida\n");
 	} while ( ( horario < 1 ) || ( horario > 3 ) );
 
 	// para este punto el horario es valido, hacemos una conversion explicita
 	C->horario = (Horario)(--horario);
-
-	miflush(); // despues de una llamada a scanf, hay que limpiar el buffer
 
 	// inicializamos el proximo elemento de este Curso como nulo
 	C->prox = NULL;
@@ -156,7 +148,7 @@ void modificarCurso(Curso **P) {
 			case 1:
 				printf("Introduzca el nuevo código de materia para este curso. Actual: %d: ", (*P)->codMat);
 				do {
-					scanf("%d", &codMat);
+					scanf("%d%*c", &codMat);
 					if ( ! obtenerMateriaPorCodigo( Mat, codMat ) ) {
 						printf("No existe ninguna materia con ese código\nIntroduzca otro\n");
 						codMat = 0;
@@ -165,19 +157,17 @@ void modificarCurso(Curso **P) {
 				break;
 			case 2:
 				printf("Introduzca un nuevo año para este curso. Actual: %d: ", (*P)->ano);
-				scanf("%hu", &ano);
-				miflush();
+				scanf("%hu%*c", &ano);
 				break;
 			case 3:
 				printf("Introduzca el nuevo lapso para este curso. Actual: %d: ",  (*P)->lapso);
-				scanf("%d", &((*P)->lapso));
-				miflush();
+				scanf("%d%*c", &((*P)->lapso));
 				break;
 			case 4:
 				printf("Seleccione el nuevo turno de horario para este curso. Actual: %s\n", horStr((*P)->horario));
 				impMenu("\0", 3, "Matutino", "Vespertino", "Nocturno");
 				do {
-					scanf("%hu", &horario);
+					scanf("%hu%*c", &horario);
 					if ( (horario < 1) || (horario > 3) ) printf("Opción no reconocida, seleccione un horario válido\n");
 				} while ( (horario < 1) || (horario > 3) );
 				(*P)->horario = (Horario)(--horario);
