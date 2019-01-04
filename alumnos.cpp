@@ -64,7 +64,7 @@ void printAlumno(Alumno *A, int detalle) {
 
 void printListaAlumno(Alumno *A, int detalle) {
 	//TILDES;
-	setlocale(LC_ALL, "");
+	//setlocale(LC_ALL, "");
 	// solamente actuamos si la lista no esta vacia
 	if (!A) {
 		printf("\tLista vacía\n");
@@ -212,7 +212,7 @@ void modificarAlumno(Alumno **P) {
 				case 1:
 					do {
 						printf("Introduzca el nuevo número de cédula para %s. Actual: %d: ", (*P)->nombre, (*P)->cedula);
-						scanf("%i", &(cedula));
+						scanf("%i%*c", &(cedula));
 						if (existe = obtenerAlumnoPorCedula(Al, cedula))
 							printf("Error al cambiar el numero de cédula: Un alumno con esa cédula ya existe en el sistema: %s %s\n", existe->nombre, existe->apellido);
 					} while ( existe );
@@ -423,7 +423,7 @@ void BuscarAlumnos(){
 	Alumno *P = NULL;
 	char Nombre[15];
 	printf("\nIntroduzca el nombre del alumno que desea buscar\n");
-	scanf("%s",Nombre);
+	gets_s(Nombre);
 	P = obtenerAlumnosPorNombre(Lista,Nombre);
 	if (Lista) printListaAlumno(P,1);
 	else printf("No se han encontrado ningun alumno con ese nombre\n");

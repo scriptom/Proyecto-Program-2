@@ -1,16 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-<<<<<<< HEAD
-=======
 #include <locale.h>
-#include <locale.h>
->>>>>>> Robert
 #include "alumnos.h"
 #include "cursos.h"
 #include "materias.h"
 #include "functions.h"
-#include <locale.h>
 
 
 Curso *Cur = NULL;
