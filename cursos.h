@@ -199,13 +199,22 @@ CursosS *BuscarPrimeraCoincidencia(CursosS*,int);
 /*
 	Recorre todo el indice de cursos buscando si el alumno esta inscrito en almenos un curso de ese año, para imprimir su record academico
 	Parametros:
-		Int Cedula: Es la cedula del alumno que se desea buscar
+	
 */
-void ImprimirRecordAcademicoAlumno(int);
+void ImprimirRecordAcademicoAlumno();
 
 /*
 	Busca usando el nombre de una materia, todos los cursos que sean de esa materia
 */
 void BuscarCursosPorNombre(void);
+
+/*
+	Busca e imprime las veces que un alumno ha cursado una materia
+*/
+void BuscarRepeticionesDeCursos(void);
+
+/*
+*/
+CursosS *BuscarCursos(CursosS *,int);
 
 #endif

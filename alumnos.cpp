@@ -431,3 +431,12 @@ void BuscarAlumnos(){
 	else printf("No se han encontrado ningun alumno con ese nombre\n");
 	system("Pause");
 }
+
+int BuscarAlumnoCursosA(CursosA *Cab,Alumno *AlumnoBuscado){
+	CursosA *T = Cab;
+	while (T){
+		if (T->alumno == AlumnoBuscado) return 1;
+		T->prox;
+	}
+	return 0;
+}

@@ -300,8 +300,8 @@ void menuParaConsultas(void) {
 		case 0: break;
 		case 1: BuscarAlumnos(); break;
 		case 2: BuscarCursosPorNombre(); break;
-		case 3: menuDeCursos(); break;
-		case 4:
+		case 3: ImprimirRecordAcademicoAlumno(); break;
+		case 4: BuscarRepeticionesDeCursos(); break;
 		case 5:
 		default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n", opt); system("pause");
 		}

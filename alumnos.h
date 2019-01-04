@@ -153,4 +153,9 @@ int inscribirEnCurso(Alumno *, Curso *);
 */
 void BuscarAlumnos(void);
 
+/*
+	Busca a un alumno en una lista de CursosA
+*/
+int BuscarAlumnoCursosA(CursosA *,Alumno*);
+
 #endif
