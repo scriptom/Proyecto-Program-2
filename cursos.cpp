@@ -395,6 +395,7 @@ void ImprimirRegistroAlumnoCursosS(CursosS *Cab,int Cedula){
 			MostrarNotaAlumno(T,AlumnoBuscado);
 		T = T->prox;
 	}
+	system("Pause");
 }
 
 CursosS *BuscarPrimeraCoincidencia(CursosS *Cab,int Cedula){
@@ -484,6 +485,7 @@ void BuscarRepeticionesDeCursos(){
 			printCurso(Curso->curso,detalle());
 			existe = 1;
 		}
+		T = T->prox;
 	}
 	if (!existe){
 		printf("\nEl alumno no ha cursado esta materia ninguna vez\n");
