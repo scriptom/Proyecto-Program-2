@@ -13,6 +13,7 @@
 */
 
 Alumno *Al = NULL;
+Alumno *IndAl = NULL;
 
 Fecha crearFecha() {
 	TILDES;
