@@ -55,11 +55,11 @@ Materia *crearMateria() {
 	gets_s(M->area);
 
 	// solicitamos el numero de creditos que ocupa la Materia
-	printf("Número de créditos: \n");
+	printf("Número de créditos: ");
 	scanf("%hhd%*c", &(M->creditos));
 	
 	// solicitamos el semestre en el que se debe estar para cursar la Materia
-	printf("Semestre mínimo: \n");
+	printf("Semestre mínimo: ");
 	scanf("%hhd%*c", &(M->semestre));
 
 	// inicializamos el proximo elemento de este Materia como nulo
@@ -115,11 +115,11 @@ void modificarMateria(Materia **P) {
 				break;
 			case 4:
 				printf("Introduzca la nueva cantidad de créditos de %s. Actual: %d: ", (*P)->nombre, (*P)->creditos);
-				scanf("%hhd%*c", (*P)->creditos);
+				scanf("%hhd%*c", &((*P)->creditos));
 				break;
 			case 5:
 				printf("Introduzca el nuevo semestre mínimo para %s. Actual: %d: ", (*P)->nombre, (*P)->semestre);
-				scanf("%hhd%*c", (*P)->semestre);
+				scanf("%hhd%*c", &((*P)->semestre));
 				break;
 			default:
 				printf("Opción no reconocida. Vuelva a intentar\n");

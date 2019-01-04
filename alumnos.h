@@ -142,10 +142,11 @@ CursosA *EstaInscrito(CursosA*,int);
 /*
 	Inscribe un alumno en un curso
 	Parametros:
-		int cedula : La cedula del alumno a inscribir
-		int codigo : El codigo del curso donde inscribir
+		Alumno *A : Alumno a inscribir
+		Curso *C  : Curso donde inscribir
+	Retorno: int : Si hubo exito en la inscripcion devuelve 1, 0 en caso contrario
 */
-void inscribirEnCurso(int, int);
+int inscribirEnCurso(Alumno *, Curso *);
 
 /*
 	Busca todos los alumnos cuyo nombre coincida parcial o totalmente con el buscado e imprime su nombre y su cedula
