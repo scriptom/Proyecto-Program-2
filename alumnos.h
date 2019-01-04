@@ -147,4 +147,9 @@ CursosA *EstaInscrito(CursosA*,int);
 */
 void inscribirEnCurso(int, int);
 
+/*
+	Busca todos los alumnos cuyo nombre coincida parcial o totalmente con el buscado e imprime su nombre y su cedula
+*/
+void BuscarAlumnos(void);
+
 #endif

@@ -31,13 +31,6 @@ const char *horStr(Horario);
 Curso *crearCurso(void);
 
 /*
-	Añade un curso al índice. Si el indice no está inicializado, lo crea
-	Parametros:
-		Curso *C: El curso a insertar en el índice
-*/
-void agregarAIndice(Curso *C);
-
-/*
 	Utilidad para mostrar los datos de un Curso en pantalla, mediante un formato definido
 	Parametros:
 		Curso *C   : Un Curso cuyos datos quieren ser mostrados en pantalla
@@ -209,5 +202,10 @@ CursosS *BuscarPrimeraCoincidencia(CursosS,int);
 		Int Cedula: Es la cedula del alumno que se desea buscar
 */
 void ImprimirRecordAcademicoAlumno(int);
+
+/*
+	Busca usando el nombre de una materia, todos los cursos que sean de esa materia
+*/
+void BuscarCursosPorNombre(void);
 
 #endif

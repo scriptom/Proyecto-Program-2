@@ -55,17 +55,17 @@ Materia *crearMateria() {
 	miflush(); // despues de una llamada a scanf, hay que limpiar el buffer
 
 	// solicitamos el area de la Materia
-	printf("Área: \n");
+	printf("Área: ");
 	gets_s(M->area);
 
 	// solicitamos el numero de creditos que ocupa la Materia
-	printf("Número de créditos: \n");
+	printf("Número de créditos: ");
 	scanf("%hhd", &(M->creditos));
 	
 	miflush(); // despues de una llamada a scanf, hay que limpiar el buffer
 
 	// solicitamos el semestre en el que se debe estar para cursar la Materia
-	printf("Semestre mínimo: \n");
+	printf("Semestre mínimo: ");
 	scanf("%hhd", &(M->semestre));
 
 	miflush(); // despues de una llamada a scanf, hay que limpiar el buffer

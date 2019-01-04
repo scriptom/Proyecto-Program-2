@@ -94,6 +94,7 @@ void menuMantenimiento() {
 	} while (opt);
 }
 
+
 void menuAlumnado(void) {
 	int opt = -1, cedula = -1, cantidad = -1;
 	Alumno *nuevo = NULL, *res = NULL;
@@ -280,7 +281,33 @@ void menuInscripciones(void) {
 		}
 	} while (opt);
 }
-void menuParaConsultas(void) {}
+
+void menuParaConsultas(void) {
+	int opt = -1;
+	do {
+		impCabezado();
+		impMenu("Qué desea consultar?", 5,
+			"Buscar a un alumno por nombre",
+			"Buscar la informacion de una materia mediante su nombre",
+			"Informacion de un alumno por su cedula",
+			"Informacion de un curso por su codigo",
+			"Informacion de una materia por su codigo"
+			);
+
+	scanf("%i", &opt);
+		miflush();
+		switch (opt) {
+		case 0: break;
+		case 1: BuscarAlumnos(); break;
+		case 2: BuscarCursosPorNombre(); break;
+		case 3: menuDeCursos(); break;
+		case 4:
+		case 5:
+		default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n"); system("pause");
+		}
+	} while (opt);
+
+}
 
 void cargarDeArchivos() {
 	// abrimos todos los handlers de los archivos. Los abrimos en modo anexo-lectura-binario par aque se creen si no existen

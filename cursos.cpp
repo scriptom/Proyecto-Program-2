@@ -1,12 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-<<<<<<< HEAD
-=======
 #include <locale.h>
 #include <locale.h>
 #include "alumnos.h"
->>>>>>> Robert
 #include "cursos.h"
 #include "materias.h"
 #include "functions.h"
@@ -125,7 +122,6 @@ void insertarCurso(Curso **P, Curso *C) {
 	// si la cabeza es nulo, entonces asignamos el nuevo como cabeza
 	if (!(*P)) {
 		*P = C;
-		agregarAIndice(C);
 	}
 	// si el siguiente es nulo, estamos en el ultimo elemento, insertemos
 	else if (!(*P)->prox) {
@@ -259,6 +255,7 @@ int genCodigoCurso(int ano, int cod) {
 void BuscarCursos(char *NombreM){
 	int Codigo;
 	Curso *C=NULL;
+	impCabezado();
 	Codigo = ObtenerCodigoMateria(Mat,NombreM);
 	if (Codigo){
 		Buscar(Codigo,&C);
@@ -428,4 +425,12 @@ void ImprimirRecordAcademicoAlumno(int Cedula){
 		}
 		T = T->prox;
 	}
+}
+
+void BuscarCursosPorNombre(){
+	char Nombre[30];
+	impCabezado();
+	printf("Introduzca el nombre de la materia que se desea buscar\n");
+	scanf("%s",Nombre);
+	BuscarCursos(Nombre);
 }
