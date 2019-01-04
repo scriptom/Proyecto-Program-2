@@ -410,12 +410,11 @@ void menuSingleInscripcion(void) {
 			salir = !impSiNo("Desea volver a intentar?");
 			continue;
 		}
-		putchar('\n');
 		printf("Ingrese el codigo del curso al cual insertar el alumno: ");
 		scanf( "%i%*c", &codigo );
 		if ( ! ( C = obtenerCursoPorCodigo( Cur, codigo ) ) ) {
 			putchar('\n');
-			printf("El curso de codigo %d no existe en el sistema\n", cedula);
+			printf("El curso de codigo %d no existe en el sistema\n", codigo);
 			salir = !impSiNo("Desea volver a intentar?");
 			continue;
 		}
@@ -427,7 +426,7 @@ void menuSingleInscripcion(void) {
 			printf("Ocurrio un error al intentar inscribir el alumno al curso\n");
 		else
 			printf("El alumno fue inscrito con exito\n");
-
+		salir = 1;
 		system("pause");
 	} while ( ! salir );
 
