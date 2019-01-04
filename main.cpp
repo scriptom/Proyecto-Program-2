@@ -289,8 +289,7 @@ void menuParaConsultas(void) {
 			"Informacion de una materia por su codigo"
 			);
 
-	scanf("%i", &opt);
-		miflush();
+	scanf("%i%*c", &opt);
 		switch (opt) {
 		case 0: break;
 		case 1: BuscarAlumnos(); break;
