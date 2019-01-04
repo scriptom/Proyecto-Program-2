@@ -18,7 +18,7 @@ const char *horStr(Horario h) {
 
 void printCurso(Curso *C, int detalle) {
 	TILDES;
-	if (!C) return; // solamente actuamos si la Curso no es NULL
+	if (!C) return; // solamente actuamos si el Curso no es NULL
 	Materia *M = obtenerMateriaPorCodigo(Mat, C->codMat);
 	printf("Información del Curso: %s (%d)\n\n", M->nombre, C->ano);
 	printf("\tNombre de la materia: %s\n", M->nombre);
@@ -103,7 +103,6 @@ Curso *crearCurso() {
 
 	// devolvemos
 
-	InsertarIndCurso(C);
 	
 	return C;
 }
@@ -121,12 +120,16 @@ void insertarCurso(Curso **P, Curso *C) {
 	}
 	// llamamos recursivamente si estamos en cualquier otro punto de la lista
 	else insertarCurso(&(*P)->prox, C);
+
+	// lo insertamos al indice
+	InsertarIndCurso(C);
 }
 
 void modificarCurso(Curso **P) {
 	// nada mas actuamos si no tenemos un puntero a nulo
 	if (*P) {
-		int opt = -1, codMat = -1, cursoInvalido = -1, ano = -1, horario = -1, codigo = -1;
+		int opt = -1, codMat = -1, cursoInvalido = -1, codigo = -1;
+		unsigned short ano = -1, horario = -1;
 		Curso *existe = NULL;
 		// salimos cuando la opcion sea 0
 		do {
@@ -157,11 +160,11 @@ void modificarCurso(Curso **P) {
 				break;
 			case 2:
 				printf("Introduzca un nuevo año para este curso. Actual: %d: ", (*P)->ano);
-				scanf("%hu%*c", &ano);
+				scanf("%4hu%*c", &ano);
 				break;
 			case 3:
 				printf("Introduzca el nuevo lapso para este curso. Actual: %d: ",  (*P)->lapso);
-				scanf("%d%*c", &((*P)->lapso));
+				scanf("%hhd%*c", &((*P)->lapso));
 				break;
 			case 4:
 				printf("Seleccione el nuevo turno de horario para este curso. Actual: %s\n", horStr((*P)->horario));
@@ -363,6 +366,8 @@ CursosY *CrearCursosY(unsigned short ano) {
 	        }
         }
 	  }
+	// no deberia pasar
+	return NULL;
 }
 
 void InsertarIndCurso(Curso *Agregado){ 

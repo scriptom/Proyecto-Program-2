@@ -1,7 +1,7 @@
+#include "functions.h"
 #include "alumnos.h"
 #include "materias.h"
 #include "cursos.h"
-#include "functions.h"
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -33,6 +33,8 @@ void menuMantenimiento(void);
 	void menuDeCursos(void);
 void menuInscripciones(void);
 	void menuInsConsultas(void);
+	void menuSingleInscripcion(void);
+	void menuMultiInscripcion(void);
 void menuParaConsultas(void);
 
 
@@ -49,10 +51,10 @@ void guardarEnArchivos(void);
 
 void main()
 {
-	TILDES;
 	int opt = -1;
 	cargarDeArchivos();
 	do {
+		TILDES;
 		impCabezado();
 		impMenu("Qué desea hacer?", 3, "Mantenimiento", "Inscripciones", "Consultas");
 
@@ -78,6 +80,7 @@ void main()
 void menuMantenimiento() {
 	int opt = -1;
 	do {
+		TILDES;
 		impCabezado();
 		impMenu("Qué desea gestionar?", 3, "Alumnos", "Materias", "Cursos");
 
@@ -87,7 +90,7 @@ void menuMantenimiento() {
 		case 1: menuAlumnado(); break;
 		case 2: menuMaterias(); break;
 		case 3: menuDeCursos(); break;
-		default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n"); system("pause");
+		default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n", opt); system("pause");
 		}
 	} while (opt);
 }
@@ -98,6 +101,7 @@ void menuAlumnado(void) {
 	Alumno *nuevo = NULL, *res = NULL;
 	char nombre[15] = "\0";
 	do {
+		TILDES;
 		// mostramos el encabezado
 		impCabezado();
 		// mostramos las opciones
@@ -148,7 +152,7 @@ void menuAlumnado(void) {
 				printListaAlumno(Al, detalle());
 				system("pause");
 				break;
-			default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n"); 
+			default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n", opt); 
 		}
 	} while ( opt );
 }	
@@ -158,6 +162,7 @@ void menuMaterias(void) {
 	int opt = -1, codigo = -1;
 	Materia *nuevo = NULL, *res = NULL;
 	do {
+		TILDES;
 		impCabezado();
 		impMenu(
 			"Estas son las opciones disponibles para las materias.\nMarque la opción de acuerdo a la operación que desea realizar",
@@ -205,9 +210,10 @@ void menuDeCursos(void) {
 	int opt = -1, codigo = -1;
 	Curso *nuevo = NULL, *res = NULL;
 	do {
+		TILDES;
 		impCabezado();
 		impMenu(
-			"Estas son las opciones disponibles para las Cursos.\nMarque la opción de acuerdo a la operación que desea realizar",
+			"Estas son las opciones disponibles para los Cursos.\nMarque la opción de acuerdo a la operación que desea realizar",
 			4,
 			"Agregar Curso",
 			"Modificar Curso",
@@ -239,11 +245,11 @@ void menuDeCursos(void) {
 			elimCurso(&Cur, codigo);
 			break;
 		case 4:
-			printf("Lista completa de Cursos");
+			printf("\t\tLista completa de Cursos\n");
 			printListaCurso(Cur, detalle());
 			system("pause");
 			break;
-		default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n");
+		default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n", opt);
 		}
 	} while (opt);
 }
@@ -251,10 +257,8 @@ void menuDeCursos(void) {
 void menuInscripciones(void) {
 	// Opcion escogida en un menu
 	int opt = -1;
-	// Termino de busqueda
-	char termino[20];
-
 	do {
+		TILDES;
 		impCabezado();
 		impMenu(
 			"Opciones disponibles de inscripción",
@@ -271,6 +275,7 @@ void menuInscripciones(void) {
 		switch (opt) {
 		case 0: break;
 		case 1: menuInsConsultas(); break;
+		case 2: menuSingleInscripcion(); break;
 		default: printf("Opción no reconocida\n");
 			break;
 		}
@@ -280,6 +285,7 @@ void menuInscripciones(void) {
 void menuParaConsultas(void) {
 	int opt = -1;
 	do {
+		TILDES;
 		impCabezado();
 		impMenu("Qué desea consultar?", 5,
 			"Buscar a un alumno por nombre",
@@ -297,7 +303,7 @@ void menuParaConsultas(void) {
 		case 3: menuDeCursos(); break;
 		case 4:
 		case 5:
-		default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n"); system("pause");
+		default: printf("Opción \"%i\" no reconocida. Marque una opción válida\n", opt); system("pause");
 		}
 	} while (opt);
 
@@ -358,6 +364,7 @@ void menuInsConsultas(void) {
 	// Lista de resultados de Cursos
 	Curso *resCurso = NULL;
 	do {
+		TILDES;
 		impCabezado();
 		impMenu(
 			"Seleccione categoría de búsqueda",
@@ -386,6 +393,44 @@ void menuInsConsultas(void) {
 		vaciarListaAlumnos(&resAlumno);
 	if (resCurso)
 		vaciarListaCursos(&resCurso);
+}
+
+void menuSingleInscripcion(void) {
+	int cedula = -1, codigo = -1, exito = -1, salir = 1;
+	Alumno *A = NULL;
+	Curso *C = NULL;
+	do {
+		TILDES;
+		impCabezado();
+		printf("Ingrese la cédula del alumno a inscribir: ");
+		scanf( "%i%*c", &cedula );
+		if ( ! ( A = obtenerAlumnoPorCedula( Al, cedula ) ) ) {
+			putchar('\n');
+			printf("El número de cedula %d no existe en el sistema\n", cedula);
+			salir = !impSiNo("Desea volver a intentar?");
+			continue;
+		}
+		putchar('\n');
+		printf("Ingrese el código del curso al cual insertar el alumno: ");
+		scanf( "%i%*c", &codigo );
+		if ( ! ( C = obtenerCursoPorCodigo( Cur, codigo ) ) ) {
+			putchar('\n');
+			printf("El curso de código %d no existe en el sistema\n", cedula);
+			salir = !impSiNo("Desea volver a intentar?");
+			continue;
+		}
+
+		// para este punto deberiamos tener una cedula y codigo validos
+		exito = inscribirEnCurso(A, C);
+
+		if ( ! exito )
+			printf("Ocurrió un error al intentar inscribir el alumno al curso\n");
+		else
+			printf("El alumno fue inscrito con éxito\n");
+
+		system("pause");
+	} while ( ! salir );
+
 }
 
 /* CODIGO A SER USADO EN UN FUTURO

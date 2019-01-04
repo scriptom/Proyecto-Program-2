@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "alumnos.h"
-#include "functions.h"
-#include <locale.h>
 #include <wchar.h>
+#include <locale.h>
+#include "alumnos.h"
 #include "cursos.h"
+#include "functions.h"
 
 /*
 	La documentacion acerca de lo que hace cada funcion esta en alumnos.h
@@ -15,13 +15,13 @@
 Alumno *Al = NULL;
 
 Fecha crearFecha() {
-	TILDES;
 	// asumimos que la fecha es invalida inicialmente
 	int esValida = 0;
 	// fecha a devolver
 	Fecha fecha;
 	// mientras sea invalida la fecha, volvemos a llenar los datos (Posible optimizacion seria solamente pedir el dato erroneo)
 	while( ! esValida ) {
+		TILDES;
 		// solicitamos el dia (1-31)
 		printf("\tDía: ");
 		scanf( "%hu%*c", &(fecha.dia) );
@@ -50,12 +50,13 @@ Fecha crearFecha() {
 }
 
 void printAlumno(Alumno *A, int detalle) {
+	TILDES;
 	if (!A) return; // solamente actuamos si el alumno no es NULL
 	printf("Información del alumno: %s %s\n", A->nombre, A->apellido);
 	printf("\tNombre completo: %s %s\n", A->nombre, A->apellido);
 	printf("\tCédula: %i\n", A->cedula);
 	if ( detalle ) {
-		printf("\tFecha Nacimiento: %hhu/%hhu/%hhu\n", A->fechaNac.dia, A->fechaNac.mes, A->fechaNac.ano);
+		printf("\tFecha Nacimiento: %hi/%hi/%hi\n", A->fechaNac.dia, A->fechaNac.mes, A->fechaNac.ano);
 		printf("\tTeléfono: %s\n", A->telefono);
 		printf("\tCorreo: %s\n", A->correo);
 		printf("\tDirección: %s\n", A->direccion);
@@ -63,8 +64,7 @@ void printAlumno(Alumno *A, int detalle) {
 }
 
 void printListaAlumno(Alumno *A, int detalle) {
-	//TILDES;
-	//setlocale(LC_ALL, "");
+	TILDES;
 	// solamente actuamos si la lista no esta vacia
 	if (!A) {
 		printf("\tLista vacía\n");
@@ -141,7 +141,6 @@ Alumno *obtenerAlumnosPorNombre(Alumno *P, char *nombre ) {
 }
 
 Alumno *crearAlumno(void) {
-	TILDES;
 	// declaramos el nuevo alumno a insertar, y un auxiliar para saber si el alumno existe
 	Alumno *A = new Alumno, *existe = NULL;
 
@@ -155,6 +154,7 @@ Alumno *crearAlumno(void) {
 
 	// solicitamos la cedula del alumno hasta que esta sea una cedula unica (No este en el sistema)
 	do {
+		TILDES;
 		printf( "Cédula de identidad del alumno: " );
 		scanf( "%i%*c", &(A->cedula) );
 		existe = obtenerAlumnoPorCedula( Al, A->cedula );
@@ -162,6 +162,7 @@ Alumno *crearAlumno(void) {
 			printf("El alumno con la cédula \"%i\" ya existe, pertence a %s\n Por favor ingrese otro número de cédula\n", existe->cedula, existe->nombre);
 	} while( existe );
 
+	TILDES;
 	// solicitamos la direccion del alumno
 	printf( "Dirección: " );
 	gets_s( A->direccion );
@@ -193,6 +194,7 @@ void modificarAlumno(Alumno **P) {
 
 		// salimos cuando la opcion sea 0
 		do {
+			TILDES;
 			// mostramos el encabezado
 			impCabezado();
 			printAlumno(*P);
@@ -349,11 +351,7 @@ Alumno *extraerAlumno(Alumno *A, int cedula) {
 	return extraido;
 }
 
-void inscribirEnCurso(int cedula, int codigo) {
-	// (posiblemente) el curso con el codigo pasado
-	Curso *C = obtenerCursoPorCodigo(Cur, codigo);
-	// (posiblemente) el alumno con la cedula pasado
-	Alumno *A = obtenerAlumnoPorCedula(Al, cedula);
+int inscribirEnCurso(Alumno *A, Curso *C) {
 	// copia del indice de cursos por año
 	CursosY *cursos = IndCurso;
 	// copia del indice de cursos dictados
@@ -404,7 +402,10 @@ void inscribirEnCurso(int cedula, int codigo) {
 
 			alumnos->prox = new CursosA;
 		}
+		return 1;
 	}
+
+	return 0;
 }
 
 CursosA *EstaInscrito(CursosA* Puntero,int Cedula){
