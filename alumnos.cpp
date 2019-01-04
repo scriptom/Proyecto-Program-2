@@ -385,29 +385,7 @@ int inscribirEnCurso(Alumno *A, Curso *C) {
 			indice = indice->prox;
 		}
 
-		// revisamos si tiene una lista de alumnos ya
-		if ( ! indice->alumnos ) {
-			// si no la tiene, la creamos
-			indice->alumnos = new CursosA;
-			// colocamos el siguiente alumno en la lista como NULL
-			indice->alumnos->prox = NULL;
-			// conectamos el indice con el alumno a inscribir
-			indice->alumnos->alumno = A;
-			// su estatus es desconocido
-			indice->alumnos->estatus = '\0';
-			// su nota tambien
-			indice->alumnos->nota = -1;
-		}
-		else {
-			// en caso de tener lista de alumnos,
-			// vamos al ultimo lugar e insertamos
-			alumnos = indice->alumnos;
-			while ( alumnos->prox )
-				alumnos = alumnos->prox;
-
-			alumnos->prox = new CursosA;
-		}
-		return 1;
+		return insertarCursosA(&(indice->alumnos), crearCursosA(A));
 	}
 
 	return 0;

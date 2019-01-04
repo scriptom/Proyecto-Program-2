@@ -177,4 +177,5 @@ void insertarAlumC(AlumC*);
 */
 int BuscarAlumnoCursosA(CursosA *,Alumno*);
 
+
 #endif

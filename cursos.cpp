@@ -492,3 +492,42 @@ void BuscarRepeticionesDeCursos(){
 		system("Pause");
 	}
 }
+
+CursosA *ultimoCursosA(CursosA *listado) {
+	if (listado)
+		return listado->prox ? ultimoCursosA(listado->prox) : listado;
+	return NULL;
+}
+
+CursosA *crearCursosA(Alumno *A) {
+	if (A) {
+		CursosA *indice = new CursosA;
+		indice->alumno = A;
+		indice->estatus = '\0';
+		indice->nota = -1;
+		indice->prox = NULL;
+
+		return indice;
+	}
+
+	return NULL;
+
+}
+
+int insertarCursosA(CursosA **listado, CursosA *indice) {
+	if (*listado) {
+		// si las cedulas coinciden, no podemos insertar
+		if ((*listado)->alumno->cedula == indice->alumno->cedula)
+			return 0;
+		// llamamos recursivamente hasta el ultimo elemento
+		if ((*listado)->prox)
+			return insertarCursosA(&((*listado)->prox), indice);
+		// si llegamos hasta aqui, estamos en el ultimo elemento, insertamos como si nada
+		(*listado)->prox = indice;
+		return 1;
+	}
+
+	// si no hay listado, nuestro indice es el primero
+	(*listado) = indice;
+	return 1;
+}

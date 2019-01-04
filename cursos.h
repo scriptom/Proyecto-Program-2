@@ -217,4 +217,27 @@ void BuscarRepeticionesDeCursos(void);
 */
 CursosS *BuscarCursos(CursosS *,int);
 
+/*
+	Crea una nueva entrada en el indice de cursos CursosA
+	Parametros:
+		Alumno * A : El Alumno a quien pertenece este indice
+*/
+CursosA *crearCursosA(Alumno *);
+
+/*
+	Devuelve el ultimo elemento de un indice de cursos CursosA
+	Parametros:
+		CursosA *listado : Listado de los alumnos del indice
+*/
+CursosA *ultimoCursosA(CursosA *);
+
+/*
+	Inserta un registro en un listado de CursosA dado
+	Parametros:
+		CursosA ** listado : El listado donde insertar
+		CursosA * indice   : El indice a insertar
+	Retorno : int : Regresa 1 si hibo exito al insertar, 0 en caso contrario
+*/
+int insertarCursosA(CursosA **, CursosA *);
+
 #endif
