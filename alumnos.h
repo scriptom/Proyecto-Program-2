@@ -10,6 +10,11 @@
 */
 extern Alumno *Al;
 
+ /*
+	Indice global de alumnos
+ */
+extern AlumC *IndAlumno;
+
 /*
 	Crea un nuevo puntero a Alumno, se encarga de una vez de mostrar las opciones y recibir las entradas
 	Retorno: Alumno * : El nuevo alumno creado
@@ -152,5 +157,19 @@ int inscribirEnCurso(Alumno *, Curso *);
 	Busca todos los alumnos cuyo nombre coincida parcial o totalmente con el buscado e imprime su nombre y su cedula
 */
 void BuscarAlumnos(void);
+
+/*
+	Crear el indice de alumnos
+	Parametros:
+		Alumno *A : Alumno a ser insertado al indice
+
+	Retorno : AlumC *: Indice de alumno creado
+*/
+AlumC *crearIndiceAl(Alumno *);
+
+/*
+	Inserta un alumno al indice global
+*/
+void insertarAlumC(AlumC*);
 
 #endif

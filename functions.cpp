@@ -3,8 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <locale.h>
-#include <wchar.h>
 #include "functions.h"
 /************************/
 /* DECLARACIONES VARIAS */
@@ -47,14 +45,14 @@ void impMenu(const char *titulo, int optlen, ...) {
 }
 
 int impSiNo(const char *planteamiento) {
-	TILDES;
+	
 	printf("\n%s (S/N) \n", planteamiento);
 	char o = -1;
 	do {
 		scanf("%c", &o);
 		o = tolower(o);
 		if (o != 's' && o != 'n')
-			printf("Opción no reconocida");
+			printf("Opcion no reconocida\n");
 	} while (o != 's' && o != 'n');
 	return o == 's';
 }

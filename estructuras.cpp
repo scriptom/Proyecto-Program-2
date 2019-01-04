@@ -33,15 +33,15 @@ typedef struct Materia {
 	int codigo;
 	char nombre[30];
 	char area[20];
-	char creditos;
-	char semestre;
+	unsigned short creditos;
+	unsigned short semestre;
 	Materia *prox;
 }Materia;
 
 typedef struct Curso {
 	int codigo;
 	unsigned short ano;
-	char lapso;
+	unsigned short lapso;
 	int codMat;
 	Horario horario;
 	Curso *prox;
@@ -54,7 +54,7 @@ typedef struct Curso {
 
 typedef struct AlumN {
 	char estatus;
-	char nota;
+	short int nota;
 	Curso *curso;
 	AlumN *prox;
 }AlumN;
@@ -66,7 +66,7 @@ typedef struct AlumC {
 }AlumC;
 
 typedef struct CursosA {
-	char nota;
+	short int nota;
 	char estatus;
 	Alumno* alumno;
 	CursosA* prox;

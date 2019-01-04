@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wchar.h>
-#include <locale.h>
 #include "alumnos.h"
 #include "cursos.h"
 #include "functions.h"
@@ -13,6 +11,7 @@
 */
 
 Alumno *Al = NULL;
+AlumC *IndAlumno = NULL;
 
 Fecha crearFecha() {
 	// asumimos que la fecha es invalida inicialmente
@@ -21,9 +20,9 @@ Fecha crearFecha() {
 	Fecha fecha;
 	// mientras sea invalida la fecha, volvemos a llenar los datos (Posible optimizacion seria solamente pedir el dato erroneo)
 	while( ! esValida ) {
-		TILDES;
+		
 		// solicitamos el dia (1-31)
-		printf("\tDía: ");
+		printf("\tDia: ");
 		scanf( "%hu%*c", &(fecha.dia) );
 		// solicitamos el mes (1-12)
 		printf("\tMes: ");
@@ -50,24 +49,24 @@ Fecha crearFecha() {
 }
 
 void printAlumno(Alumno *A, int detalle) {
-	TILDES;
+	
 	if (!A) return; // solamente actuamos si el alumno no es NULL
-	printf("Información del alumno: %s %s\n", A->nombre, A->apellido);
+	printf("Informacion del alumno: %s %s\n", A->nombre, A->apellido);
 	printf("\tNombre completo: %s %s\n", A->nombre, A->apellido);
-	printf("\tCédula: %i\n", A->cedula);
+	printf("\tCedula: %i\n", A->cedula);
 	if ( detalle ) {
 		printf("\tFecha Nacimiento: %hi/%hi/%hi\n", A->fechaNac.dia, A->fechaNac.mes, A->fechaNac.ano);
-		printf("\tTeléfono: %s\n", A->telefono);
+		printf("\tTelefono: %s\n", A->telefono);
 		printf("\tCorreo: %s\n", A->correo);
-		printf("\tDirección: %s\n", A->direccion);
+		printf("\tDireccion: %s\n", A->direccion);
 	}
 }
 
 void printListaAlumno(Alumno *A, int detalle) {
-	TILDES;
+	
 	// solamente actuamos si la lista no esta vacia
 	if (!A) {
-		printf("\tLista vacía\n");
+		printf("\tLista vacia\n");
 		return; 
 	}
 	printf("----------------------------\n\n");
@@ -84,6 +83,10 @@ int cantidadAlumnos( Alumno *A ) {
 }
 
 void insertarAlumno(Alumno **P, Alumno *A) {
+
+	// insertamos el alumno en el indice de alumnos
+	insertarAlumC( crearIndiceAl( A ) );
+
 	// si no hay Cabeza, se asigna al A alumno y regresamos
 	if (!*P) {
 		*P = A;
@@ -112,10 +115,11 @@ void insertarAlumno(Alumno **P, Alumno *A) {
 
 	// si no hemos insertado hasta este punto, es el ultimo.
 	t->prox = A;
+
 }
 
 Alumno *obtenerAlumnoPorCedula(Alumno *A, int cedula) {
-	// Como los alumnos deben estar insertados por cedula (menor-mayor), podemos salir si no hay elemento actual o si la cédula actual es mayor a la cédula a buscar
+	// Como los alumnos deben estar insertados por cedula (menor-mayor), podemos salir si no hay elemento actual o si la cedula actual es mayor a la cedula a buscar
 	if ( ( ! A ) || A->cedula > cedula ) return NULL;
 
 	// si no regresamos null, entonces comparemos la cedula. Si hay coincidencia regresamos el alumno, caso contrario vamos con el siguiente
@@ -129,9 +133,10 @@ Alumno *obtenerAlumnosPorNombre(Alumno *P, char *nombre ) {
 	nombre = minusculas( nombre );
 	// iteramos sobre la lista de alumnos dada
 	while ( A ) {
-		// comparamos el nombre en minúsculas del alumno actual con el nombre en minúsculas a buscar
-		// si está, lo insertamos en la lista de coincidencias
-		if ( strstr( minusculas( A->nombre ), nombre ) ) insertarAlumno( &coincidencias, extraerAlumno(P, A->cedula) );
+		// comparamos el nombre en minusculas del alumno actual con el nombre en minusculas a buscar
+		// si esta, lo insertamos en la lista de coincidencias
+		if ( strstr( minusculas( A->nombre ), nombre ) ) 
+			insertarAlumno( &coincidencias, extraerAlumno(P, A->cedula) );
 		// vamos al siguiente alumno de la lista
 		A = A->prox;
 	}
@@ -154,21 +159,21 @@ Alumno *crearAlumno(void) {
 
 	// solicitamos la cedula del alumno hasta que esta sea una cedula unica (No este en el sistema)
 	do {
-		TILDES;
-		printf( "Cédula de identidad del alumno: " );
+		
+		printf( "Cedula de identidad del alumno: " );
 		scanf( "%i%*c", &(A->cedula) );
 		existe = obtenerAlumnoPorCedula( Al, A->cedula );
 		if ( existe )
-			printf("El alumno con la cédula \"%i\" ya existe, pertence a %s\n Por favor ingrese otro número de cédula\n", existe->cedula, existe->nombre);
+			printf("El alumno con la cedula \"%i\" ya existe, pertence a %s\n Por favor ingrese otro numero de cedula\n", existe->cedula, existe->nombre);
 	} while( existe );
 
-	TILDES;
+	
 	// solicitamos la direccion del alumno
-	printf( "Dirección: " );
+	printf( "Direccion: " );
 	gets_s( A->direccion );
 
 	// solicitamos el numero telefonico del alumno
-	printf( "Teléfono: " );
+	printf( "Telefono: " );
 	gets_s( A->telefono );
 
 	// solicitamos los datos de la fecha de nacimiento del alumno
@@ -176,7 +181,7 @@ Alumno *crearAlumno(void) {
 	A->fechaNac = crearFecha();
 
 	// solicitamos el correo electronico del alumno
-	printf( "Correo Electrónico: " );
+	printf( "Correo Electronico: " );
 	gets_s( A->correo );
 
 	// inicializamos el proximo elemento de este alumno como nulo
@@ -194,31 +199,31 @@ void modificarAlumno(Alumno **P) {
 
 		// salimos cuando la opcion sea 0
 		do {
-			TILDES;
+			
 			// mostramos el encabezado
 			impCabezado();
 			printAlumno(*P);
 			impMenu(
-				"Estas son las opciones disponibles para los alumnos.\nMarque la opción de acuerdo a la operación que desea realizar",
+				"Estas son las opciones disponibles para los alumnos.\nMarque la opcion de acuerdo a la operacion que desea realizar",
 				6,
-				"Editar número de cédula",
+				"Editar numero de cedula",
 				"Editar el nombre del alumno",
-				"Editar la dirección del alumno",
-				"Editar número de teléfono",
+				"Editar la direccion del alumno",
+				"Editar numero de telefono",
 				"Editar fecha de nacimiento",
-				"Editar correo electrónico"
+				"Editar correo electronico"
 			);
 			scanf("%i%*c", &opt);
 			switch ( opt ) {
 				case 0: break;
 				case 1:
 					do {
-						printf("Introduzca el nuevo número de cédula para %s. Actual: %d: ", (*P)->nombre, (*P)->cedula);
+						printf("Introduzca el nuevo numero de cedula para %s. Actual: %d: ", (*P)->nombre, (*P)->cedula);
 						scanf("%i%*c", &(cedula));
 						if (existe = obtenerAlumnoPorCedula(Al, cedula))
-							printf("Error al cambiar el numero de cédula: Un alumno con esa cédula ya existe en el sistema: %s %s\n", existe->nombre, existe->apellido);
+							printf("Error al cambiar el numero de cedula: Un alumno con esa cedula ya existe en el sistema: %s %s\n", existe->nombre, existe->apellido);
 					} while ( existe );
-					printf("Cédula cambiada con éxito\n");
+					printf("Cedula cambiada con exito\n");
 					system("pause");
 					break;
 				case 2:
@@ -226,35 +231,35 @@ void modificarAlumno(Alumno **P) {
 					gets_s( (*P)->nombre );
 					printf("Introduzca un nuevo apellido para %s. Actual: %s: ", (*P)->nombre, (*P)->apellido);
 					gets_s( (*P)->apellido );
-					printf("Nombres y apellido cambiados con éxito\n");
+					printf("Nombres y apellido cambiados con exito\n");
 					system("pause");
 					break;
 				case 3:
-					printf("Introduzca una nueva dirección para %s. Actual: %s: ", (*P)->nombre, (*P)->direccion);
+					printf("Introduzca una nueva direccion para %s. Actual: %s: ", (*P)->nombre, (*P)->direccion);
 					gets_s( (*P)->direccion );
-					printf("Dirección cambiada con éxito\n");
+					printf("Direccion cambiada con exito\n");
 					system("pause");
 					break;
 				case 4:
-					printf("Introduzca un nuevo número de teléfono para %s. Actual: %s: ", (*P)->nombre, (*P)->telefono);
+					printf("Introduzca un nuevo numero de telefono para %s. Actual: %s: ", (*P)->nombre, (*P)->telefono);
 					gets_s( (*P)->telefono );
-					printf("Número de teléfono cambiado con éxito\n");
+					printf("Numero de telefono cambiado con exito\n");
 					system("pause");
 					break;
 				case 5:
 					printf("Introduzca una nueva fecha de nacimiento para %s. Actual: %hi/%hi/%hi: ", (*P)->nombre, (*P)->fechaNac.ano, (*P)->fechaNac.mes, (*P)->fechaNac.dia);
 					(*P)->fechaNac = crearFecha();
-					printf("Fecha de nacimiento cambiada con éxito\n");
+					printf("Fecha de nacimiento cambiada con exito\n");
 					system("pause");
 					break;
 				case 6:
-					printf("Introduzca un nuevo correo electrónico para %s. Actual: %s: ", (*P)->nombre, (*P)->correo);
+					printf("Introduzca un nuevo correo electronico para %s. Actual: %s: ", (*P)->nombre, (*P)->correo);
 					gets_s( (*P)->correo );
-					printf("Correo electrónico cambiado con éxito\n");
+					printf("Correo electronico cambiado con exito\n");
 					system("pause");
 					break;
 				default: 
-					printf("Opción no reconocida. Vuelva a intentar\n");
+					printf("Opcion no reconocida. Vuelva a intentar\n");
 			}
 		} while ( opt );
 	}
@@ -298,7 +303,7 @@ void consultarAlumno(Alumno **P, int cedula) {
 	if (alumno)
 		printAlumno(alumno);
 	else 
-		printf( "No se encontró a ningún alumno con la cédula '%i'\n", cedula );
+		printf( "No se encontro a ningun alumno con la cedula '%i'\n", cedula );
 }
 
 void vaciarListaAlumnos(Alumno **P) {
@@ -426,7 +431,27 @@ void BuscarAlumnos(){
 	printf("\nIntroduzca el nombre del alumno que desea buscar\n");
 	gets_s(Nombre);
 	P = obtenerAlumnosPorNombre(Lista,Nombre);
-	if (Lista) printListaAlumno(P,1);
+	if (Lista) printListaAlumno(P,detalle());
 	else printf("No se han encontrado ningun alumno con ese nombre\n");
 	system("Pause");
+}
+
+AlumC *crearIndiceAl(Alumno *A) {
+	AlumC *indice = new AlumC;
+	indice->prox = NULL;
+	indice->materias = NULL;
+	indice->alumno = A;
+
+	return indice;
+}
+
+void insertarAlumC( AlumC *nodo ) {
+	AlumC *global = IndAlumno;
+	if ( ! IndAlumno ) IndAlumno = nodo;
+	else {
+		while ( global->prox )
+			global = global->prox;
+		
+		global->prox = nodo;
+	}
 }

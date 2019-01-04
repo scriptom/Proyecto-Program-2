@@ -12,7 +12,7 @@ extern Curso *Cur;
 extern CursosY *IndCurso;
 
 /*
-	Variable global, a ser utilizada a lo largo del programa como el índice de cursos
+	Variable global, a ser utilizada a lo largo del programa como el indice de cursos
 */
 extern CursosY *IndCurso;
 

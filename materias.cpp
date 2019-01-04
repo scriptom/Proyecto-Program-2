@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
 #include "functions.h"
 #include "materias.h"
 
@@ -9,12 +8,12 @@ Materia *Mat = NULL;
 
 void printMateria(Materia *M, int detalle) {
 	if (!M) return; // solamente actuamos si la Materia no es NULL
-	printf("Información de la Materia: %s\n", M->nombre);
+	printf("Informacion de la Materia: %s\n", M->nombre);
 	printf("\tNombre: %s\n", M->nombre);
-	printf("\tCódigo: %i\n", M->codigo);
+	printf("\tCodigo: %i\n", M->codigo);
 	if (detalle) {
-		printf("\tÁrea: %s\n", M->area);
-		printf("\tCréditos: %d\n", M->creditos);
+		printf("\tarea: %s\n", M->area);
+		printf("\tCreditos: %d\n", M->creditos);
 		printf("\tSemestre: %d\n\n", M->semestre);
 	}
 }
@@ -22,7 +21,7 @@ void printMateria(Materia *M, int detalle) {
 void printListaMateria(Materia *M, int detalle) {
 	// solamente actuamos si la lista no esta vacia
 	if (!M) {
-		printf("\tLista vacía\n");
+		printf("\tLista vacia\n");
 		return;
 	}
 	printf("----------------------------\n\n");
@@ -43,24 +42,24 @@ Materia *crearMateria() {
 
 	// solicitamos la Codigo del Materia hasta que esta sea una Codigo unica (No este en el sistema)
 	do {
-		printf("Código de identidad de la Materia: ");
+		printf("Codigo de identidad de la Materia: ");
 		scanf("%i%*c", &(M->codigo));
 		existe = obtenerMateriaPorCodigo(Mat, M->codigo);
 		if (existe)
-			printf("La Materia con el código \"%i\" ya existe, pertence a %s\n Por favor ingrese otro código\n", existe->codigo, existe->nombre);
+			printf("La Materia con el codigo \"%i\" ya existe, pertence a %s\n Por favor ingrese otro codigo\n", existe->codigo, existe->nombre);
 	} while (existe);
 
 	// solicitamos el area de la Materia
-	printf("Área: ");
+	printf("area: ");
 	gets_s(M->area);
 
 	// solicitamos el numero de creditos que ocupa la Materia
-	printf("Número de créditos: ");
-	scanf("%hhd%*c", &(M->creditos));
+	printf("Numero de creditos: ");
+	scanf("%hu%*c", &(M->creditos));
 	
 	// solicitamos el semestre en el que se debe estar para cursar la Materia
-	printf("Semestre mínimo: ");
-	scanf("%hhd%*c", &(M->semestre));
+	printf("Semestre minimo: ");
+	scanf("%hu%*c", &(M->semestre));
 
 	// inicializamos el proximo elemento de este Materia como nulo
 	M->prox = NULL;
@@ -90,19 +89,19 @@ void modificarMateria(Materia **P) {
 			impCabezado();
 			printMateria(*P);
 			impMenu(
-				"Estas son las opciones disponibles para las Materias.\nMarque la opción de acuerdo a la operación que desea realizar",
+				"Estas son las opciones disponibles para las Materias.\nMarque la opcion de acuerdo a la operacion que desea realizar",
 				5,
-				"Editar número de Código",
+				"Editar numero de Codigo",
 				"Editar el nombre de la Materia",
-				"Editar el área de la Materia",
-				"Editar el número de créditos",
-				"Editar semestre mínimo"
+				"Editar el area de la Materia",
+				"Editar el numero de creditos",
+				"Editar semestre minimo"
 			);
 			scanf("%i%*c", &opt);
 			switch (opt) {
 			case 0: break;
 			case 1:
-				printf("Introduzca el nuevo número de código para %s. Actual: %d: ", (*P)->nombre, (*P)->codigo);
+				printf("Introduzca el nuevo numero de codigo para %s. Actual: %d: ", (*P)->nombre, (*P)->codigo);
 				scanf("%i%*c", &((*P)->codigo));
 				break;
 			case 2:
@@ -110,19 +109,19 @@ void modificarMateria(Materia **P) {
 				gets_s((*P)->nombre);
 				break;
 			case 3:
-				printf("Introduzca la nueva área para %s. Actual: %s: ", (*P)->nombre, (*P)->area);
+				printf("Introduzca la nueva area para %s. Actual: %s: ", (*P)->nombre, (*P)->area);
 				gets_s((*P)->area);
 				break;
 			case 4:
-				printf("Introduzca la nueva cantidad de créditos de %s. Actual: %d: ", (*P)->nombre, (*P)->creditos);
-				scanf("%hhd%*c", &((*P)->creditos));
+				printf("Introduzca la nueva cantidad de creditos de %s. Actual: %d: ", (*P)->nombre, (*P)->creditos);
+				scanf("%hu%*c", &((*P)->creditos));
 				break;
 			case 5:
-				printf("Introduzca el nuevo semestre mínimo para %s. Actual: %d: ", (*P)->nombre, (*P)->semestre);
-				scanf("%hhd%*c", &((*P)->semestre));
+				printf("Introduzca el nuevo semestre minimo para %s. Actual: %d: ", (*P)->nombre, (*P)->semestre);
+				scanf("%hu%*c", &((*P)->semestre));
 				break;
 			default:
-				printf("Opción no reconocida. Vuelva a intentar\n");
+				printf("Opcion no reconocida. Vuelva a intentar\n");
 			}
 		} while (opt);
 	}
@@ -198,14 +197,14 @@ int ObtenerCodigoMateria(Materia *P,char *Nombre){
 	}
 	if (( cm = cantidadMaterias(M)) > 1) {
 		impCabezado();
-		printf("Elija la materia que desea usar para su búsqueda:\n\n");
+		printf("Elija la materia que desea usar para su busqueda:\n\n");
 		aux = M;
 		for ( ; cont < cm; cont++, aux = aux->prox)
 			printf("\t%i. %s\n", cont + 1, aux->nombre);
 		do {
 			scanf("%i%*c",&opcion);
 			if ((opcion < 1) || (opcion > cm))
-				printf("El número indicado no es válido\n");
+				printf("El numero indicado no es valido\n");
 		} while ((opcion < 1) || (opcion > cm));
 			aux = obtenerEnesimaMateria(M, opcion);
 			return aux->codigo;

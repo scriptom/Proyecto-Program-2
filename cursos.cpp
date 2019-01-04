@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
 #include "alumnos.h"
 #include "cursos.h"
 #include "materias.h"
@@ -17,25 +16,25 @@ const char *horStr(Horario h) {
 }
 
 void printCurso(Curso *C, int detalle) {
-	TILDES;
+	
 	if (!C) return; // solamente actuamos si el Curso no es NULL
 	Materia *M = obtenerMateriaPorCodigo(Mat, C->codMat);
-	printf("Información del Curso: %s (%d)\n\n", M->nombre, C->ano);
+	printf("Informacion del Curso: %s (%d)\n\n", M->nombre, C->ano);
 	printf("\tNombre de la materia: %s\n", M->nombre);
-	printf("\tCódigo Curso: %i\n", C->codigo);
+	printf("\tCodigo Curso: %i\n", C->codigo);
 	if (detalle) {
 		printf("\tAño: %d\n", C->ano);
 		printf("\tLapso: %d\n", C->lapso);
-		printf("\tCódigo de la materia: %d\n", C->codMat);
+		printf("\tCodigo de la materia: %d\n", C->codMat);
 		printf("\tHorario: %s\n\n", horStr( C->horario ));
 	}
 }
 
 void printListaCurso(Curso *C, int detalle) {
-	TILDES;
+	
 	// solamente actuamos si la lista no esta vacia
 	if (!C) {
-		printf("\tLista vacía\n");
+		printf("\tLista vacia\n");
 		return;
 	}
 	printf("----------------------------\n\n");
@@ -55,10 +54,10 @@ Curso *crearCurso() {
 	do {
 		do {
 			//  solicitamos el codigo de la materia del curso
-			printf("Introduzca el código de la materia: ");
+			printf("Introduzca el codigo de la materia: ");
 			scanf("%i%*c", &codigoMateria);
 			if ( ! obtenerMateriaPorCodigo(Mat, codigoMateria)) {
-				printf("No existe ninguna materia con el código \"%i\"\n", codigoMateria);
+				printf("No existe ninguna materia con el codigo \"%i\"\n", codigoMateria);
 				if ( ! impSiNo("Desea reintentar?")) return NULL;
 				codigoMateria = 0;
 			}
@@ -68,14 +67,14 @@ Curso *crearCurso() {
 			// solicitamos el ano de la Curso
 			printf("Año que representa este curso: ");
 			scanf("%hu%*c", &ano);
-			if ( ano < 1970) printf("El año introducido es inválido, introduzca otro\n");
+			if ( ano < 1970) printf("El año introducido es invalido, introduzca otro\n");
 		} while ( ano < 1970 );
 
 		// para este punto, el año y el codigo de la materia son validos, asi que podemos generar el codigo del curso
 		codigoCurso = genCodigoCurso(ano, codigoMateria);
 		existe = obtenerCursoPorCodigo(Cur, codigoCurso);
 		if (existe) {
-			printf("Un curso con esas características ya existe (Código %d)\n", existe->codigo);
+			printf("Un curso con esas caracteristicas ya existe (Codigo %d)\n", existe->codigo);
 			if ( ! impSiNo("Desea reintentar?")) return NULL;
 		}
 	} while (existe);
@@ -85,14 +84,14 @@ Curso *crearCurso() {
 	C->codigo = codigoCurso;
 
 	// solicitamos el numero de lapso que ocupa la Curso
-	printf("Número de lapso: ");
-	scanf("%hhd%*c", &(C->lapso));
+	printf("Numero de lapso: ");
+	scanf("%hu%*c", &(C->lapso));
 
 	do {
 		// solicitamos el horario en el que se debe estar para cursar la Curso
 		impMenu("Horario de este curso", 3, "Matutino", "Vespertino", "Nocturno");
 		scanf("%d%*c", &horario);
-		if ( ( horario < 1  ) || ( horario > 3 ) ) printf("Opción no reconocida, por favor seleccione una opción válida\n");
+		if ( ( horario < 1  ) || ( horario > 3 ) ) printf("Opcion no reconocida, por favor seleccione una opcion valida\n");
 	} while ( ( horario < 1 ) || ( horario > 3 ) );
 
 	// para este punto el horario es valido, hacemos una conversion explicita
@@ -136,24 +135,24 @@ void modificarCurso(Curso **P) {
 			// mostramos el encabezado
 			impCabezado();
 			printCurso(*P);
-			printf("**NOTA: EL AÑO Y EL CÓDIGO DE LA MATERIA NO SE GUARDARÁN HASTA QUE DECIDA SALIR**\n\n");
+			printf("**NOTA: EL AÑO Y EL CoDIGO DE LA MATERIA NO SE GUARDARaN HASTA QUE DECIDA SALIR**\n\n");
 			impMenu(
-				"Estas son las opciones disponibles para los Cursos.\nMarque la opción de acuerdo a la operación que desea realizar",
+				"Estas son las opciones disponibles para los Cursos.\nMarque la opcion de acuerdo a la operacion que desea realizar",
 				4,
-				"Editar el Código de Materia",
+				"Editar el Codigo de Materia",
 				"Editar el año del Curso",
-				"Editar el número de lapso",
+				"Editar el numero de lapso",
 				"Editar horario"
 			);
 			scanf("%i", &opt);
 			switch (opt) {
 			case 0: break;
 			case 1:
-				printf("Introduzca el nuevo código de materia para este curso. Actual: %d: ", (*P)->codMat);
+				printf("Introduzca el nuevo codigo de materia para este curso. Actual: %d: ", (*P)->codMat);
 				do {
 					scanf("%d%*c", &codMat);
 					if ( ! obtenerMateriaPorCodigo( Mat, codMat ) ) {
-						printf("No existe ninguna materia con ese código\nIntroduzca otro\n");
+						printf("No existe ninguna materia con ese codigo\nIntroduzca otro\n");
 						codMat = 0;
 					}
 				} while ( !codMat );
@@ -164,19 +163,19 @@ void modificarCurso(Curso **P) {
 				break;
 			case 3:
 				printf("Introduzca el nuevo lapso para este curso. Actual: %d: ",  (*P)->lapso);
-				scanf("%hhd%*c", &((*P)->lapso));
+				scanf("%hu%*c", &((*P)->lapso));
 				break;
 			case 4:
 				printf("Seleccione el nuevo turno de horario para este curso. Actual: %s\n", horStr((*P)->horario));
 				impMenu("\0", 3, "Matutino", "Vespertino", "Nocturno");
 				do {
 					scanf("%hu%*c", &horario);
-					if ( (horario < 1) || (horario > 3) ) printf("Opción no reconocida, seleccione un horario válido\n");
+					if ( (horario < 1) || (horario > 3) ) printf("Opcion no reconocida, seleccione un horario valido\n");
 				} while ( (horario < 1) || (horario > 3) );
 				(*P)->horario = (Horario)(--horario);
 				break;
 			default:
-				printf("Opción no reconocida. Vuelva a intentar\n");
+				printf("Opcion no reconocida. Vuelva a intentar\n");
 			}
 			if ( ano != -1 || codMat != -1 ) {
 				if ( ano == -1 ) ano = (*P)->ano;

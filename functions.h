@@ -1,8 +1,6 @@
 #ifndef FUNCIONES_H
 #define FUNCIONES_H
 
-#define TILDES setlocale(LC_ALL, "")
-
 /**
  * Devuelve un string totalmente en minusculas
  */
