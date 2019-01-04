@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+<<<<<<< HEAD
+=======
+#include <locale.h>
+#include <locale.h>
+>>>>>>> Robert
 #include "alumnos.h"
 #include "cursos.h"
 #include "materias.h"
@@ -245,6 +250,7 @@ int genCodigoCurso(int ano, int cod) {
 void BuscarCursos(char *NombreM){
 	int Codigo;
 	Curso *C=NULL;
+	impCabezado();
 	Codigo = ObtenerCodigoMateria(Mat,NombreM);
 	if (Codigo){
 		Buscar(Codigo,&C);
@@ -414,4 +420,12 @@ void ImprimirRecordAcademicoAlumno(int Cedula){
 		}
 		T = T->prox;
 	}
+}
+
+void BuscarCursosPorNombre(){
+	char Nombre[30];
+	impCabezado();
+	printf("Introduzca el nombre de la materia que se desea buscar\n");
+	scanf("%s",Nombre);
+	BuscarCursos(Nombre);
 }

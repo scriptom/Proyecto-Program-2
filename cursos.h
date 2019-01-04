@@ -203,4 +203,9 @@ CursosS *BuscarPrimeraCoincidencia(CursosS*,int);
 */
 void ImprimirRecordAcademicoAlumno(int);
 
+/*
+	Busca usando el nombre de una materia, todos los cursos que sean de esa materia
+*/
+void BuscarCursosPorNombre(void);
+
 #endif

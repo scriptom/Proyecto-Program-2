@@ -31,7 +31,7 @@ typedef struct Alumno {
 
 typedef struct Materia {
 	int codigo;
-	char nombre[15];
+	char nombre[30];
 	char area[20];
 	char creditos;
 	char semestre;

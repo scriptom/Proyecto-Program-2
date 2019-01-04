@@ -51,7 +51,7 @@ Materia *crearMateria() {
 	} while (existe);
 
 	// solicitamos el area de la Materia
-	printf("Área: \n");
+	printf("Área: ");
 	gets_s(M->area);
 
 	// solicitamos el numero de creditos que ocupa la Materia

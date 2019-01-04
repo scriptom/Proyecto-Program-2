@@ -416,3 +416,16 @@ CursosA *EstaInscrito(CursosA* Puntero,int Cedula){
 	}
 	return NULL;
 }
+
+void BuscarAlumnos(){
+	impCabezado();
+	Alumno *Lista = Al;
+	Alumno *P = NULL;
+	char Nombre[15];
+	printf("\nIntroduzca el nombre del alumno que desea buscar\n");
+	scanf("%s",Nombre);
+	P = obtenerAlumnosPorNombre(Lista,Nombre);
+	if (Lista) printListaAlumno(P,1);
+	else printf("No se han encontrado ningun alumno con ese nombre\n");
+	system("Pause");
+}
