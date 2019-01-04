@@ -59,11 +59,6 @@ int impSiNo(const char *planteamiento) {
 	return o == 's';
 }
 
-void miflush() {
-	int c;
-	while (((c = getchar()) != '\n') && c != EOF);
-}
-
 void impCabezado() {
 	system("cls");
 	printf("*********************************\n");

@@ -56,7 +56,7 @@ void main()
 		impCabezado();
 		impMenu("Qué desea hacer?", 3, "Mantenimiento", "Inscripciones", "Consultas");
 
-		scanf("%i", &opt);
+		scanf("%i%*c", &opt);
 		switch ( opt ) {
 			case 0: break;
 			case 1: menuMantenimiento(); break;
@@ -65,7 +65,6 @@ void main()
 			default: printf("Opción \"%i\" no reconocida. Marque una opción valida\n", opt); system("pause");
 		}
 	} while ( opt );
-	miflush();
 	if ( impSiNo( "Desea guardar lo modificado?" ) )
 		guardarEnArchivos();
 	printf("Hasta luego!\n");
@@ -82,8 +81,7 @@ void menuMantenimiento() {
 		impCabezado();
 		impMenu("Qué desea gestionar?", 3, "Alumnos", "Materias", "Cursos");
 
-		scanf("%i", &opt);
-		miflush();
+		scanf("%i%*c", &opt);
 		switch (opt) {
 		case 0: break;
 		case 1: menuAlumnado(); break;
@@ -111,7 +109,7 @@ void menuAlumnado(void) {
 			"Mostrar lista de Alumnos"
 		);
 		
-		scanf("%i", &opt);
+		scanf("%i%*c", &opt);
 		switch ( opt ) {
 			case 0: break; // si es 0, salimos del switch y ya
 			case 1:
@@ -123,7 +121,7 @@ void menuAlumnado(void) {
 			case 2:
 				// solicitamos el numero de cedula 
 				printf("Por favor inserte el número de cédula: ");
-				scanf("%i",&cedula);
+				scanf("%i%*c",&cedula);
 				// (tal vez) obtenemos el alumno en cuestion
 				res = obtenerAlumnoPorCedula(Al, cedula);
 				if (res) {
@@ -141,12 +139,11 @@ void menuAlumnado(void) {
 			case 3:
 				// solicitamos el numero de cedula a eliminar
 				printf("Introduzca el número de cédula a buscar: ");
-				scanf("%i", &cedula);
+				scanf("%i%*c", &cedula);
 				elimAlumno(&Al, cedula);
 				system("pause");
 				break;
 			case 4:
-				miflush();
 				printListaAlumno(Al, detalle());
 				system("pause");
 				break;
@@ -170,8 +167,7 @@ void menuMaterias(void) {
 			"Mostrar lista de Materias"
 		);
 		
-		scanf( "%i", &opt );
-		miflush();
+		scanf( "%i%*c", &opt );
 		switch ( opt ) {
 			case 0: break;
 			case 1:
@@ -181,7 +177,7 @@ void menuMaterias(void) {
 				break;
 			case 2:
 				printf("Inserte el código de la materia que desea modificar: ");
-				scanf("%i", &codigo);
+				scanf("%i%*c", &codigo);
 				res = obtenerMateriaPorCodigo(Mat, codigo);
 				if (res) modificarMateria(&res);
 				else printf("No se encontró ninguna materia con el código \"%i\"\n", codigo);
@@ -189,7 +185,7 @@ void menuMaterias(void) {
 				break;
 			case 3:
 				printf("Inserte el código de la materia a eliminar: ");
-				scanf("%i", &codigo);
+				scanf("%i%*c", &codigo);
 				elimMateria(&Mat, codigo);
 				system("pause");
 				break;
@@ -218,7 +214,7 @@ void menuDeCursos(void) {
 			"Mostrar lista de Cursos"
 		);
 
-		scanf("%i", &opt);
+		scanf("%i%*c", &opt);
 		switch (opt) {
 		case 0: break;
 		case 1:
@@ -228,7 +224,7 @@ void menuDeCursos(void) {
 			break;
 		case 2:
 			printf("Inserte el código del Curso que desea modificar: ");
-			scanf("%i", &codigo);
+			scanf("%i%*c", &codigo);
 			res = obtenerCursoPorCodigo(Cur, codigo);
 			if (res) modificarCurso(&res);
 			else {
@@ -238,7 +234,7 @@ void menuDeCursos(void) {
 			break;
 		case 3:
 			printf("Inserte el código del Curso a eliminar: ");
-			scanf("%i", &codigo);
+			scanf("%i%*c", &codigo);
 			elimCurso(&Cur, codigo);
 			break;
 		case 4:
@@ -270,8 +266,7 @@ void menuInscripciones(void) {
 			"Eliminar un curso",
 			"Mover un alumno de un curso"
 		);
-		scanf("%i", &opt);
-		miflush();
+		scanf("%i%*c", &opt);
 		switch (opt) {
 		case 0: break;
 		case 1: menuInsConsultas(); break;
@@ -344,8 +339,7 @@ void menuInsConsultas(void) {
 			"Alumnos por nombre",
 			"Cursos por nombre de materia"
 		);
-		scanf("%i", &opt);
-		miflush();
+		scanf("%i%*c", &opt);
 		if (opt < 0 || opt > 2) printf("Opción no reconocida\n");
 		else if (opt) {
 			printf("Introduzca término de búsqueda: ");

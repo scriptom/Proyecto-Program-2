@@ -23,14 +23,14 @@ Fecha crearFecha() {
 	// mientras sea invalida la fecha, volvemos a llenar los datos (Posible optimizacion seria solamente pedir el dato erroneo)
 	while( ! esValida ) {
 		// solicitamos el dia (1-31)
-		printf("\tDía: \n");
-		scanf( "%hu", &(fecha.dia) );
+		printf("\tDía: ");
+		scanf( "%hu%*c", &(fecha.dia) );
 		// solicitamos el mes (1-12)
-		printf("\tMes: \n");
-		scanf( "%hu", &(fecha.mes) );
+		printf("\tMes: ");
+		scanf( "%hu%*c", &(fecha.mes) );
 		// solicitamos el año (mayor a 1970)
-		printf("\tAño: \n");
-		scanf( "%hu", &(fecha.ano) );
+		printf("\tAño: ");
+		scanf( "%hu%*c", &(fecha.ano) );
 
 		/* 
 			Validaciones. Si una falla, las demas tienen que fallar 
@@ -63,7 +63,8 @@ void printAlumno(Alumno *A, int detalle) {
 }
 
 void printListaAlumno(Alumno *A, int detalle) {
-	TILDES;
+	//TILDES;
+	setlocale(LC_ALL, "");
 	// solamente actuamos si la lista no esta vacia
 	if (!A) {
 		printf("\tLista vacía\n");
@@ -144,8 +145,6 @@ Alumno *crearAlumno(void) {
 	// declaramos el nuevo alumno a insertar, y un auxiliar para saber si el alumno existe
 	Alumno *A = new Alumno, *existe = NULL;
 
-	miflush(); // limpiamos el buffer de entrada
-
 	// solicitamos el nombre del alumno
 	printf( "Nombre del alumno: " );
 	gets_s( A->nombre );
@@ -157,13 +156,11 @@ Alumno *crearAlumno(void) {
 	// solicitamos la cedula del alumno hasta que esta sea una cedula unica (No este en el sistema)
 	do {
 		printf( "Cédula de identidad del alumno: " );
-		scanf( "%i", &(A->cedula) );
+		scanf( "%i%*c", &(A->cedula) );
 		existe = obtenerAlumnoPorCedula( Al, A->cedula );
 		if ( existe )
 			printf("El alumno con la cédula \"%i\" ya existe, pertence a %s\n Por favor ingrese otro número de cédula\n", existe->cedula, existe->nombre);
 	} while( existe );
-
-	miflush(); // despues de una llamada a scanf, hay que limpiar el buffer
 
 	// solicitamos la direccion del alumno
 	printf( "Dirección: " );
@@ -174,10 +171,8 @@ Alumno *crearAlumno(void) {
 	gets_s( A->telefono );
 
 	// solicitamos los datos de la fecha de nacimiento del alumno
-	printf( "Fecha Nacimiento: " );
+	printf( "Fecha Nacimiento: \n" );
 	A->fechaNac = crearFecha();
-
-	miflush(); // despues de una llamada a scanf, hay que limpiar el buffer
 
 	// solicitamos el correo electronico del alumno
 	printf( "Correo Electrónico: " );
@@ -211,8 +206,7 @@ void modificarAlumno(Alumno **P) {
 				"Editar fecha de nacimiento",
 				"Editar correo electrónico"
 			);
-			scanf("%i", &opt);
-			miflush();
+			scanf("%i%*c", &opt);
 			switch ( opt ) {
 				case 0: break;
 				case 1:
@@ -368,41 +362,48 @@ void inscribirEnCurso(int cedula, int codigo) {
 	CursosA *alumnos = NULL;
 	// (posiblemente) un puntero a los cursos de un año
 	CursosY *cursosAno = NULL;
+
 	if (C && A) {
-		// sacamos una copia de los cursos dictados
+		// obtenemos el puntero del año
 		cursosAno = obtenerPunteroInd(C->ano);
 		if (!cursosAno)
+			// si no obtuvimos nada, lo creamos
 			cursosAno = CrearCursosY(C->ano);
 		
+		// obtenemos el listado de cursos dictados
 		indice = cursosAno->cursosDictados;
 
-		while ( indice ) {
-			// buscamos el 
+		// buscamos secuencialmente el indice cuyo curso tenga el codigo de nuestro curso
+		// si no hay, nos quedamos con el ultimo indice (que por descarte contiene nuestro curso)
+		while ( indice->prox ) {
+			// buscamos el curso en cuestion entre los cursos dictados
 			if (indice->curso &&
 				indice->curso->codigo == C->codigo) break;
 			indice = indice->prox;
 		}
 
-		if ( ! indice ) {
-			indice = new CursosS;
-			indice->alumnos = NULL;
-			indice->prox = NULL;
-			indice->curso = C;
-		}
-
+		// revisamos si tiene una lista de alumnos ya
 		if ( ! indice->alumnos ) {
+			// si no la tiene, la creamos
 			indice->alumnos = new CursosA;
+			// colocamos el siguiente alumno en la lista como NULL
 			indice->alumnos->prox = NULL;
-			indice->alumnos->alumno = NULL;
+			// conectamos el indice con el alumno a inscribir
+			indice->alumnos->alumno = A;
+			// su estatus es desconocido
 			indice->alumnos->estatus = '\0';
+			// su nota tambien
 			indice->alumnos->nota = -1;
 		}
+		else {
+			// en caso de tener lista de alumnos,
+			// vamos al ultimo lugar e insertamos
+			alumnos = indice->alumnos;
+			while ( alumnos->prox )
+				alumnos = alumnos->prox;
 
-		alumnos = indice->alumnos;
-		while ( alumnos->prox )
-			alumnos = alumnos->prox;
-
-		alumnos->prox = new CursosA;
+			alumnos->prox = new CursosA;
+		}
 	}
 }
 

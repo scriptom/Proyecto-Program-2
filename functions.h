@@ -25,11 +25,6 @@ void impMenu( const char *, int, ... );
 int impSiNo( const char * );
 
 /**
- * Limpia de manera manual el buffer de entrada estandar
- */
-void miflush();
-
-/**
  * Limpia la pantalla e imprime el encabezado de la aplicacion
  */
 void impCabezado();
