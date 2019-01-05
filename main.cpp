@@ -282,6 +282,27 @@ void menuInscripciones(void) {
 	} while (opt);
 }
 
+void menuParaRecord(void){
+int opt = -1;
+	do {
+		
+		impCabezado();
+		impMenu("Que desea consultar?", 3,
+			"Record academico de un alumno",
+			"Mostrar las veces que un alumno ha cursado una materia",
+			"Promedio del alumno"
+			);
+
+	scanf("%i%*c", &opt);
+		switch (opt) {
+		case 0: break;
+		case 1: ImprimirRecordAcademicoAlumno(); break;
+		case 2: BuscarRepeticionesDeCursos(); break;
+		case 3: 
+		}
+	} while (opt);
+
+}
 void menuParaConsultas(void) {
 	int opt = -1;
 	do {
@@ -300,8 +321,8 @@ void menuParaConsultas(void) {
 		case 0: break;
 		case 1: BuscarAlumnos(); break;
 		case 2: BuscarCursosPorNombre(); break;
-		case 3: ImprimirRecordAcademicoAlumno(); break;
-		case 4: BuscarRepeticionesDeCursos(); break;
+		case 3: menuParaRecord(); break;
+		case 4: 
 		case 5:
 		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); system("pause");
 		}
