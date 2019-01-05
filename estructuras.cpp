@@ -54,7 +54,7 @@ typedef struct Curso {
 
 typedef struct AlumN {
 	char estatus;
-	short int nota;
+	float nota;
 	Curso *curso;
 	AlumN *prox;
 }AlumN;
@@ -66,7 +66,7 @@ typedef struct AlumC {
 }AlumC;
 
 typedef struct CursosA {
-	short int nota;
+	float nota;
 	char estatus;
 	Alumno* alumno;
 	CursosA* prox;

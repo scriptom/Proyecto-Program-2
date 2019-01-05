@@ -240,4 +240,13 @@ CursosA *ultimoCursosA(CursosA *);
 */
 int insertarCursosA(CursosA **, CursosA *);
 
+/*
+	Regresa el listado de alumnos de un curso dado
+	Parametros:
+		Curso *C : El cuya lista se va a retornar
+	Retorno : CursosA * : La lista de alumnos
+*/
+CursosA *ubicarListaAlumnos(Curso *);
+
+
 #endif

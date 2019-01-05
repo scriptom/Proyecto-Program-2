@@ -385,7 +385,14 @@ int inscribirEnCurso(Alumno *A, Curso *C) {
 			indice = indice->prox;
 		}
 
-		return insertarCursosA(&(indice->alumnos), crearCursosA(A));
+
+		// regresamos si tuvimos exito o no insertando el alumno en el curso
+		int exito = insertarCursosA(&(indice->alumnos), crearCursosA(A));
+		if (exito)
+			// agregamos la materia a la lista de materias del alumno
+			agregarMateriaAAlumno(A, C);
+
+		return exito;
 	}
 
 	return 0;
@@ -438,7 +445,104 @@ int BuscarAlumnoCursosA(CursosA *Cab,Alumno *AlumnoBuscado){
 	CursosA *T = Cab;
 	while (T){
 		if (T->alumno == AlumnoBuscado) return 1;
-		T->prox;
+		T = T->prox;
 	}
 	return 0;
+}
+
+void agregarMateriaAAlumno(Alumno *A, Curso *C) {
+	// Copia del indice global de Alumnos. Para que cualquier ejecucion llegue hasta este punto, El indice no puede ser nulo, asi que podemos confiarnos
+	AlumC *global = IndAlumno;
+
+	// nos movemos hasta el ultimo elemento. Si 
+	while (global->prox) {
+		if (global->alumno == A) break;
+		global = global->prox;
+	}
+	insertarAlumN(&(global->materias), crearAlumN(C));
+}
+
+AlumN *crearAlumN(Curso *C) {
+	if (C) {
+		AlumN *indice = new AlumN;
+		indice->curso = C;
+		indice->prox = NULL;
+		indice->estatus = 'N';
+		indice->nota = -1.0f;
+
+		return indice;
+	}
+
+	return NULL;
+}
+
+void insertarAlumN(AlumN **listado, AlumN *indice) {
+	if (*listado) {
+		// llamamos recursivamente hasta el ultimo elemento
+		if ((*listado)->prox)
+			return insertarAlumN(&((*listado)->prox), indice);
+		// si llegamos hasta aqui, estamos en el ultimo elemento, insertamos como si nada
+		(*listado)->prox = indice;
+	}
+
+	// si no hay listado, nuestro indice es el primero
+	(*listado) = indice;
+}
+
+AlumC *ubicarAlumno(Alumno *A) {
+	if (A) {
+		AlumC *global = IndAlumno;
+		while (global->prox) {
+			if (global->alumno == A) break;
+			global = global->prox;
+		}
+
+		return global;
+	}
+	return NULL;
+}
+
+AlumN *ubicarMateriaAlumno(Curso *C, Alumno *A) {
+	if (C && A) {
+		AlumN *materias = ubicarAlumno(A)->materias;
+		while (materias->prox) {
+			if (materias->curso == C) break;
+			materias = materias->prox;
+		}
+
+		return materias;
+	}
+	return NULL;
+}
+
+void modificarNotaAlumno(Alumno *A, Curso *C) {
+	if (C && A) {
+		AlumN *indAlum = ubicarMateriaAlumno(C, A);
+		CursosA *indCur = ubicarListaAlumnos(C);
+		int continuar = 0;
+		float nota = -1.0f;
+		do {
+			impCabezado();
+			printf("Nota de %s %s en %d: ", A->nombre, A->apellido, C->codigo, indAlum->nota);
+			if ((indAlum->estatus == 'R') || (indCur->estatus == 'R'))
+				printf("RE");
+			else
+				if (indAlum->nota == -1) 
+					printf("(sin asignar)");
+				else
+					printf("%05.2f", indAlum->nota);
+			putchar('\n');
+			printf("Ingrese la nueva nota (-1 para cancelar): ");
+			scanf("%f%*c", &nota);
+			if (nota < 0 || nota > 20) {
+				if (-1.0f != nota) {
+					printf("'%05.2f' no es una nota valida. El valor debe ser un valor entre 0 y 20", nota);
+					continuar = impSiNo("Desea continuar editando?");
+				}
+				continue;
+			}
+			indAlum->nota = indCur->nota = nota;
+			continuar = 0;
+		} while (continuar);
+	}
 }

@@ -382,7 +382,7 @@ void MostrarNotaAlumno(CursosS *Curso,CursosA *AlumnoBuscado){
 	Materia *MateriaDeseada = NULL;
 	MateriaDeseada =  obtenerMateriaPorCodigo(Mat,(Curso->curso)->codMat);
 	printf("\n Nombre de la materia: %s \n",MateriaDeseada->nombre);
-	printf("\n La nota del alumno en la materia es: %c \n",AlumnoBuscado->nota);
+	printf("\n La nota del alumno en la materia es: %05.2f \n",AlumnoBuscado->nota);
 	printCurso(Curso->curso,1);
 }
 
@@ -491,6 +491,7 @@ void BuscarRepeticionesDeCursos(){
 		printf("\nEl alumno no ha cursado esta materia ninguna vez\n");
 		system("Pause");
 	}
+	system("pause");
 }
 
 CursosA *ultimoCursosA(CursosA *listado) {
@@ -503,8 +504,8 @@ CursosA *crearCursosA(Alumno *A) {
 	if (A) {
 		CursosA *indice = new CursosA;
 		indice->alumno = A;
-		indice->estatus = '\0';
-		indice->nota = -1;
+		indice->estatus = 'N';
+		indice->nota = -1.0f;
 		indice->prox = NULL;
 
 		return indice;
@@ -530,4 +531,18 @@ int insertarCursosA(CursosA **listado, CursosA *indice) {
 	// si no hay listado, nuestro indice es el primero
 	(*listado) = indice;
 	return 1;
+}
+
+CursosA *ubicarListaAlumnos(Curso *C) {
+	if (C) {
+		CursosS *cursos = obtenerPunteroInd(C->ano)->cursosDictados;
+		while (cursos->prox) {
+			if (cursos->curso = C) break;
+			cursos = cursos->prox;
+		}
+
+		return cursos->alumnos;
+	}
+
+	return NULL;
 }

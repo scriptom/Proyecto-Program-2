@@ -177,5 +177,53 @@ void insertarAlumC(AlumC*);
 */
 int BuscarAlumnoCursosA(CursosA *,Alumno*);
 
+/*
+	Agrega una materia (en realidad es un curso) al listado de materias vistas por un alumno
+	Parametros:
+		Alumno *A : El Alumno a quien se le va a agregar la materia
+		Curso *C  : El Curso que se va a agregar a la lista del Alumno
+
+*/
+void agregarMateriaAAlumno(Alumno *, Curso *);
+
+/*
+	Crea un registro en el indice de materias de alumno
+	Parametro:
+		Curso *C: Materia correspondiente
+*/
+AlumN *crearAlumN(Curso *);
+
+/*
+	Inserta un nodo de materias cursadas (AlumN) en un listado dado
+	Parametros:
+		AlumN **listado : El listado de materias original
+		AlumN *materia : La materia a ser ingresada en la lista
+*/
+void insertarAlumN(AlumN**, AlumN*);
+
+/*
+	Pone a un alumno en un estado de modificacion de nota
+	Parametros:
+		Alumno *A : Alumno cuya nota sera modificada
+		Curso *C : Curso donde la nota sera modificada
+*/
+void modificarNotaAlumno(Alumno *, Curso *);
+
+/*
+	Ubica y devuelve la instancia de una materia dentro del indice de alumnos
+	Parametros:
+		Curso *C  : Curso donde esta el alumno inscrito
+		Alumno *A : Alumno cuyos datos se quieren
+	Retorno : AlumN * : El indice de materias de alumno relevante
+*/
+AlumN *ubicarMateriaAlumno(Curso *, Alumno *);
+
+/*
+	Ubica y devuelve la instancia de un alumno en el indice
+	Parametros:
+		Alumno *A : Alumno a ubicar en el indice
+	Retorno: AlumC * : Indice del alumno ubicado
+*/
+AlumC *ubicarAlumno(Alumno *);
 
 #endif

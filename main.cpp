@@ -35,6 +35,7 @@ void menuInscripciones(void);
 	void menuInsConsultas(void);
 	void menuSingleInscripcion(void);
 	void menuMultiInscripcion(void);
+	void menuModificarNota(void);
 void menuParaConsultas(void);
 
 
@@ -267,15 +268,17 @@ void menuInscripciones(void) {
 			"Inscripcion de un alumno en un curso",
 			"Inscripcion de varios alumnos en un curso",
 			"Modificar la nota de un alumno en un curso",
-			"Eliminar alumno de un curso",
+			"Modificar estatus de inscripcion",
 			"Eliminar un curso",
-			"Mover un alumno de un curso"
+			"Mover un alumno de un curso a otro"
 		);
 		scanf("%i%*c", &opt);
 		switch (opt) {
 		case 0: break;
 		case 1: menuInsConsultas(); break;
 		case 2: menuSingleInscripcion(); break;
+		case 3: menuMultiInscripcion(); break;
+		case 4: menuModificarNota(); break;
 		default: printf("Opcion no reconocida\n");
 			break;
 		}
@@ -298,7 +301,7 @@ int opt = -1;
 		case 0: break;
 		case 1: ImprimirRecordAcademicoAlumno(); break;
 		case 2: BuscarRepeticionesDeCursos(); break;
-		case 3: 
+		case 3: break;
 		}
 	} while (opt);
 
@@ -473,20 +476,52 @@ void menuMultiInscripcion(void) {
 		do {
 			printf("Cedula del alumno #%d: ", numAlum);
 			scanf("%i%*c", &cedula);
+			if (!cedula) break;
 			if (!(A = obtenerAlumnoPorCedula(Al, cedula))) {
 				printf("No existe ningun alumno con la cedula %d\n", cedula);
 				continue;
 			}
 			else {
 				exito = inscribirEnCurso(A, C);
-				if (!exito) {
+				if (!exito)
 					printf("Ocurrio un error al intentar inscribir el alumno al curso\n");
+				else {
 					numAlum++;
-				}
-				else
 					printf("El alumno fue inscrito con exito\n");
+				}
 			}
-		} while (cedula);
+		} while (1);
+		system("pause");
+	} while (!salir);
+}
+
+void menuModificarNota(void) {
+	int salir = 1, cedula = -1, codigo = -1;
+	Alumno *alumno = NULL;
+	Curso *curso = NULL;
+	do {
+		impCabezado();
+		printf("Ingrese la cedula del alumno cuya nota se altarara: ");
+		scanf("%i%*c", &cedula);
+		if (!(alumno = obtenerAlumnoPorCedula(Al, cedula))) {
+			printf("No se consiguio ningun alumno con la cedula %d\n", cedula);
+			salir = !impSiNo("Desea volver a intentar?");
+			continue;
+		}
+		printf("Ingrese el codigo del curso que cursa el alumno: ");
+		scanf("%i%*c", &codigo);
+		if ( ! (curso = obtenerCursoPorCodigo(Cur, codigo))) {
+			printf("No se consiguio ningun curso con el codigo %d\n", codigo);
+			salir = !impSiNo("Desea volver a intentar?");
+			continue;
+		}
+		// verificamos que siquiera este inscrito el alumno en el curso
+		if (EstaInscrito(ubicarListaAlumnos(curso), alumno->cedula)) {
+			// en caso de que lo este, entonces podemos cargar la modificacion
+			modificarNotaAlumno(alumno, curso);
+		}
+		else printf("El alumno %s no se encuentra inscrito en %s (%d)", alumno->nombre, obtenerMateriaPorCodigo(Mat, curso->codMat)->nombre, curso->ano);
+		salir = 1;
 		system("pause");
 	} while (!salir);
 }
