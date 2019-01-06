@@ -652,3 +652,81 @@ int moverAlumnoDeCurso(Alumno *A, Curso *F, Curso *D) {
 
 	return -1;
 }
+AlumC *BuscarPunteroIndAlumno(Alumno *P){
+	AlumC *T = IndAlumno;
+	while (T){
+		if ((T->alumno) == P ) return T;
+		T=T->prox;
+		}
+	return NULL;
+}
+
+void PrintPromedio(AlumN *Cab){
+	AlumN *P = Cab;
+	int Retiradas = 0;
+	int Reprobadas = 0;
+	int Promedio = 0;
+	int CantidadMaterias = 0;
+	while (P){
+		CantidadMaterias++;
+		if (P->estatus == 'R') Retiradas++;
+		else {
+			if (P->nota != -1) Promedio += P->nota;
+			if (P->nota < 10) Reprobadas++;
+		}
+	}
+	printf("\nPromedio: %i\nReprobadas: %i\nRetiradas: %i",Promedio/CantidadMaterias,Reprobadas,Retiradas);
+}
+
+void CalcularPromedio(){
+	int salir, Cedula;
+	Alumno *AlumnoBuscado;
+	AlumC *T;
+	impCabezado();
+	do{
+		salir = 1;
+		printf("Introduzca el numero de cedula del alumno al cual calcular el promedio\n");
+		scanf("%i%*c",&Cedula);
+		AlumnoBuscado = obtenerAlumnoPorCedula(Al,Cedula);
+		if (!AlumnoBuscado)
+			salir = impSiNo("El alumno no existe, ¿Desea introducir otra cedula?");
+	}while(!salir);
+	T = BuscarPunteroIndAlumno(AlumnoBuscado);
+	printf("\nPromedio del alumno: %s %s\n",T->alumno->nombre,T->alumno->apellido);
+	PrintPromedio(T->materias);
+}
+
+void CalcularAlumnos(CursosA *ListaAlumnos,PromedioCurso **CursoPromediado){
+	(*CursoPromediado)->promedio = 0;
+	CursosA *T = ListaAlumnos;
+	int Alum = 0;
+	while (T){
+		((*CursoPromediado)->CantidadAlumnos)++;
+		if (T->estatus == 'R') ((*CursoPromediado)->Retirados )++;
+		else {
+			if(T->nota !=(-1)){
+				Alum++;
+				if (T->nota >= 10) ((*CursoPromediado)->Aprobados)++;
+				else ((*CursoPromediado)->Reprobados)++;
+				(*CursoPromediado)->promedio += T->nota; 
+			}
+		}
+	}
+	(*CursoPromediado)->promedio /= Alum;
+}
+
+void BuscarNotaMax(CursosS *Cab){
+	CursosS *T = Cab;
+	CursosA *P;
+	while (T){
+		P = T->alumnos;
+		while (P){
+			if (P->nota == 20){
+				printAlumno(P->alumno,0);
+				printCurso(T->curso,1);
+			}
+			P = P->prox;
+		}
+	}
+	system("Pause");
+}

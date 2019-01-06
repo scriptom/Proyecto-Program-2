@@ -214,8 +214,33 @@ void BuscarCursosPorNombre(void);
 void BuscarRepeticionesDeCursos(void);
 
 /*
+	Inserta un CursosS en una lista de CursosS por cola
+	Parametros:
+		CursosS **Cab: La cabeza de la lista de cursosS
+		CursosS *Nuevo: El cursosS que se desea ingresar
 */
-CursosS *BuscarCursos(CursosS *,int);
+void InsertarListaCursosScola(CursosS **,CursosS *);
+
+/*
+	Busca un curso por el codigo de la materia y el año
+	Parametros:
+		Int Codigo: Es el codigo de la materia a buscar
+		Int Año: Es el año del curso a buscar
+*/
+Curso *BuscarCursoPorCodigoYano(int,int);
+
+/*
+	Inserta un CursosS en una lista de  por cabeza
+	Parametros:
+		CursosS **Cab: La cabeza de la lista de cursosS
+		CursosS *Nuevo: El cursosS que se desea ingresar
+*/
+void InsertarListaCursosScabeza(CursosS **,CursosS *);
+
+/*
+	
+*/
+CursosS *obtenerCursos(CursosS *Cab,int codigo);
 
 /*
 	Crea una nueva entrada en el indice de cursos CursosA
@@ -255,5 +280,15 @@ CursosA *ubicarListaAlumnos(Curso *);
 */
 void removerIndCurso(Curso *);
 
+/*
+	Imprime los datos de un curso especifico, la cantidad de alumos que lo cursan y la cantidad de aprobados, reprobados y retirados
+*/
+void DatosDelCurso(void);
+/*
+	Busca y devuelve un curso en el indice de cursos
+	Parametro:
+		Curso *Buscado: Es el curso que se desea encontrar
+*/
+CursosS *ObtenerCursosS(Curso *);
 
 #endif

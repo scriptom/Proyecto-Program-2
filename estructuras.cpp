@@ -38,6 +38,14 @@ typedef struct Materia {
 	Materia *prox;
 }Materia;
 
+typedef struct PromedioCurso {
+	int CantidadAlumnos;
+	int Aprobados;
+	int Reprobados;
+	int Retirados;
+	int promedio;
+}PromedioCurso;
+
 typedef struct Curso {
 	int codigo;
 	unsigned short ano;
@@ -46,7 +54,8 @@ typedef struct Curso {
 	Horario horario;
 	Curso *prox;
 }Curso;
-	
+
+
 // FIN DECLARACION DE ESTRUCTURAS BASE
 //--------------------------------------
 // INICIO DECLARACION DE INDICES
