@@ -14,7 +14,7 @@ void printMateria(Materia *M, int detalle) {
 	printf("\tNombre: %s\n", M->nombre);
 	printf("\tCodigo: %i\n", M->codigo);
 	if (detalle) {
-		printf("\tarea: %s\n", M->area);
+		printf("\tArea: %s\n", M->area);
 		printf("\tCreditos: %d\n", M->creditos);
 		printf("\tSemestre: %d\n\n", M->semestre);
 	}

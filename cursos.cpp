@@ -112,16 +112,16 @@ void insertarCurso(Curso **P, Curso *C) {
 	// si la cabeza es nulo, entonces asignamos el nuevo como cabeza
 	if (!(*P)) {
 		*P = C;
+		InsertarIndCurso(C);
 	}
 	// si el siguiente es nulo, estamos en el ultimo elemento, insertemos
 	else if (!(*P)->prox) {
 		(*P)->prox = C;
+		InsertarIndCurso(C);
 	}
 	// llamamos recursivamente si estamos en cualquier otro punto de la lista
-	else insertarCurso(&(*P)->prox, C);
-
-	// lo insertamos al indice
-	InsertarIndCurso(C);
+	else
+		insertarCurso(&(*P)->prox, C);
 }
 
 void modificarCurso(Curso **P) {
@@ -338,6 +338,8 @@ void InsertarCursosS(CursosS** Cab, Curso *Agregar){
 	else{ 
 		CursosS *T = *Cab;	
 		while (T->prox){
+			// prevencion de repetidos en el indice (repetidos causados por la recursividad ups)
+			if (T->curso->codigo == Agregar->codigo) return;
 			T = T->prox;
 		}
 		T->prox = P;
@@ -456,7 +458,11 @@ void InsertarListaCursosScabeza(CursosS **Cab,CursosS *Nuevo){
 	CursosS *T = *Cab;
 	if (!(*Cab)) *Cab =Nuevo;
 	else{
-		while(T->prox) T = T->prox;
+		while (T->prox) {
+			// prevencion de repetidos
+			if (T->curso->codigo == Nuevo->curso->codigo) return;
+			T = T->prox;
+		}
 		T->prox = Nuevo;
 	}
 }
@@ -665,16 +671,21 @@ Curso *BuscarCursoPorCodigoYano(int Codigo,int Ano){
 }
 
 CursosA *ubicarAlumnoEnCurso(Curso *C, Alumno *A) {
-	CursosA *lista = ubicarListaAlumnos(C);
-	while (lista->prox) {
-		if (lista->alumno->cedula == A->cedula)
-			return lista;
-		lista = lista->prox;
-	}
+	if (C && A) {
+		CursosA *lista = ubicarListaAlumnos(C);
+		while (lista->prox) {
+			if (lista->alumno->cedula == A->cedula) break;
+			lista = lista->prox;
+		}
 
+		return lista;
+	}
 	return NULL;
 }
 
 CursosS *ubicarCursosEnAno(unsigned short y) {
-	return ubicarIndiceAnual(y)->cursosDictados;
+	CursosY *anual = ubicarIndiceAnual(y);
+	if (anual) 
+		return anual->cursosDictados;
+	return NULL;
 }

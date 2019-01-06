@@ -487,22 +487,20 @@ void cargarDeArchivos() {
 	FILE *falumno = fopen("alumnos.alp2", "ab+"),
 		*fmateria = fopen("materias.alp2", "ab+"),
 		*fcurso   = fopen("cursos.alp2", "ab+"),
-		*findalum = fopen("indalum.alp2", "ab+"),
-		*findcurs = fopen("indcurs.alp2", "ab+");
+		*findice  = fopen("indice.alp2", "ab+");
 
 	extraerAlumnosDesdeArchivo(&Al, falumno);
 	extraerMateriasDesdeArchivo(&Mat, fmateria);
 	extraerCursosDesdeArchivo(&Cur, fcurso);
 
-	completarIndice(findcurs);
+	completarIndice(findice);
 	//completarIndiceCursos(findcurs);
 
 	// cerramos los handlers
 	fclose(falumno);
 	fclose(fmateria);
 	fclose(fcurso);
-	fclose(findalum);
-	fclose(findcurs);
+	fclose(findice);
 
 }
 
@@ -546,14 +544,16 @@ void completarIndice(FILE *f) {
 
 void guardarEnArchivos() {
 	// inicializamos los handlers de archivos
-	FILE *falumno = fopen("alumnos.alp2", "wb"),
+	FILE *falumno  = fopen("alumnos.alp2", "wb"),
 		 *fmateria = fopen("materias.alp2", "wb"),
-		 *fcurso = fopen("cursos.alp2", "wb");
+		 *fcurso   = fopen("cursos.alp2", "wb"),
+		 *findice  = fopen("indice.alp2", "wb");
 
 	// asignamos los punteros a las cabezas
 	Alumno *A = Al;
 	Materia *M = Mat;
 	Curso *C = Cur;
+
 
 	// si no tenemos una lista global vacia, vamos a iterar sobre ella e insertamos
 	if (A)
@@ -570,6 +570,7 @@ void guardarEnArchivos() {
 	fclose(falumno);
 	fclose(fmateria);
 	fclose(fcurso);
+	fclose(findice);
 }
 
 void menuInsConsultas(void) {

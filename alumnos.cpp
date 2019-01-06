@@ -548,38 +548,36 @@ void modificarNotaAlumno(Alumno *A, Curso *C, float nota) {
 	if (C && A) {
 		AlumN *indAlum = ubicarMateriaAlumno(C, A);
 		CursosA *indCur = ubicarAlumnoEnCurso(C, A);
-		if (EstaInscrito(indCur, A->cedula)) {
-			int continuar = 0;
-			// si no nos pasaron nada, la nota debe ser -1
-			if (nota == -1.0f)
-				do {
-					impCabezado();
-					printf("Nota de %s %s en %d: ", A->nombre, A->apellido, C->codigo);
-					if ((indAlum->estatus == 'R') || (indCur->estatus == 'R'))
-						printf("RE");
+		int continuar = 0;
+		// si no nos pasaron nada, la nota debe ser -1
+		if (nota == -1.0f)
+			do {
+				impCabezado();
+				printf("Nota de %s %s en %d: ", A->nombre, A->apellido, C->codigo);
+				if ((indAlum->estatus == 'R') || (indCur->estatus == 'R'))
+					printf("RE");
+				else
+					if (indAlum->nota == -1)
+						printf("(sin asignar)");
 					else
-						if (indAlum->nota == -1)
-							printf("(sin asignar)");
-						else
-							printf("%05.2f", indAlum->nota);
-					putchar('\n');
-					printf("Ingrese la nueva nota (-1 para cancelar): ");
-					scanf("%f%*c", &nota);
-					if (nota < 0.0f || nota > 20.0f) {
-						if (-1.0f != nota) {
-							printf("'%05.2f' no es una nota valida. El valor debe ser un valor entre 0 y 20", nota);
-							continuar = impSiNo("Desea continuar editando?");
-						}
-						continue;
+						printf("%05.2f", indAlum->nota);
+				putchar('\n');
+				printf("Ingrese la nueva nota (-1 para cancelar): ");
+				scanf("%f%*c", &nota);
+				if (nota < 0.0f || nota > 20.0f) {
+					if (-1.0f != nota) {
+						printf("'%05.2f' no es una nota valida. El valor debe ser un valor entre 0 y 20", nota);
+						continuar = impSiNo("Desea continuar editando?");
 					}
-					indAlum->nota = indCur->nota = nota;
-					continuar = 0;
-				} while (continuar);
-			// si nos pasaron algo, simplemente asignamos esa nota (con tal de que sea valida)
-			else
-				if (nota >= 0.0f && nota <= 20.0f)
-					indAlum->nota = indCur->nota = nota;
-		}
+					continue;
+				}
+				indAlum->nota = indCur->nota = nota;
+				continuar = 0;
+			} while (continuar);
+		// si nos pasaron algo, simplemente asignamos esa nota (con tal de que sea valida)
+		else
+			if (nota >= 0.0f && nota <= 20.0f)
+				indAlum->nota = indCur->nota = nota;
 	}
 }
 
