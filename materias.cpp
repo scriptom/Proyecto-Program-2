@@ -3,6 +3,8 @@
 #include <string.h>
 #include "functions.h"
 #include "materias.h"
+#include "cursos.h"
+#include "alumnos.h"
 
 Materia *Mat = NULL;
 
@@ -259,4 +261,110 @@ Materia *extraerMateria(Materia *M, int codigo) {
 
 	// regresamos
 	return extraido;
+}
+
+void InformacionHistoricaMateria(void){
+	CursosY *T = IndCurso;
+	int Codigo,CantidadCur = 0,Nota = 0;
+	Materia *MateriaBuscada;
+	CursosS *CursoEncontrado;
+	CursosS *Lista = NULL;
+	PromedioCurso *Prom = new PromedioCurso;
+	Prom->Aprobados = 0;
+	Prom->Reprobados = 0;
+	Prom->Retirados = 0;
+	Prom->CantidadAlumnos = 0;
+	Prom->promedio = 0;
+	int SN = 1;
+		{
+		printf("\nIntroduzca el codigo de la materia\n");
+		scanf("%i",&Codigo);
+		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
+		if (!MateriaBuscada){
+			SN = impSiNo("La materia no existe, ¿Desea introducir otro codigo?");
+			if (!SN) return;
+			}
+	} while (!MateriaBuscada);
+		while (T){
+			CursoEncontrado = obtenerCursos(T->cursosDictados,Codigo);
+			if (CursoEncontrado) InsertarListaCursosScola(&Lista,CursoEncontrado);
+			T = T->prox;
+		}
+		while(Lista){
+			CantidadCur++;
+			CalcularAlumnos(Lista->alumnos,&Prom);
+			Nota +=Prom->promedio;
+			printf("\nEl promedio de los alumnos del curso del año: %hu, es: %i\n",(Lista->curso)->ano,Prom->promedio);
+			Lista = Lista->prox;
+		}
+		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es:%i\nEl numero de reprobados es: %i\nEl numero de retirados es:%i",Prom->CantidadAlumnos,Nota/CantidadCur,Prom->Reprobados,Prom->Retirados);
+		system("Pause");
+}
+
+void InformacionDeUnaMateria(void){
+	PromedioCurso *Prom = new PromedioCurso;
+	Prom->Aprobados;
+	Prom->Reprobados;
+	Prom->Retirados;
+	Prom->promedio;
+	Prom->CantidadAlumnos;
+	int Codigo,ano,SN =1;
+	int CodigoCurso;
+	Materia *MateriaBuscada;
+	CursosS *P;
+	Curso *Buscado;
+	do{
+		printf("\nIntroduzca el codigo de la materia\n");
+		scanf("%i",&Codigo);
+		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
+		printf("Introduzca el año del curso");
+		scanf("%i",ano);
+		if (!MateriaBuscada){
+			SN = impSiNo("La materia no existe, ¿Desea introducir otro codigo?");
+			if (!SN) return;
+			}
+	} while (!MateriaBuscada);
+	Buscado = BuscarCursoPorCodigoYano(Codigo,ano);
+	if (!Buscado){
+		printf("El curso que busca no existe");
+		system("Pause");
+		return;
+	}
+	else{
+		P = ObtenerCursosS(Buscado);
+		CalcularAlumnos(P->alumnos,&Prom);
+		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es:%i\nEl numero de reprobados es: %i\nEl numero de retirados es:%i",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
+		system("Pause");
+		}
+}
+
+void AlumnosNotaMaxima(void){
+	CursosY *T = IndCurso;
+	int Codigo,CantidadCur = 0,Nota = 0;
+	Materia *MateriaBuscada;
+	CursosS *CursoEncontrado;
+	CursosS *Lista = NULL;
+	PromedioCurso *Prom = new PromedioCurso;
+	Prom->Aprobados = 0;
+	Prom->Reprobados = 0;
+	Prom->Retirados = 0;
+	Prom->CantidadAlumnos = 0;
+	Prom->promedio = 0;
+	int SN = 1;
+		{
+		printf("\nIntroduzca el codigo de la materia\n");
+		scanf("%i",&Codigo);
+		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
+		if (!MateriaBuscada){
+			SN = impSiNo("La materia no existe, ¿Desea introducir otro codigo?");
+			if (!SN) return;
+			}
+	} while (!MateriaBuscada);
+	while (T){
+		CursoEncontrado = obtenerCursos(T->cursosDictados,Codigo);
+		if (CursoEncontrado) InsertarListaCursosScabeza(&Lista,CursoEncontrado);
+		T = T->prox;
+	}
+	BuscarNotaMax(Lista);
+	system("Pause");
 }

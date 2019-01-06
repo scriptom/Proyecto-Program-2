@@ -115,5 +115,18 @@ int ObtenerCodigoMateria(Materia *,char*);
 		Materia **P : La lista de materias a vaciar
 */
 void vaciarListaMaterias(Materia**);
+/*
+	Imprime el total de todos los alumnos que han cursado una materia a lo largo del tiempo
+*/
+void InformacionHistoricaMateria(void);
+/*
+	
+*/
+void InformacionDeUnaMateria(void);
+
+/*
+	Busca a los alumnos que hayan obtenido la nota maxima en una materia especifica
+*/
+void AlumnosNotaMaxima(void);
 
 #endif

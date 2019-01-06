@@ -415,7 +415,7 @@ void ImprimirRecordAcademicoAlumno(){
 	short existe = 0;
 	int Cedula = 0;
 	printf("\nIntroduzca el numero de cedula del alumno a buscar\n");
-	scanf("%i",&Cedula);	system("Pause");
+	scanf("%i",&Cedula);
 	while (T){
 		Puntero = BuscarPrimeraCoincidencia(T->cursosDictados,Cedula);
 		if (Puntero) existe = 1;
@@ -430,6 +430,26 @@ void ImprimirRecordAcademicoAlumno(){
 		system("Pause");
 	}
 }
+
+void InsertarListaCursosScola(CursosS **Cab,CursosS *Nuevo){
+	Nuevo->prox = NULL;
+	if (!(*Cab)) *Cab =Nuevo;
+	else{
+		Nuevo->prox = *Cab;
+		*Cab = Nuevo;
+	}
+}
+
+void InsertarListaCursosScabeza(CursosS **Cab,CursosS *Nuevo){
+	Nuevo->prox = NULL;
+	CursosS *T = *Cab;
+	if (!(*Cab)) *Cab =Nuevo;
+	else{
+		while(T->prox) T = T->prox;
+		T->prox = Nuevo;
+	}
+}
+
 
 void BuscarCursosPorNombre(){
 	char Nombre[30];
@@ -530,4 +550,50 @@ int insertarCursosA(CursosA **listado, CursosA *indice) {
 	// si no hay listado, nuestro indice es el primero
 	(*listado) = indice;
 	return 1;
+}
+
+CursosS *ObtenerCursosS(Curso *Buscado){
+	CursosY *T = IndCurso;
+	CursosS *Lista;
+	while (T){
+		Lista = T->cursosDictados;
+		while(Lista){
+			if (Lista->curso == Buscado) return Lista;
+			Lista = Lista->prox;
+		}
+		T = T->prox;
+	}
+	return NULL;
+}
+
+void DatosDelCurso(void){
+	int Codigo = 0;
+	Curso *CursoBuscado; 
+	CursosS *Encontrado;
+	PromedioCurso *NuevoProm = new PromedioCurso;
+	impCabezado();
+	int salir = 0;
+	do{
+		printf("\nIntroduzca el codigo del curso\n");
+		scanf("%i",Codigo);
+		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
+		if (!CursoBuscado)
+			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
+	} while(salir);
+	if (CursoBuscado){
+	Encontrado = ObtenerCursosS(CursoBuscado);
+	printCurso(CursoBuscado,1);
+	CalcularAlumnos(Encontrado->alumnos,&NuevoProm);
+	printf("\nLa cantidad de alumnos inscritos en el curso es de: %i \nLa cantidad de aprobados es: %i \nLa cantidad de repobados es: %i \nLa cantidad de retirados es: %i\n",(NuevoProm->CantidadAlumnos),(NuevoProm->Aprobados),(NuevoProm->Reprobados),(NuevoProm->Retirados));
+	system("Pause");
+	}
+}
+
+Curso *BuscarCursoPorCodigoYano(int Codigo,int Ano){
+	Curso *T = Cur;
+	while (T){
+		if ((T->codMat == Codigo) && (T->ano ==Ano)) return T;
+		T = T->prox;
+	}
+	return NULL;
 }

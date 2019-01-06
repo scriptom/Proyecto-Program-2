@@ -177,5 +177,35 @@ void insertarAlumC(AlumC*);
 */
 int BuscarAlumnoCursosA(CursosA *,Alumno*);
 
+/*
+	Calcula el promedio, la cantidad de materias que han sido retiradas y reprobadas
+*/
+void CalcularPromedio(void);
 
+/*
+	Busca en el indice de alumnos un alumno
+	Parametros:
+		Alumno * P: Es el puntero al alumno que hay que localizar
+*/
+AlumC *BuscarPunteroIndAlumno(Alumno *);
+
+/*
+	Imprime el promedio, reprobadas y retiradas
+	Parametros:
+		AlumN *Cab: Es el puntero a la lista de materias de un alumno
+*/
+void PrintPromedio(AlumN *);
+/*
+	Imprime la cantidad de alumnos que hay en el curso, los retirados, aprobados y raspados
+	Parametros:
+		CursosA *ListaAlumnos: Es el punteroa a la lista de alumnos 
+*/
+void CalcularAlumnos(CursosA *,PromedioCurso **);
+
+/*
+	Busca a los alumnos con la nota maxima en una lista de CursosS
+	Parametros:
+		CursosS *Cab: Es la lista con los cursos de una materia
+*/
+void BuscarNotaMax(CursosS *);
 #endif

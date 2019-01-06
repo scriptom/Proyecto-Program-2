@@ -274,7 +274,7 @@ void menuInscripciones(void) {
 		scanf("%i%*c", &opt);
 		switch (opt) {
 		case 0: break;
-		case 1: menuInsConsultas(); break;
+		case 1: DatosDelCurso(); break;
 		case 2: menuSingleInscripcion(); break;
 		default: printf("Opcion no reconocida\n");
 			break;
@@ -282,15 +282,15 @@ void menuInscripciones(void) {
 	} while (opt);
 }
 
-void menuParaRecord(void){
-int opt = -1;
+void menuParaConsultasAlumno(void){
+	int opt = -1;
 	do {
 		
 		impCabezado();
-		impMenu("Que desea consultar?", 3,
-			"Record academico de un alumno",
-			"Mostrar las veces que un alumno ha cursado una materia",
-			"Promedio del alumno"
+		impMenu("¿Que desea consultar sobre un alumno?", 3,
+			"Mostrar su record academico",
+			"Mostrar las veces que curso una materia especifica",
+			"Calcular su promedio y el numero de materias reprobadas y retiradas"
 			);
 
 	scanf("%i%*c", &opt);
@@ -298,11 +298,54 @@ int opt = -1;
 		case 0: break;
 		case 1: ImprimirRecordAcademicoAlumno(); break;
 		case 2: BuscarRepeticionesDeCursos(); break;
-		case 3: 
+		case 3: CalcularPromedio(); break;
+		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); system("pause");
+		}
+	} while (opt);
+}
+void menuParaConsultaCurso(void) {
+	int opt = -1;
+	do {
+		
+		impCabezado();
+		impMenu("¿Que desea consultar sobre un curso?", 2,
+			"Consultar numero de alumnos inscritos, numero de aprobados, reprobados y retirados",
+			"Informacion del curso y de los alumnos inscritos"
+			);
+
+	scanf("%i%*c", &opt);
+		switch (opt) {
+		case 0: break;
+		case 1: DatosDelCurso(); break;
+		case 2: ; break;
+		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); system("pause");
 		}
 	} while (opt);
 
 }
+
+void menuParaConsultaMateria(void){
+int opt = -1;
+	do {
+		
+		impCabezado();
+		impMenu("Que desea consultar?", 3,
+			"Mostrar la cantidad de alumnos que ha cursado esta materia, el promedio por curso y la cantidad de retirados y reprobados",
+			"Mostrar la informacion de los alumnos que cursaron la materia en un año especifico",
+			"Mostrar los alumnos que obtuvieron la calificacion mas alta y la informacion del curso en el que se encuntran"
+			);
+
+	scanf("%i%*c", &opt);
+		switch (opt) {
+		case 0: break;
+		case 1: InformacionHistoricaMateria(); break;
+		case 2:	InformacionDeUnaMateria(); break;
+		case 3: AlumnosNotaMaxima(); break;
+		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); system("pause");
+		}
+	} while (opt);
+}
+
 void menuParaConsultas(void) {
 	int opt = -1;
 	do {
@@ -321,9 +364,9 @@ void menuParaConsultas(void) {
 		case 0: break;
 		case 1: BuscarAlumnos(); break;
 		case 2: BuscarCursosPorNombre(); break;
-		case 3: menuParaRecord(); break;
-		case 4: 
-		case 5:
+		case 3: menuParaConsultasAlumno(); break;
+		case 4: menuParaConsultaCurso(); break;
+		case 5: menuParaConsultaMateria(); break;
 		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); system("pause");
 		}
 	} while (opt);
