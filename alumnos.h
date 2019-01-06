@@ -154,6 +154,15 @@ CursosA *EstaInscrito(CursosA*,int);
 int inscribirEnCurso(Alumno *, Curso *);
 
 /*
+	Elimina un alumno de un curso
+	Parametros:
+		Alumno *A : Alumno a eliminar
+		Curso *C  : Curso donde eliminar
+	Retorno: int : Si hubo exito en la eliminacion devuelve 1, 0 en caso contrario
+*/
+int eliminarDeCurso(Alumno *, Curso *);
+
+/*
 	Busca todos los alumnos cuyo nombre coincida parcial o totalmente con el buscado e imprime su nombre y su cedula
 */
 void BuscarAlumnos(void);
@@ -210,6 +219,14 @@ void insertarAlumN(AlumN**, AlumN*);
 void modificarNotaAlumno(Alumno *, Curso *);
 
 /*
+	Modifica el estatus de inscripcion de un alumno en un curso
+	Parametros:
+		Alumno *A : El alumno que esta en un curso
+		Curso *C : El curso en cuestion 
+*/
+void modificarEstatusAlumno(Alumno *, Curso *);
+
+/*
 	Ubica y devuelve la instancia de una materia dentro del indice de alumnos
 	Parametros:
 		Curso *C  : Curso donde esta el alumno inscrito
@@ -225,5 +242,24 @@ AlumN *ubicarMateriaAlumno(Curso *, Alumno *);
 	Retorno: AlumC * : Indice del alumno ubicado
 */
 AlumC *ubicarAlumno(Alumno *);
+
+/*
+	Elimina un curso dado de la lista de materias de un alumno dado
+	Parametros:
+		Alumno *A : El alumno a quien se le quitara un curso
+		Curso *C : El curso a eliminar
+*/
+void removerMateriaDeListado(Alumno *, Curso *);
+
+/*
+	Mueve un alumno de un curso fuente a un curso destino. 
+	Parametros:
+		Alumno *A : El alumno a mover
+		Curso *F  : El curso fuente (donde esta ahora el alumno)
+		Curso *D  : El curso destino (donde se movera el alumno)
+	Retorno : int : Devuelve 0 en caso de exito, 1 en caso de que el alumno no este en el curso fuente,
+	y 2 en caso de que ya este en el curso destino. Un numero negativo implica que alguno de los elementos no existe
+*/
+int moverAlumnoDeCurso(Alumno *, Curso *, Curso *);
 
 #endif

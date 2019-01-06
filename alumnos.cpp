@@ -4,6 +4,7 @@
 #include "alumnos.h"
 #include "cursos.h"
 #include "functions.h"
+#include <ctype.h>
 
 /*
 	La documentacion acerca de lo que hace cada funcion esta en alumnos.h
@@ -55,7 +56,7 @@ void printAlumno(Alumno *A, int detalle) {
 	printf("\tNombre completo: %s %s\n", A->nombre, A->apellido);
 	printf("\tCedula: %i\n", A->cedula);
 	if ( detalle ) {
-		printf("\tFecha Nacimiento: %hi/%hi/%hi\n", A->fechaNac.dia, A->fechaNac.mes, A->fechaNac.ano);
+		printf("\tFecha Nacimiento: %02hi/%02hi/%hi\n", A->fechaNac.dia, A->fechaNac.mes, A->fechaNac.ano);
 		printf("\tTelefono: %s\n", A->telefono);
 		printf("\tCorreo: %s\n", A->correo);
 		printf("\tDireccion: %s\n", A->direccion);
@@ -398,6 +399,37 @@ int inscribirEnCurso(Alumno *A, Curso *C) {
 	return 0;
 }
 
+int eliminarDeCurso(Alumno *A, Curso *C) {
+	if (A && C) {
+		// regresamos temprano si no esta inscrito
+		if (!EstaInscrito(ubicarListaAlumnos(C), A->cedula)) 
+			return 0;
+
+		CursosA *copia = ubicarListaAlumnos(C),
+			**cabeza = &copia,
+			*del = NULL;
+		// comparamos la cabeza con el alumno
+		if ((*cabeza)->alumno == A) {
+			del = *cabeza;
+			(*cabeza) = del->prox;
+		}
+		else while (copia->prox) {
+			if (copia->prox->alumno == A) {
+				del = copia->prox;
+				copia->prox = del->prox;
+				break;
+			}
+			copia = copia->prox;
+		}
+			
+		removerMateriaDeListado(A, C);
+		delete del;
+		return 1;
+	}
+
+	return 0;
+}
+
 CursosA *EstaInscrito(CursosA* Puntero,int Cedula){
 	CursosA *T = Puntero;
 	while (T){
@@ -523,7 +555,7 @@ void modificarNotaAlumno(Alumno *A, Curso *C) {
 		float nota = -1.0f;
 		do {
 			impCabezado();
-			printf("Nota de %s %s en %d: ", A->nombre, A->apellido, C->codigo, indAlum->nota);
+			printf("Nota de %s %s en %d: ", A->nombre, A->apellido, C->codigo);
 			if ((indAlum->estatus == 'R') || (indCur->estatus == 'R'))
 				printf("RE");
 			else
@@ -545,4 +577,78 @@ void modificarNotaAlumno(Alumno *A, Curso *C) {
 			continuar = 0;
 		} while (continuar);
 	}
+}
+
+void modificarEstatusAlumno(Alumno *A, Curso *C) {
+	if (A && C) {
+		AlumN *indAlum = ubicarMateriaAlumno(C, A);
+		CursosA *indCur = ubicarListaAlumnos(C);
+		int continuar = 0;
+		char estatus = 0;
+		do {
+			impCabezado();
+			printf("Estatus de %s %s en %d: %c\n", A->nombre, A->apellido, C->codigo, indAlum->estatus);
+			printf("Ingrese el nuevo estatus de inscripcion (R = retirado / N = normal): ");
+			scanf("%c%*c", &estatus);
+			estatus = toupper(estatus);
+			if (estatus != 'R' && estatus != 'N') {
+				printf("'%c' no es un estatus de inscripcion valido. Los valores validos son R y N", estatus);
+				continuar = impSiNo("Desea continuar editando?");
+				continue;
+			}
+			indAlum->estatus = indCur->estatus = estatus;
+			continuar = 0;
+		} while (continuar);
+	}
+}
+
+void removerMateriaDeListado(Alumno *A, Curso *C) {
+	// actuamos si tenemos ambos elementos
+	if (A && C) {
+		// Indice del alumno objetivo
+		AlumC *alumno = ubicarAlumno(A);
+		// Cabeza de su listado de materias
+		AlumN **listado = &alumno->materias,
+			// Copia de su listado de materias
+			*materia = *listado,
+			// Materia a eliminar
+			*del = NULL;
+		// si la primera materia de la lista es la que buscamos, eliminamos y movemos la cabeza
+		if ((*listado)->curso == C) {
+			del = (*listado);
+			*listado = del->prox;
+		}
+		// sino nos movemos hasta encontrarla
+		else while (materia->prox) {
+			if (materia->prox->curso == C) {
+				del = materia->prox;
+				materia->prox = del->prox;
+				break;
+			}
+			materia = materia->prox;
+		}
+
+		// finalmente, eliminamos lo que hayamos obtenido
+		delete del;
+	}
+}
+
+int moverAlumnoDeCurso(Alumno *A, Curso *F, Curso *D) {
+	// actuamos si tenemos todo
+	if (A && F && D) {
+		// si no esta inscrito en (F)uente, regresamos 1
+		if (!EstaInscrito(ubicarListaAlumnos(F), A->cedula))
+			return 1;
+		// si ya esta inscrito en (D)estino, regresamos 2
+		if (EstaInscrito(ubicarListaAlumnos(D), A->cedula))
+			return 2;
+		// si no hemos regresado, podemos mover
+		// mover = eliminar fuente de su lista, y añadirle destino && eliminar alumno de fuente,y añadirlo a destino
+		eliminarDeCurso(A, F);
+		inscribirEnCurso(A, D);
+
+		return 0;
+	}
+
+	return -1;
 }

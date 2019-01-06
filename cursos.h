@@ -248,5 +248,12 @@ int insertarCursosA(CursosA **, CursosA *);
 */
 CursosA *ubicarListaAlumnos(Curso *);
 
+/*
+	Remueve un Curso dado del indice
+	Parametros:
+		Curso *C : El curso a remover
+*/
+void removerIndCurso(Curso *);
+
 
 #endif

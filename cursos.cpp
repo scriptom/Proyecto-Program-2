@@ -203,8 +203,10 @@ void elimCurso(Curso **P, int codigo) {
 		// si el codigo coincide con el primer elemento, tenemos que eliminar la cabeza
 		del = *P;
 		*P = (*P)->prox;
-		if ( impSiNo("Seguro que desea eliminar el curso?") )
+		if (impSiNo("Seguro que desea eliminar el curso?")) {
+			removerIndCurso(del);
 			delete del;
+		}
 		return;
 	}
 
@@ -217,8 +219,10 @@ void elimCurso(Curso **P, int codigo) {
 			// si el codigo del proximo en la lista coincide, entonces tenemos que eliminarlo
 			del = C->prox;
 			C->prox = del->prox;
-			if ( impSiNo("Seguro que desea eliminar el curso?") )
+			if (impSiNo("Seguro que desea eliminar el curso?")) {
+				removerIndCurso(del);
 				delete del;
+			}
 			return;
 		}
 
@@ -352,6 +356,7 @@ CursosY *CrearCursosY(unsigned short ano) {
 	else {
 		if ((T->ano) > (Puntero->ano)){
 			T->prox=Puntero;
+			IndCurso = T;
 			return T;
 		}
 		else {
@@ -537,12 +542,53 @@ CursosA *ubicarListaAlumnos(Curso *C) {
 	if (C) {
 		CursosS *cursos = obtenerPunteroInd(C->ano)->cursosDictados;
 		while (cursos->prox) {
-			if (cursos->curso = C) break;
+			if (cursos->curso == C) break;
 			cursos = cursos->prox;
 		}
 
 		return cursos->alumnos;
-	}
+	}	
 
 	return NULL;
+}
+
+void removerIndCurso(Curso *C) {
+	// actuamos si tenemos un curso
+	if (C) {
+		// Cabeza del listado de cursos
+		CursosS **cab = &( obtenerPunteroInd( C->ano )->cursosDictados ),
+			// Curso a eliminar del indice
+				*del = NULL,
+			// Copia de la cabeza
+				*copia = *cab;
+
+		// Listado de alumnos del curso
+		CursosA *alumnos = NULL;
+
+		// evaluamos si tenemos que eliminar la cabeza
+		if ((*cab)->curso == C) {
+			del = *cab;
+			*cab = del->prox;
+		}
+		else {
+			// sino, iteramos usando la copia
+			copia = *cab;
+			while (copia->prox)
+				if (copia->prox->curso == C) {
+					del = copia->prox;
+					copia->prox = del->prox;
+				}
+		}
+
+		// guardamos la lista de alumnos 
+		alumnos = del->alumnos;
+		while (alumnos) {
+			// por cada alumno le eliminamos de su lista de materias el curso
+			removerMateriaDeListado(alumnos->alumno, C);
+			alumnos = alumnos->prox;
+		}
+		// finalmente, eliminamos del indice
+		delete del;
+	}	
+
 }

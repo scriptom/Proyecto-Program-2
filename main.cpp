@@ -19,23 +19,46 @@
 	-Menu principal
 	|- menuMantenimiento
 	|	|- menuAlumnado
+	|	|	|- (ejecucion directa)
+	|	|	|- (ejecucion directa)
+	|	|	|- (ejecucion directa)
+	|	|	|- menuConsultaAlumno
 	|	|- menuMaterias
+	|	|	|- (ejecucion directa)
+	|	|	|- (ejecucion directa)
+	|	|	|- (ejecucion directa)
+	|	|	|- menuConsultaMateria
 	|	|- menuDeCursos
+	|	|	|- (ejecucion directa)
+	|	|	|- (ejecucion directa)
+	|	|	|- (ejecucion directa)
+	|	|	|- menuConsultaCurso
 	|- menuInscripciones
 	|	|- menuInsConsultas
+	|   |- menuSingleInscripcion
+	|   |- menuMultiInscripcion
+	|   |- menuModificarNota
+	|   |- menuModificarEstatus
+	|   |- (ejecucion directa)
+	|   |- menuMoverAlumno
 
 	Abajo se encuentra la declaracion de las funciones
 */
 
 void menuMantenimiento(void);
 	void menuAlumnado(void);
+		void menuConsultaAlumno(void);
 	void menuMaterias(void);
+		void menuConsultaMateria(void);
 	void menuDeCursos(void);
+		void menuConsultaCurso(void);
 void menuInscripciones(void);
 	void menuInsConsultas(void);
 	void menuSingleInscripcion(void);
 	void menuMultiInscripcion(void);
 	void menuModificarNota(void);
+	void menuModificarEstatus(void);
+	void menuMoverAlumno(void);
 void menuParaConsultas(void);
 
 
@@ -112,7 +135,7 @@ void menuAlumnado(void) {
 			"Agregar un alumno nuevo",
 			"Modificar los datos de un alumno (por cedula)",
 			"Eliminar un alumno de la lista (por cedula)",
-			"Mostrar lista de Alumnos"
+			"Consultar"
 		);
 		
 		scanf("%i%*c", &opt);
@@ -149,14 +172,39 @@ void menuAlumnado(void) {
 				elimAlumno(&Al, cedula);
 				system("pause");
 				break;
-			case 4:
-				printListaAlumno(Al, detalle());
-				system("pause");
+			case 4: menuConsultaAlumno();
 				break;
 			default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); 
 		}
 	} while ( opt );
-}	
+}
+
+void menuConsultaAlumno(void) {
+	int opt = -1,
+		cedula = -1;
+	Alumno *A = NULL;
+	do {
+		impCabezado();
+		impMenu("Que clase de consulta de alumno desea realizar?", 2, "Todos los alumnos", "Datos de un alumno individual");
+		scanf("%i%*c", &opt);
+		switch (opt) {
+		case 0: break;
+		case 1: printListaAlumno(Al, detalle());
+			system("pause");
+			break;
+		case 2: printf("Introduzca el numero de cedula del alumno: ");
+			scanf("%i%*c", &cedula);
+			if (A = obtenerAlumnoPorCedula(Al, cedula))
+				printAlumno(A, detalle());
+			else
+				printf("No se encontro ningun alumno con la cedula %i\n", cedula);
+			system("pause");
+			break;
+		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); 
+
+		}
+	} while (opt);
+}
 
 void menuMaterias(void) {
 	/* Esta funcion actua de manera muy similar a menuAlumnados. Ver la documentacion de esa funcion para una explicacion de lo que pasa */
@@ -171,7 +219,7 @@ void menuMaterias(void) {
 			"Agregar Materia",
 			"Modificar Materia",
 			"Eliminar Materia",
-			"Mostrar lista de Materias"
+			"Consultar"
 		);
 		
 		scanf( "%i%*c", &opt );
@@ -196,14 +244,38 @@ void menuMaterias(void) {
 				elimMateria(&Mat, codigo);
 				system("pause");
 				break;
-			case 4:
-				printf("\t\tLista completa de materias\n");
-				printListaMateria(Mat, detalle());
-				system("pause");
+			case 4: menuConsultaMateria();
 				break;
 			default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); 
 		}
 	} while ( opt );
+}
+
+void menuConsultaMateria(void) {
+	int opt = -1,
+		codigo = -1;
+	Materia *M = NULL;
+	do {
+		impCabezado();
+		impMenu("Que clase de consulta de materia desea realizar?", 2, "Todas las materias", "Datos de una materia individual");
+		scanf("%i%*c", &opt);
+		switch (opt) {
+		case 0: break;
+		case 1: printListaMateria(Mat, detalle());
+			system("pause");
+			break;
+		case 2: printf("Introduzca el codigo de la materia: ");
+			scanf("%i%*c", &codigo);
+			if (M = obtenerMateriaPorCodigo(Mat, codigo))
+				printMateria(M, detalle());
+			else
+				printf("No se encontro ninguna materia con el codigo %i\n", codigo);
+			system("pause");
+			break;
+		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt);
+
+		}
+	} while (opt);
 }
 
 void menuDeCursos(void) {
@@ -219,7 +291,7 @@ void menuDeCursos(void) {
 			"Agregar Curso",
 			"Modificar Curso",
 			"Eliminar Curso",
-			"Mostrar lista de Cursos"
+			"Consultar"
 		);
 
 		scanf("%i%*c", &opt);
@@ -245,19 +317,43 @@ void menuDeCursos(void) {
 			scanf("%i%*c", &codigo);
 			elimCurso(&Cur, codigo);
 			break;
-		case 4:
-			printf("\t\tLista completa de Cursos\n");
-			printListaCurso(Cur, detalle());
-			system("pause");
+		case 4: menuConsultaCurso();
 			break;
 		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt);
 		}
 	} while (opt);
 }
 
+void menuConsultaCurso(void) {
+	int opt = -1,
+		codigo = -1;
+	Curso *C = NULL;
+	do {
+		impCabezado();
+		impMenu("Que clase de consulta de curso desea realizar?", 2, "Todos los cursos", "Datos de un curso individual");
+		scanf("%i%*c", &opt);
+		switch (opt) {
+		case 0: break;
+		case 1: printListaCurso(Cur, detalle());
+			system("pause");
+			break;
+		case 2: printf("Introduzca el codigo del curso: ");
+			scanf("%i%*c", &codigo);
+			if (C = obtenerCursoPorCodigo(Cur, codigo))
+				printCurso(C, detalle());
+			else
+				printf("No se encontro ningun curso son el codigo %i\n", codigo);
+			system("pause");
+			break;
+		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt);
+
+		}
+	} while (opt);
+}
+
 void menuInscripciones(void) {
 	// Opcion escogida en un menu
-	int opt = -1;
+	int opt = -1, codigo = -1;;
 	do {
 		
 		impCabezado();
@@ -279,6 +375,11 @@ void menuInscripciones(void) {
 		case 2: menuSingleInscripcion(); break;
 		case 3: menuMultiInscripcion(); break;
 		case 4: menuModificarNota(); break;
+		case 5: menuModificarEstatus(); break;
+		case 6: printf("Ingrese el codigo del curso a eliminar: ");
+			scanf("%i%*c", &codigo);
+			elimCurso(&Cur, codigo);
+		case 7: menuMoverAlumno(); break;
 		default: printf("Opcion no reconocida\n");
 			break;
 		}
@@ -516,30 +617,90 @@ void menuModificarNota(void) {
 			continue;
 		}
 		// verificamos que siquiera este inscrito el alumno en el curso
-		if (EstaInscrito(ubicarListaAlumnos(curso), alumno->cedula)) {
+		if (EstaInscrito(ubicarListaAlumnos(curso), alumno->cedula))
 			// en caso de que lo este, entonces podemos cargar la modificacion
 			modificarNotaAlumno(alumno, curso);
-		}
 		else printf("El alumno %s no se encuentra inscrito en %s (%d)", alumno->nombre, obtenerMateriaPorCodigo(Mat, curso->codMat)->nombre, curso->ano);
 		salir = 1;
 		system("pause");
 	} while (!salir);
 }
 
+void menuModificarEstatus(void) {
+	int salir = -1, cedula = -1, codigo = -1;
+	Alumno *alumno = NULL;
+	Curso *curso = NULL;
+	do {
+		impCabezado();
+		printf("Ingrese la cedula del alumno cuyo estatus se modificara: ");
+		scanf("%i%*c", &cedula);
+		if (!(alumno = obtenerAlumnoPorCedula(Al, cedula))) {
+			printf("No se consiguio ningun alumno con la cedula %d\n", cedula);
+			salir = !impSiNo("Desea volver a intentar?");
+			continue;
+		}
+		printf("Ingrese el codigo del curso del alumno: ");
+		scanf("%i%*c", &codigo);
+		if (!(curso = obtenerCursoPorCodigo(Cur, codigo))) {
+			printf("No se consiguio ningun curso con el codigo %d", codigo);
+			salir = !impSiNo("Desea volver a intentar?");
+			continue;
+		}
+		if (EstaInscrito(ubicarListaAlumnos(curso), alumno->cedula))
+			modificarEstatusAlumno(alumno, curso);
+		else
+			printf("El alumno %s no se encuentra inscrito en %s (%d)", alumno->nombre, obtenerMateriaPorCodigo(Mat, curso->codMat)->nombre, curso->ano); printf("El alumno %s no se encuentra inscrito en %s (%d)", alumno->nombre, obtenerMateriaPorCodigo(Mat, curso->codMat)->nombre, curso->ano);
+		salir = 1;
+		system("pause");
+	} while (!salir);
+}
 
-/* CODIGO A SER USADO EN UN FUTURO
-------------------------- DATOS DE UN ALUMNO -------------------------
-// solicitamos un numero de cedula
-printf("\nPor favor ingrese el numero de cedula a buscar: ");
-scanf("%i", &cedula);
-// (tal vez) obtenemos un alumno con la cedula
-res = obtenerAlumnoPorCedula(Al, cedula);
-if ( res ) {
-	// En caso de que se consiga el alumno, lo mostramos en pantalla
-	printf("\nSe encontro un alumno con la cedula especificada:");
-	printAlumno( res );
-} else printf("\nNo se encontro ningun alumno con la cedula especificada");
-
-
-
-*/
+void menuMoverAlumno(void) {
+	int salir = -1, cedula = -1, codigoFuente = -1, codigoDestino = -1, exito = -1;
+	Alumno *alumno = NULL;
+	Curso *fuente = NULL, *destino= NULL;
+	do {
+		impCabezado();
+		printf("Introduzca la cedula del alumno a mover: ");
+		scanf("%i%*c", &cedula);
+		if (!(alumno = obtenerAlumnoPorCedula(Al, cedula))) {
+			printf("No existe ningun alumno con la cedula %d\n", cedula);
+			salir = !impSiNo("Desea volver a ingresar los datos?");
+			continue;
+		}
+		printf("Introduzca el codigo del curso donde esta el alumno, y seguido de un espacio, el codigo del curso destino: ");
+		scanf("%i %i%*c", &codigoFuente, &codigoDestino);
+		// verificamos que el codigo del curso fuente sea valido
+		if (!(fuente = obtenerCursoPorCodigo(Cur, codigoFuente)))
+			printf("No existe curso con el codigo %d\n", codigoFuente);
+		// verificamos que el codigo del curso destino sea valido
+		if (!(destino = obtenerCursoPorCodigo(Cur, codigoDestino)))
+			printf("No existe curso con el codigo %d\n", codigoDestino);
+		// si alguno no fue valido, damos la opcion de reintentar
+		if (!(fuente && destino)) {
+			salir = !impSiNo("Desea volver a ingresar los datos?");
+			continue;
+		}
+		// si llegamos hasta aqui, los valores son validos
+		/* Valores de retorno validos 
+			0: Exito, no hubo ningun problema
+			1: El alumno no estaba inscrito el en curso fuente
+			2: El alumno ya se encuentra en el curso destino
+			default: No deberia caer, pero quien sabe...
+				Quiere decir que no existia alguno de los elementos, pero se supone fueron validados antes...
+		*/
+		switch (moverAlumnoDeCurso(alumno, fuente, destino)) {
+		case 0: printf("El alumno %s fue movido con exito de \"%s (%d)\" a \"%s (%d)\"", alumno->nombre, obtenerMateriaPorCodigo(Mat, fuente->codMat)->nombre, fuente->ano, obtenerMateriaPorCodigo(Mat, destino->codMat)->nombre, destino->ano);
+			salir = 1;
+			break;
+		case 1: printf("Error al inscribir: El alumno no se encuentra inscrito en el curso fuente");
+			salir = !impSiNo("Desea volver a intentar?");
+			break;
+		case 2: printf("Error al inscribir: El alumno ya se encuentra inscrito en el curso destino");
+			salir = !impSiNo("Desea volver a intentar?");
+			break;
+		default: printf("Error inesperado: Al parecer la validacion no esta funcionando");
+		}
+		system("pause");
+	} while (! salir);
+}
