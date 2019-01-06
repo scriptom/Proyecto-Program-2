@@ -78,6 +78,11 @@ void insertarAlumno(Alumno **, Alumno *);
 void extraerAlumnosDesdeArchivo(Alumno **, FILE *);
 
 /*
+	Completa los registros de indice no completados por la carga de data de archivos
+*/
+//void completarIndiceAlumno(FILE *);
+
+/*
 	Devuelve la cantidad de Alumnos que hay en un listado de manera recursiva
 	Parametros:
 		Alumno *A : El alumno actual de la lista
@@ -213,18 +218,20 @@ void insertarAlumN(AlumN**, AlumN*);
 /*
 	Pone a un alumno en un estado de modificacion de nota
 	Parametros:
-		Alumno *A : Alumno cuya nota sera modificada
-		Curso *C : Curso donde la nota sera modificada
+		Alumno *A  : Alumno cuya nota sera modificada
+		Curso *C   : Curso donde la nota sera modificada
+		float nota : Para modificaciones rapidas, se puede pasar una nota y saltarse todo el proceso manual. Valor por defecto -1 (Asignacion manual)
 */
-void modificarNotaAlumno(Alumno *, Curso *);
+void modificarNotaAlumno(Alumno *, Curso *, float = -1.0f);
 
 /*
 	Modifica el estatus de inscripcion de un alumno en un curso
 	Parametros:
-		Alumno *A : El alumno que esta en un curso
-		Curso *C : El curso en cuestion 
+		Alumno *A	 : El alumno que esta en un curso
+		Curso *C	 : El curso en cuestion 
+		char estatus : Para modificaciones rapidas, se puede pasar un estatus y saltarse todo el proceso manual. Valor por defecto 0 (Asignacion manual)
 */
-void modificarEstatusAlumno(Alumno *, Curso *);
+void modificarEstatusAlumno(Alumno *, Curso *, char = 0);
 
 /*
 	Ubica y devuelve la instancia de una materia dentro del indice de alumnos

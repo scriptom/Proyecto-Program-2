@@ -135,7 +135,7 @@ void modificarCurso(Curso **P) {
 			// mostramos el encabezado
 			impCabezado();
 			printCurso(*P);
-			printf("**NOTA: EL AÑO Y EL CoDIGO DE LA MATERIA NO SE GUARDARaN HASTA QUE DECIDA SALIR**\n\n");
+			printf("**NOTA: EL AÑO Y EL CODIGO DE LA MATERIA NO SE GUARDARAN HASTA QUE DECIDA SALIR**\n\n");
 			impMenu(
 				"Estas son las opciones disponibles para los Cursos.\nMarque la opcion de acuerdo a la operacion que desea realizar",
 				4,
@@ -293,6 +293,8 @@ void extraerCursosDesdeArchivo(Curso **P, FILE *f) {
 	else delete C; // si llegamos a fin de archivo, liberemos la memoria (no lo hacemos siempre porque la memoria declarada aqui fue insertada
 }
 
+
+
 Curso *extraerCurso(Curso *C, int codigo) {
 	// Alumno a extraer de la lista
 	Curso *objetivo = obtenerCursoPorCodigo(C, codigo),
@@ -317,7 +319,7 @@ Curso *extraerCurso(Curso *C, int codigo) {
 	return extraido;
 }
 
-CursosY *obtenerPunteroInd( unsigned short Ano){
+CursosY *ubicarIndiceAnual( unsigned short Ano){
 	CursosY *T = IndCurso;
 	while (T){
 		if ((T->ano) == Ano)
@@ -377,7 +379,7 @@ CursosY *CrearCursosY(unsigned short ano) {
 void InsertarIndCurso(Curso *Agregado){ 
 	CursosY *Existe = NULL;
 	// Se verifica si el año se encuentra en el indice para introducirlo a la lista correspondiente, sino se creara una nueva lista del año correspondiente
-	Existe = obtenerPunteroInd(Agregado->ano);
+	Existe = ubicarIndiceAnual(Agregado->ano);
 	if  (!(Existe))
 		Existe = CrearCursosY(Agregado->ano);
 	InsertarCursosS(&(Existe->cursosDictados),Agregado);	
@@ -560,7 +562,7 @@ int insertarCursosA(CursosA **listado, CursosA *indice) {
 
 CursosA *ubicarListaAlumnos(Curso *C) {
 	if (C) {
-		CursosS *cursos = obtenerPunteroInd(C->ano)->cursosDictados;
+		CursosS *cursos = ubicarIndiceAnual(C->ano)->cursosDictados;
 		while (cursos->prox) {
 			if (cursos->curso == C) break;
 			cursos = cursos->prox;
@@ -576,7 +578,7 @@ void removerIndCurso(Curso *C) {
 	// actuamos si tenemos un curso
 	if (C) {
 		// Cabeza del listado de cursos
-		CursosS **cab = &( obtenerPunteroInd( C->ano )->cursosDictados ),
+		CursosS **cab = &( ubicarIndiceAnual( C->ano )->cursosDictados ),
 			// Curso a eliminar del indice
 				*del = NULL,
 			// Copia de la cabeza
@@ -656,4 +658,19 @@ Curso *BuscarCursoPorCodigoYano(int Codigo,int Ano){
 		T = T->prox;
 	}
 	return NULL;
+}
+
+CursosA *ubicarAlumnoEnCurso(Curso *C, Alumno *A) {
+	CursosA *lista = ubicarListaAlumnos(C);
+	while (lista->prox) {
+		if (lista->alumno->cedula == A->cedula)
+			return lista;
+		lista = lista->prox;
+	}
+
+	return NULL;
+}
+
+CursosS *ubicarCursosEnAno(unsigned short y) {
+	return ubicarIndiceAnual(y)->cursosDictados;
 }

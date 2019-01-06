@@ -265,7 +265,8 @@ Materia *extraerMateria(Materia *M, int codigo) {
 
 void InformacionHistoricaMateria(void){
 	CursosY *T = IndCurso;
-	int Codigo,CantidadCur = 0,Nota = 0;
+	int Codigo, CantidadCur = 0;
+	float Nota = 0.0f;
 	Materia *MateriaBuscada;
 	CursosS *CursoEncontrado;
 	CursosS *Lista = NULL;
@@ -274,9 +275,9 @@ void InformacionHistoricaMateria(void){
 	Prom->Reprobados = 0;
 	Prom->Retirados = 0;
 	Prom->CantidadAlumnos = 0;
-	Prom->promedio = 0;
+	Prom->promedio = 0.0f;
 	int SN = 1;
-		{
+	do{
 		printf("\nIntroduzca el codigo de la materia\n");
 		scanf("%i%*c",&Codigo);
 		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
@@ -294,10 +295,10 @@ void InformacionHistoricaMateria(void){
 			CantidadCur++;
 			CalcularAlumnos(Lista->alumnos,&Prom);
 			Nota +=Prom->promedio;
-			printf("\nEl promedio de los alumnos del curso del año: %hu, es: %i\n",(Lista->curso)->ano,Prom->promedio);
+			printf("\nEl promedio de los alumnos del curso del año: %hu, es: %05.2f\n",(Lista->curso)->ano,Prom->promedio);
 			Lista = Lista->prox;
 		}
-		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es:%i\nEl numero de reprobados es: %i\nEl numero de retirados es:%i",Prom->CantidadAlumnos,Nota/CantidadCur,Prom->Reprobados,Prom->Retirados);
+		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i", Prom->CantidadAlumnos, Nota / CantidadCur, Prom->Reprobados, Prom->Retirados);
 		system("Pause");
 }
 

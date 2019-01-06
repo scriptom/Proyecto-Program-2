@@ -43,7 +43,7 @@ typedef struct PromedioCurso {
 	int Aprobados;
 	int Reprobados;
 	int Retirados;
-	int promedio;
+	float promedio;
 }PromedioCurso;
 
 typedef struct Curso {

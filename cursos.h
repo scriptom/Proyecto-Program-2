@@ -155,7 +155,7 @@ void InsertarIndCurso(Curso *);
 	Parametros:
 		Unsigned shot ano: Es el año que se desea buscar en el indice de cursos
 */
-CursosY *obtenerPunteroInd( unsigned short);
+CursosY *ubicarIndiceAnual( unsigned short);
 
 /*
 	Agrega un curso a la lista de cursos de un año determinado
@@ -272,6 +272,23 @@ int insertarCursosA(CursosA **, CursosA *);
 	Retorno : CursosA * : La lista de alumnos
 */
 CursosA *ubicarListaAlumnos(Curso *);
+
+/*
+	Ubica y devuelve el registro de un alumno en la lista de un curso
+	Parametros:
+		Curso *C  : El curso donde se buscara el alumno
+		Alumno *A : El alumno a buscar en la lista del curso
+	Retorno : CursosA* : El registro del alumno
+*/
+CursosA *ubicarAlumnoEnCurso(Curso *, Alumno *);
+
+/*
+	Ubica y devuelve la lista de cursos dictados en un año dado
+	Parametros:
+		unsigned short y : Año del curso
+	Retorno : CursosS* Lista de cursos de dicho año
+*/
+CursosS *ubicarCursosEnAno(unsigned short);
 
 /*
 	Remueve un Curso dado del indice

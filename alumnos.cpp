@@ -331,6 +331,8 @@ void extraerAlumnosDesdeArchivo(Alumno **P, FILE *f) {
 	else delete A; // si llegamos a fin de archivo, liberemos la memoria (no lo hacemos siempre porque la memoria declarada aqui fue insertada
 }
 
+void completarIndiceAlumno(FILE *f) {}
+
 Alumno *extraerAlumno(Alumno *A, int cedula) {
 	// Alumno a extraer de la lista
 	Alumno *objetivo = obtenerAlumnoPorCedula(A, cedula),
@@ -369,7 +371,7 @@ int inscribirEnCurso(Alumno *A, Curso *C) {
 
 	if (C && A) {
 		// obtenemos el puntero del año
-		cursosAno = obtenerPunteroInd(C->ano);
+		cursosAno = ubicarIndiceAnual(C->ano);
 		if (!cursosAno)
 			// si no obtuvimos nada, lo creamos
 			cursosAno = CrearCursosY(C->ano);
@@ -483,14 +485,9 @@ int BuscarAlumnoCursosA(CursosA *Cab,Alumno *AlumnoBuscado){
 }
 
 void agregarMateriaAAlumno(Alumno *A, Curso *C) {
-	// Copia del indice global de Alumnos. Para que cualquier ejecucion llegue hasta este punto, El indice no puede ser nulo, asi que podemos confiarnos
-	AlumC *global = IndAlumno;
-
-	// nos movemos hasta el ultimo elemento. Si 
-	while (global->prox) {
-		if (global->alumno == A) break;
-		global = global->prox;
-	}
+	// Alumno sacado del indice
+	AlumC *global = ubicarAlumno(A);
+	// insertamos en su lista de materias un nuevo nodo con el curso
 	insertarAlumN(&(global->materias), crearAlumN(C));
 }
 
@@ -509,23 +506,24 @@ AlumN *crearAlumN(Curso *C) {
 }
 
 void insertarAlumN(AlumN **listado, AlumN *indice) {
-	if (*listado) {
+	if (*listado)
 		// llamamos recursivamente hasta el ultimo elemento
 		if ((*listado)->prox)
-			return insertarAlumN(&((*listado)->prox), indice);
+			insertarAlumN(&((*listado)->prox), indice);
 		// si llegamos hasta aqui, estamos en el ultimo elemento, insertamos como si nada
-		(*listado)->prox = indice;
-	}
-
+		else
+			(*listado)->prox = indice;
+	
 	// si no hay listado, nuestro indice es el primero
-	(*listado) = indice;
+	else
+		(*listado) = indice;
 }
 
 AlumC *ubicarAlumno(Alumno *A) {
 	if (A) {
 		AlumC *global = IndAlumno;
 		while (global->prox) {
-			if (global->alumno == A) break;
+			if (global->alumno->cedula == A->cedula) break;
 			global = global->prox;
 		}
 
@@ -547,58 +545,74 @@ AlumN *ubicarMateriaAlumno(Curso *C, Alumno *A) {
 	return NULL;
 }
 
-void modificarNotaAlumno(Alumno *A, Curso *C) {
+void modificarNotaAlumno(Alumno *A, Curso *C, float nota) {
 	if (C && A) {
 		AlumN *indAlum = ubicarMateriaAlumno(C, A);
-		CursosA *indCur = ubicarListaAlumnos(C);
-		int continuar = 0;
-		float nota = -1.0f;
-		do {
-			impCabezado();
-			printf("Nota de %s %s en %d: ", A->nombre, A->apellido, C->codigo);
-			if ((indAlum->estatus == 'R') || (indCur->estatus == 'R'))
-				printf("RE");
+		CursosA *indCur = ubicarAlumnoEnCurso(C, A);
+		if (EstaInscrito(indCur, A->cedula)) {
+			int continuar = 0;
+			// si no nos pasaron nada, la nota debe ser -1
+			if (nota == -1.0f)
+				do {
+					impCabezado();
+					printf("Nota de %s %s en %d: ", A->nombre, A->apellido, C->codigo);
+					if ((indAlum->estatus == 'R') || (indCur->estatus == 'R'))
+						printf("RE");
+					else
+						if (indAlum->nota == -1)
+							printf("(sin asignar)");
+						else
+							printf("%05.2f", indAlum->nota);
+					putchar('\n');
+					printf("Ingrese la nueva nota (-1 para cancelar): ");
+					scanf("%f%*c", &nota);
+					if (nota < 0.0f || nota > 20.0f) {
+						if (-1.0f != nota) {
+							printf("'%05.2f' no es una nota valida. El valor debe ser un valor entre 0 y 20", nota);
+							continuar = impSiNo("Desea continuar editando?");
+						}
+						continue;
+					}
+					indAlum->nota = indCur->nota = nota;
+					continuar = 0;
+				} while (continuar);
+			// si nos pasaron algo, simplemente asignamos esa nota (con tal de que sea valida)
 			else
-				if (indAlum->nota == -1) 
-					printf("(sin asignar)");
-				else
-					printf("%05.2f", indAlum->nota);
-			putchar('\n');
-			printf("Ingrese la nueva nota (-1 para cancelar): ");
-			scanf("%f%*c", &nota);
-			if (nota < 0 || nota > 20) {
-				if (-1.0f != nota) {
-					printf("'%05.2f' no es una nota valida. El valor debe ser un valor entre 0 y 20", nota);
-					continuar = impSiNo("Desea continuar editando?");
-				}
-				continue;
-			}
-			indAlum->nota = indCur->nota = nota;
-			continuar = 0;
-		} while (continuar);
+				if (nota >= 0.0f && nota <= 20.0f)
+					indAlum->nota = indCur->nota = nota;
+		}
 	}
 }
 
-void modificarEstatusAlumno(Alumno *A, Curso *C) {
-	if (A && C) {
+void modificarEstatusAlumno(Alumno *A, Curso *C, char estatus) {
+	if (A && C ) {
 		AlumN *indAlum = ubicarMateriaAlumno(C, A);
-		CursosA *indCur = ubicarListaAlumnos(C);
-		int continuar = 0;
-		char estatus = 0;
-		do {
-			impCabezado();
-			printf("Estatus de %s %s en %d: %c\n", A->nombre, A->apellido, C->codigo, indAlum->estatus);
-			printf("Ingrese el nuevo estatus de inscripcion (R = retirado / N = normal): ");
-			scanf("%c%*c", &estatus);
-			estatus = toupper(estatus);
-			if (estatus != 'R' && estatus != 'N') {
-				printf("'%c' no es un estatus de inscripcion valido. Los valores validos son R y N", estatus);
-				continuar = impSiNo("Desea continuar editando?");
-				continue;
+		CursosA *indCur = ubicarAlumnoEnCurso(C, A);
+		if (EstaInscrito(indCur, A->cedula)) {
+			int continuar = 0;
+			// si no nos pasaron estatus, pasamos por el proceso manual
+			if (!estatus)
+				do {
+					impCabezado();
+					printf("Estatus de %s %s en %d: %c\n", A->nombre, A->apellido, C->codigo, indAlum->estatus);
+					printf("Ingrese el nuevo estatus de inscripcion (R = retirado / N = normal): ");
+					scanf("%c%*c", &estatus);
+					estatus = toupper(estatus);
+					if (estatus != 'R' && estatus != 'N') {
+						printf("'%c' no es un estatus de inscripcion valido. Los valores validos son R y N", estatus);
+						continuar = impSiNo("Desea continuar editando?");
+						continue;
+					}
+					indAlum->estatus = indCur->estatus = estatus;
+					continuar = 0;
+				} while (continuar);
+			// en caso de que si nos hayan pasado algo, tratamos de asignar (fallamos silenciosamente)
+			else {
+				estatus = toupper(estatus);
+				if (estatus == 'R' || estatus == 'N')
+					indAlum->estatus = indCur->estatus = estatus;
 			}
-			indAlum->estatus = indCur->estatus = estatus;
-			continuar = 0;
-		} while (continuar);
+		}
 	}
 }
 
@@ -665,17 +679,17 @@ void PrintPromedio(AlumN *Cab){
 	AlumN *P = Cab;
 	int Retiradas = 0;
 	int Reprobadas = 0;
-	int Promedio = 0;
+	float Promedio = 0.0f;
 	int CantidadMaterias = 0;
 	while (P){
 		CantidadMaterias++;
 		if (P->estatus == 'R') Retiradas++;
 		else {
-			if (P->nota != -1) Promedio += P->nota;
+			if (P->nota != -1.0f) Promedio += P->nota;
 			if (P->nota < 10) Reprobadas++;
 		}
 	}
-	printf("\nPromedio: %i\nReprobadas: %i\nRetiradas: %i",Promedio/CantidadMaterias,Reprobadas,Retiradas);
+	printf("\nPromedio: %05.2f\nReprobadas: %i\nRetiradas: %i", Promedio / CantidadMaterias, Reprobadas, Retiradas);
 }
 
 void CalcularPromedio(){
@@ -689,7 +703,7 @@ void CalcularPromedio(){
 		scanf("%i%*c",&Cedula);
 		AlumnoBuscado = obtenerAlumnoPorCedula(Al,Cedula);
 		if (!AlumnoBuscado)
-			salir = impSiNo("El alumno no existe, ¿Desea introducir otra cedula?");
+			salir = !impSiNo("El alumno no existe, ¿Desea introducir otra cedula?");
 	}while(!salir);
 	T = BuscarPunteroIndAlumno(AlumnoBuscado);
 	printf("\nPromedio del alumno: %s %s\n",T->alumno->nombre,T->alumno->apellido);
@@ -697,7 +711,7 @@ void CalcularPromedio(){
 }
 
 void CalcularAlumnos(CursosA *ListaAlumnos,PromedioCurso **CursoPromediado){
-	(*CursoPromediado)->promedio = 0;
+	(*CursoPromediado)->promedio = 0.0f;
 	CursosA *T = ListaAlumnos;
 	int Alum = 0;
 	while (T){
@@ -706,7 +720,7 @@ void CalcularAlumnos(CursosA *ListaAlumnos,PromedioCurso **CursoPromediado){
 		else {
 			if(T->nota !=(-1)){
 				Alum++;
-				if (T->nota >= 10) ((*CursoPromediado)->Aprobados)++;
+				if (T->nota >= 10.0f) ((*CursoPromediado)->Aprobados)++;
 				else ((*CursoPromediado)->Reprobados)++;
 				(*CursoPromediado)->promedio += T->nota; 
 			}
@@ -721,7 +735,7 @@ void BuscarNotaMax(CursosS *Cab){
 	while (T){
 		P = T->alumnos;
 		while (P){
-			if (P->nota == 20){
+			if (P->nota == 20.0f){
 				printAlumno(P->alumno,0);
 				printCurso(T->curso,1);
 			}

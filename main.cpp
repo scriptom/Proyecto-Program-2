@@ -73,6 +73,11 @@ void cargarDeArchivos(void);
 */
 void guardarEnArchivos(void);
 
+/*
+	Completa los registros de indice no completados por la carga de data de archivos
+*/
+void completarIndice(FILE *);
+
 void main()
 {
 	int opt = -1;
@@ -371,7 +376,7 @@ void menuInscripciones(void) {
 		scanf("%i%*c", &opt);
 		switch (opt) {
 		case 0: break;
-		case 1: DatosDelCurso(); break;
+		case 1: menuInsConsultas(); break;
 		case 2: menuSingleInscripcion(); break;
 		case 3: menuMultiInscripcion(); break;
 		case 4: menuModificarNota(); break;
@@ -479,19 +484,64 @@ void menuParaConsultas(void) {
 
 void cargarDeArchivos() {
 	// abrimos todos los handlers de los archivos. Los abrimos en modo anexo-lectura-binario para que se creen si no existen
-	FILE *falumno  = fopen("alumnos.alp2", "ab+"),
-		 *fmateria = fopen("materias.alp2", "ab+"),
-		 *fcurso   = fopen("cursos.alp2", "ab+");
+	FILE *falumno = fopen("alumnos.alp2", "ab+"),
+		*fmateria = fopen("materias.alp2", "ab+"),
+		*fcurso   = fopen("cursos.alp2", "ab+"),
+		*findalum = fopen("indalum.alp2", "ab+"),
+		*findcurs = fopen("indcurs.alp2", "ab+");
 
 	extraerAlumnosDesdeArchivo(&Al, falumno);
 	extraerMateriasDesdeArchivo(&Mat, fmateria);
 	extraerCursosDesdeArchivo(&Cur, fcurso);
 
+	completarIndice(findcurs);
+	//completarIndiceCursos(findcurs);
+
 	// cerramos los handlers
 	fclose(falumno);
 	fclose(fmateria);
 	fclose(fcurso);
+	fclose(findalum);
+	fclose(findcurs);
 
+}
+
+void completarIndice(FILE *f) {
+	// reservamos memoria
+	CursosY *CY = new CursosY;
+	// leemos registro
+	fread(CY, sizeof CursosY, 1, f);
+	// comprobamos que nos es fin de archivo
+	if (!feof(f)) {
+		// Lista de cursos dictados
+		CursosS *cursos = CY->cursosDictados;
+		// Curso actual en la iteracion
+		Curso *curso = NULL;
+		// Listado de alumnos de dicho curso, con informacion de las notas
+		CursosA *alumnos = NULL;
+		// Iteramos sobre los cursos de ese año. Por cada uno, tenemos que inscribir los alumnos guardados
+		while (cursos) {
+			// asignamos el curso actual, en el que se inscribiran proximamente todos los alumnos del listado
+			curso = cursos->curso;
+			// asignamos la cabeza del listado de alumnos, e iteramos
+			alumnos = cursos->alumnos;
+			while (alumnos) {
+				// por cada alumno, lo inscribimos en el curso. Este paso ya le agrega las materias al alumno
+				inscribirEnCurso(alumnos->alumno, curso);
+				// le colocamos la nota que teniamos guardada al alumno. Esto se encarga de modificar también la nota en sus materias
+				modificarNotaAlumno(alumnos->alumno, curso, alumnos->nota);
+				// le colocamos el estatus que teniamos guardada al alumno. Esto se encarga de modificar también el estatus en sus materias
+				modificarEstatusAlumno(alumnos->alumno, curso, alumnos->estatus);
+				// nos movemos al siguiente alumno
+				alumnos = alumnos->prox;
+			}
+			// nos movemos al siguiente curso. 
+			cursos = cursos->prox;
+		}
+	}
+	// liberamos memoria en caso de que no la usemos
+	else delete CY;
+	// Y listo... supuestamente(?
 }
 
 void guardarEnArchivos() {
