@@ -274,13 +274,6 @@ int moverAlumnoDeCurso(Alumno *, Curso *, Curso *);
 void CalcularPromedio(void);
 
 /*
-	Busca en el indice de alumnos un alumno
-	Parametros:
-		Alumno * P: Es el puntero al alumno que hay que localizar
-*/
-AlumC *BuscarPunteroIndAlumno(Alumno *);
-
-/*
 	Imprime el promedio, reprobadas y retiradas
 	Parametros:
 		AlumN *Cab: Es el puntero a la lista de materias de un alumno

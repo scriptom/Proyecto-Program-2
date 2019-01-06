@@ -513,7 +513,6 @@ void insertarAlumN(AlumN **listado, AlumN *indice) {
 		// si llegamos hasta aqui, estamos en el ultimo elemento, insertamos como si nada
 		else
 			(*listado)->prox = indice;
-	
 	// si no hay listado, nuestro indice es el primero
 	else
 		(*listado) = indice;
@@ -666,14 +665,6 @@ int moverAlumnoDeCurso(Alumno *A, Curso *F, Curso *D) {
 
 	return -1;
 }
-AlumC *BuscarPunteroIndAlumno(Alumno *P){
-	AlumC *T = IndAlumno;
-	while (T){
-		if ((T->alumno) == P ) return T;
-		T=T->prox;
-		}
-	return NULL;
-}
 
 void PrintPromedio(AlumN *Cab){
 	AlumN *P = Cab;
@@ -688,8 +679,14 @@ void PrintPromedio(AlumN *Cab){
 			if (P->nota != -1.0f) Promedio += P->nota;
 			if (P->nota < 10) Reprobadas++;
 		}
+		P = P->prox;
+		printf("\n%i\n",Promedio);
+		system("Pause");
 	}
-	printf("\nPromedio: %05.2f\nReprobadas: %i\nRetiradas: %i", Promedio / CantidadMaterias, Reprobadas, Retiradas);
+	Promedio /= CantidadMaterias;
+	printf("%05.2f",Promedio);
+	printf("\nPromedio: %i\nReprobadas: %i\nRetiradas: %i\n", Promedio, Reprobadas, Retiradas);
+	system("Pause");
 }
 
 void CalcularPromedio(){
@@ -705,8 +702,8 @@ void CalcularPromedio(){
 		if (!AlumnoBuscado)
 			salir = !impSiNo("El alumno no existe, ¿Desea introducir otra cedula?");
 	}while(!salir);
-	T = BuscarPunteroIndAlumno(AlumnoBuscado);
-	printf("\nPromedio del alumno: %s %s\n",T->alumno->nombre,T->alumno->apellido);
+	T = ubicarAlumno(AlumnoBuscado);
+	printf("\nPromedio del alumno: %s %s\n", T->alumno->nombre, T->alumno->apellido);
 	PrintPromedio(T->materias);
 }
 
