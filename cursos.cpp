@@ -355,18 +355,22 @@ CursosY *CrearCursosY(unsigned short ano) {
 	}
 	else {
 		if ((T->ano) > (Puntero->ano)){
-			T->prox=Puntero;
+			T->prox = Puntero;
 			IndCurso = T;
 			return T;
 		}
 		else {
 			while (Puntero) {
-				if (((Puntero->prox)->ano) < (T->ano)){
+				if (!(Puntero->prox)){
+					Puntero->prox = T;
+					return T;
+				}
+				else if (((Puntero->prox)->ano) < (T->ano)){
 					T->prox = Puntero->prox;
 					Puntero->prox = T;
 					return T;
 				    }
-				else{Puntero->prox;} 
+				else{Puntero = Puntero->prox;} 
 	        }
         }
 	  }
