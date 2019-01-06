@@ -220,9 +220,10 @@ void insertarAlumN(AlumN**, AlumN*);
 	Parametros:
 		Alumno *A  : Alumno cuya nota sera modificada
 		Curso *C   : Curso donde la nota sera modificada
-		float nota : Para modificaciones rapidas, se puede pasar una nota y saltarse todo el proceso manual. Valor por defecto -1 (Asignacion manual)
+		float nota : Para modificaciones rapidas, se puede pasar una nota y saltarse todo el proceso manual. 
+		Valor por defecto -0.5 (Asignacion manual). Si bien la nota se inicializa en -1, se puede confundir el valor cuando se carga de archivo...
 */
-void modificarNotaAlumno(Alumno *, Curso *, float = -1.0f);
+void modificarNotaAlumno(Alumno *, Curso *, float = -0.5f);
 
 /*
 	Modifica el estatus de inscripcion de un alumno en un curso

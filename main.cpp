@@ -505,41 +505,17 @@ void cargarDeArchivos() {
 }
 
 void completarIndice(FILE *f) {
-	// reservamos memoria
-	CursosY *CY = new CursosY;
-	// leemos registro
-	fread(CY, sizeof CursosY, 1, f);
-	// comprobamos que nos es fin de archivo
+	// Ayudante para sacar los datos
+	ArchivoNotas notas;
+	fread(&notas, sizeof ArchivoNotas, 1, f);
 	if (!feof(f)) {
-		// Lista de cursos dictados
-		CursosS *cursos = CY->cursosDictados;
-		// Curso actual en la iteracion
-		Curso *curso = NULL;
-		// Listado de alumnos de dicho curso, con informacion de las notas
-		CursosA *alumnos = NULL;
-		// Iteramos sobre los cursos de ese año. Por cada uno, tenemos que inscribir los alumnos guardados
-		while (cursos) {
-			// asignamos el curso actual, en el que se inscribiran proximamente todos los alumnos del listado
-			curso = cursos->curso;
-			// asignamos la cabeza del listado de alumnos, e iteramos
-			alumnos = cursos->alumnos;
-			while (alumnos) {
-				// por cada alumno, lo inscribimos en el curso. Este paso ya le agrega las materias al alumno
-				inscribirEnCurso(alumnos->alumno, curso);
-				// le colocamos la nota que teniamos guardada al alumno. Esto se encarga de modificar también la nota en sus materias
-				modificarNotaAlumno(alumnos->alumno, curso, alumnos->nota);
-				// le colocamos el estatus que teniamos guardada al alumno. Esto se encarga de modificar también el estatus en sus materias
-				modificarEstatusAlumno(alumnos->alumno, curso, alumnos->estatus);
-				// nos movemos al siguiente alumno
-				alumnos = alumnos->prox;
-			}
-			// nos movemos al siguiente curso. 
-			cursos = cursos->prox;
-		}
+		Alumno *a = obtenerAlumnoPorCedula(Al, notas.cedula);
+		Curso *c = obtenerCursoPorCodigo(Cur, notas.codigoCurso);
+		inscribirEnCurso(a, c);
+		modificarNotaAlumno(a, c, notas.nota);
+		modificarEstatusAlumno(a, c, notas.estatus);
+		completarIndice(f);
 	}
-	// liberamos memoria en caso de que no la usemos
-	else delete CY;
-	// Y listo... supuestamente(?
 }
 
 void guardarEnArchivos() {
@@ -554,7 +530,6 @@ void guardarEnArchivos() {
 	Materia *M = Mat;
 	Curso *C = Cur;
 
-
 	// si no tenemos una lista global vacia, vamos a iterar sobre ella e insertamos
 	if (A)
 		for ( ; A; A = A->prox )
@@ -565,6 +540,30 @@ void guardarEnArchivos() {
 	if (C)
 		for ( ; C; C = C->prox )
 			fwrite(C, sizeof(Curso), 1, fcurso);
+
+	// Variable especial para guardar las notas
+	ArchivoNotas notas;
+	if (IndCurso) {
+		CursosY *CY = IndCurso;
+		// iteramos sobre los cursos de cada año
+		while (CY) {
+			CursosS *cursos = CY->cursosDictados;
+			while (cursos) {
+				CursosA *alumnos = cursos->alumnos;
+				while (alumnos) {
+					notas.cedula = alumnos->alumno->cedula;
+					notas.codigoCurso = cursos->curso->codigo;
+					notas.nota = alumnos->nota;
+					notas.estatus = alumnos->estatus;
+					// guardamos en el archivo
+					fwrite(&notas, sizeof(ArchivoNotas), 1, findice);
+					alumnos = alumnos->prox;
+				}
+				cursos = cursos->prox;
+			}
+			CY = CY->prox;
+		}
+	}
 
 	// cerramos los handlers de archivo
 	fclose(falumno);

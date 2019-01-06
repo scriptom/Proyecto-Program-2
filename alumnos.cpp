@@ -549,8 +549,8 @@ void modificarNotaAlumno(Alumno *A, Curso *C, float nota) {
 		AlumN *indAlum = ubicarMateriaAlumno(C, A);
 		CursosA *indCur = ubicarAlumnoEnCurso(C, A);
 		int continuar = 0;
-		// si no nos pasaron nada, la nota debe ser -1
-		if (nota == -1.0f)
+		// si no nos pasaron nada, la nota debe ser -0.5
+		if (nota == -0.5f)
 			do {
 				impCabezado();
 				printf("Nota de %s %s en %d: ", A->nombre, A->apellido, C->codigo);

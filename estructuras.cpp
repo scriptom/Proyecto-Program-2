@@ -93,4 +93,11 @@ typedef struct CursosY {
 	CursosY *prox;
 }CursosY;
 
+typedef struct ArchivoNotas {
+	int cedula;
+	int codigoCurso;
+	float nota;
+	char estatus;
+}ArchivoNotas;
+
 #endif
