@@ -292,4 +292,13 @@ void CalcularAlumnos(CursosA *,PromedioCurso **);
 		CursosS *Cab: Es la lista con los cursos de una materia
 */
 void BuscarNotaMax(CursosS *);
+
+/*
+	Ordena una lsita de alumnos por orden alfabetico de apellidos
+*/
+CursosA *OrdenarLista(CursosA *);
+/*
+	Imprime una lista de alumnos ordenados alfabeticamente por el apellido
+*/
+void PrintOrdenAlfabeticoAlumnosApellido(void);
 #endif

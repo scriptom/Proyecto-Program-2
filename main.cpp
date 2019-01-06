@@ -426,7 +426,7 @@ void menuParaConsultaCurso(void) {
 		switch (opt) {
 		case 0: break;
 		case 1: DatosDelCurso(); break;
-		case 2: ; break;
+		case 2: PrintOrdenAlfabeticoAlumnosApellido(); break;
 		default: printf("Opcion \"%i\" no reconocida. Marque una opcion valida\n", opt); system("pause");
 		}
 	} while (opt);

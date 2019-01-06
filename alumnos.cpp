@@ -720,6 +720,7 @@ void CalcularAlumnos(CursosA *ListaAlumnos,PromedioCurso **CursoPromediado){
 				(*CursoPromediado)->promedio += T->nota; 
 			}
 		}
+		T = T->prox;
 	}
 	(*CursoPromediado)->promedio /= Alum;
 }
@@ -738,4 +739,58 @@ void BuscarNotaMax(CursosS *Cab){
 		}
 	}
 	system("Pause");
+}
+CursosA *OrdenarLista(CursosA *Lista){
+	int Comparacion;
+	CursosA *Aux = NULL, *Aux2 = NULL;
+	CursosA *T = Lista;
+	CursosA *Str2 = NULL;
+	if (Lista){
+		while (T->prox){
+			Str2 = T->prox;
+			while(Str2){
+				Comparacion = strcmp(((T->alumno)->apellido),((Str2->alumno)->apellido));
+				if (Comparacion >0){
+					Aux = T;
+					Aux2 = Str2->prox;
+					T = Str2;
+					Str2->prox = T->prox;
+					Str2 = Aux;
+					Str2 ->prox = Aux2;
+				}
+				Str2 = Str2->prox;
+			}
+			T = T->prox;
+		}
+	return Lista;
+	}
+	return NULL;
+}
+
+
+void PrintOrdenAlfabeticoAlumnosApellido(void){
+	CursosY *T;
+	int Codigo = 0, salir =0;
+	Curso *CursoBuscado;
+	CursosS *Encontrado;
+	CursosA *Lista = NULL;
+	do{
+		printf("\nIntroduzca el codigo del curso\n");
+		scanf("%i",&Codigo);
+		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
+		if (!CursoBuscado)
+			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
+	} while(salir);
+	Encontrado = ObtenerCursosS(CursoBuscado);
+	Lista = OrdenarLista(Encontrado->alumnos);
+	if (!Lista){
+		printf("\nNo hay alumnos inscritos en este curso");
+		return;
+	}
+	printCurso(Encontrado->curso,detalle());
+	while (Lista){
+		printAlumno(Lista->alumno,1);
+		printf("Su nota en este curso es: %i\n",Lista->nota);
+		Lista = Lista->prox;
+	}
 }

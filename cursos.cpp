@@ -643,11 +643,16 @@ void DatosDelCurso(void){
 	Curso *CursoBuscado; 
 	CursosS *Encontrado;
 	PromedioCurso *NuevoProm = new PromedioCurso;
+	NuevoProm->Aprobados = 0;
+	NuevoProm->Reprobados = 0;
+	NuevoProm->Retirados = 0;
+	NuevoProm->promedio = 0;
+	NuevoProm->CantidadAlumnos = 0;
 	impCabezado();
 	int salir = 0;
 	do{
 		printf("\nIntroduzca el codigo del curso\n");
-		scanf("%i",Codigo);
+		scanf("%i",&Codigo);
 		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
 		if (!CursoBuscado)
 			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
