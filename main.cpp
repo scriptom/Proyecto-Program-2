@@ -418,7 +418,7 @@ void menuParaConsultaCurso(void) {
 		
 		impCabezado();
 		impMenu("¿Que desea consultar sobre un curso?", 2,
-			"Consultar numero de alumnos inscritos, numero de aprobados, reprobados y retirados",
+			"Consultar numero de alumnos inscritos, numero de aprobados,                     reprobados y retirados",
 			"Informacion del curso y de los alumnos inscritos"
 			);
 
