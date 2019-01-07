@@ -295,10 +295,12 @@ void InformacionHistoricaMateria(void){
 			CantidadCur++;
 			CalcularAlumnos(Lista->alumnos,&Prom);
 			Nota +=Prom->promedio;
-			printf("\nEl promedio de los alumnos del curso del año: %hu, es: %05.2f\n",(Lista->curso)->ano,Prom->promedio);
+			if (Prom->promedio == -1 ) printf("\nEl promedio de los alumnos del curso del año: %hu, es: No hay notas registradas                                                        en este curso\n",(Lista->curso)->ano);
+			else printf("\nEl promedio de los alumnos del curso del año: %hu, es: %05.2f\n",(Lista->curso)->ano,Prom->promedio);
 			Lista = Lista->prox;
 		}
-		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i", Prom->CantidadAlumnos, Nota / CantidadCur, Prom->Reprobados, Prom->Retirados);
+		if(Prom->CantidadAlumnos) printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\nEl promedio de todos los cursos es %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i\n", Prom->CantidadAlumnos, Nota / CantidadCur, Prom->Reprobados, Prom->Retirados);
+		else printf("No hay alumnos registrados en este curso\n");
 		system("Pause");
 }
 

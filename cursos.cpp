@@ -263,7 +263,7 @@ void BuscarCursos(char *NombreM){
 void Buscar(int Codigo, Curso **C){
 	Curso *T= Cur;
 	while (T){
-		if ((T->codMat)== Codigo)
+		if ((T->codMat) == Codigo)
 			insertarCurso(C, extraerCurso(T, T->codigo));
 		T = T->prox;
 	}
@@ -501,7 +501,7 @@ void BuscarRepeticionesDeCursos(){
 		AlumnoBuscado = obtenerAlumnoPorCedula(Al,Cedula);
 		if (!AlumnoBuscado){
 			SN = impSiNo("El alumno no existe, ¿Desea introducir otra cedula?");
-			if (!SN) break;
+			if (!SN) return;
 			}
 	} while (!AlumnoBuscado);
 	do
@@ -511,7 +511,7 @@ void BuscarRepeticionesDeCursos(){
 		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
 		if (!MateriaBuscada){
 			SN = impSiNo("La materia no existe, ¿Desea introducir otro codigo?");
-			if (!SN) break;
+			if (!SN) return;
 			}
 	} while (!MateriaBuscada);
 	while (T){
