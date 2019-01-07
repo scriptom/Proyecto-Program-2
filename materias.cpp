@@ -329,15 +329,14 @@ void InformacionDeUnaMateria(void){
 	} while (!MateriaBuscada);
 	Buscado = BuscarCursoPorCodigoYano(Codigo,ano);
 	if (!Buscado){
-		printf("El curso que busca no existe");
+		printf("El curso que busca no existe\n");
 		system("Pause");
 		return;
 	}
 	else{
 		P = ObtenerCursosS(Buscado);
 		CalcularAlumnos(P->alumnos,&Prom);
-		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i%*c",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
-		printf("\n");
+		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i\n",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
 		system("Pause");
 		}
 }
