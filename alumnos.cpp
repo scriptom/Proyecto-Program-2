@@ -678,12 +678,10 @@ void PrintPromedio(AlumN *Cab){
 			if (P->nota < 10) Reprobadas++;
 		}
 		P = P->prox;
-		printf("\n%i\n",Promedio);
-		system("Pause");
 	}
 	Promedio /= CantidadMaterias;
-	printf("%05.2f",Promedio);
-	printf("\nPromedio: %i\nReprobadas: %i\nRetiradas: %i\n", Promedio, Reprobadas, Retiradas);
+	printf("\nPromedio:%05.2f",Promedio);
+	printf("\nReprobadas: %i\nRetiradas: %i\n",Reprobadas, Retiradas);
 	system("Pause");
 }
 
