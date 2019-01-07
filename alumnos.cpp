@@ -737,44 +737,58 @@ void BuscarNotaMax(CursosS *Cab){
 			}
 			P = P->prox;
 		}
+		T = T->prox;
 	}
-	system("Pause");
 }
-CursosA *OrdenarLista(CursosA *Lista){
-	int Comparacion;
-	CursosA *Aux = NULL, *Aux2 = NULL;
+
+int EstaOrdenado(CursosA *Lista){
 	CursosA *T = Lista;
-	CursosA *Str2 = NULL;
-	if (Lista){
-		while (T->prox){
-			Str2 = T->prox;
-			while(Str2){
-				Comparacion = strcmp(((T->alumno)->apellido),((Str2->alumno)->apellido));
-				if (Comparacion >0){
-					Aux = T;
-					Aux2 = Str2->prox;
-					T = Str2;
-					Str2->prox = T->prox;
-					Str2 = Aux;
-					Str2 ->prox = Aux2;
-				}
-				Str2 = Str2->prox;
-			}
-			T = T->prox;
-		}
-	return Lista;
+	int Comparacion = 0;
+	while (T->prox){
+		Comparacion =strcmp(T->alumno->apellido,T->prox->alumno->apellido);
+		if (Comparacion > 0) return 0;
+		T = T ->prox;
 	}
-	return NULL;
+	return 1;
+}
+void OrdenarLista(CursosA **Lista){
+	if (*Lista) {
+		CursosA *prox = (*Lista)->prox;
+		while (prox) {
+			if (strcmp(prox->alumno->apellido, (*Lista)->alumno->apellido) > 0)
+				swapCursosA(Lista, &prox);
+			else
+				prox = prox->prox;
+		}
+		OrdenarLista(&((*Lista)->prox));
+	}
+}
+
+void swapCursosA(CursosA **A, CursosA **B) {
+	if (*A && *B) {
+		CursosA *aux = new CursosA;
+		aux->estatus = (*A)->estatus;
+		aux->nota = (*A)->nota;
+		memcpy(aux->alumno, (*A)->alumno, sizeof Alumno);
+		(*A)->estatus = (*B)->estatus;
+		(*A)->nota = (*B)->nota;
+		memcpy((*A)->alumno, (*B)->alumno, sizeof Alumno);
+		(*B)->estatus = aux->estatus;
+		(*B)->nota = aux->nota;
+		memcpy((*B)->alumno, aux->alumno, sizeof Alumno);
+		delete aux;
+	}
 }
 
 
 void PrintOrdenAlfabeticoAlumnosApellido(void){
 	CursosY *T;
-	int Codigo = 0, salir =0;
+	int Codigo = 0, salir;
 	Curso *CursoBuscado;
 	CursosS *Encontrado;
 	CursosA *Lista = NULL;
 	do{
+		salir = 0;
 		printf("\nIntroduzca el codigo del curso\n");
 		scanf("%i",&Codigo);
 		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
@@ -782,7 +796,8 @@ void PrintOrdenAlfabeticoAlumnosApellido(void){
 			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
 	} while(salir);
 	Encontrado = ObtenerCursosS(CursoBuscado);
-	Lista = OrdenarLista(Encontrado->alumnos);
+	Lista = Encontrado->alumnos;
+	OrdenarLista(&Lista); 
 	if (!Lista){
 		printf("\nNo hay alumnos inscritos en este curso");
 		return;

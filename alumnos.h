@@ -295,11 +295,21 @@ void CalcularAlumnos(CursosA *,PromedioCurso **);
 void BuscarNotaMax(CursosS *);
 
 /*
-	Ordena una lsita de alumnos por orden alfabetico de apellidos
-*/
-CursosA *OrdenarLista(CursosA *);
-/*
 	Imprime una lista de alumnos ordenados alfabeticamente por el apellido
 */
 void PrintOrdenAlfabeticoAlumnosApellido(void);
+
+/*
+	Indica si una lista esta ordenada alfabeticamente
+	Parametros:
+		CursosA *Lista: Es la lista de alumnos de un curso donde se va a iterar
+*/
+void OrdenarLista(CursosA **);
+	/*
+	Intercambia dos cursosA
+	Parametros:
+		CursosA **:Alumno 1
+		CursosB **:Alumno 2
+*/
+void swapCursosA(CursosA **, CursosA **);
 #endif
