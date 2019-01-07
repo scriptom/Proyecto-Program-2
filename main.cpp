@@ -695,7 +695,7 @@ void menuModificarNota(void) {
 	Curso *curso = NULL;
 	do {
 		impCabezado();
-		printf("Ingrese la cedula del alumno cuya nota se altarara: ");
+		printf("Ingrese la cedula del alumno cuya nota se alterara: ");
 		scanf("%i%*c", &cedula);
 		if (!(alumno = obtenerAlumnoPorCedula(Al, cedula))) {
 			printf("No se consiguio ningun alumno con la cedula %d\n", cedula);

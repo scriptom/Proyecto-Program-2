@@ -336,7 +336,7 @@ void InformacionDeUnaMateria(void){
 	else{
 		P = ObtenerCursosS(Buscado);
 		CalcularAlumnos(P->alumnos,&Prom);
-		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i%*c",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
+		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\nEl promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i%*c",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
 		printf("\n");
 		system("Pause");
 		}

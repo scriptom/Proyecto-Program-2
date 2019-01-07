@@ -790,13 +790,14 @@ void PrintOrdenAlfabeticoAlumnosApellido(void){
 	CursosS *Encontrado;
 	CursosA *Lista = NULL;
 	do{
-		salir = 0;
+		salir = 1;
 		printf("\nIntroduzca el codigo del curso\n");
 		scanf("%i%*c",&Codigo);
 		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
 		if (!CursoBuscado)
 			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
-	} while(salir);
+		if (salir) return;
+	} while(!salir);
 	Encontrado = ObtenerCursosS(CursoBuscado);
 	Lista = Encontrado->alumnos;
 	OrdenarLista(&Lista); 
@@ -804,8 +805,10 @@ void PrintOrdenAlfabeticoAlumnosApellido(void){
 		printf("\nNo hay alumnos inscritos en este curso");
 		return;
 	}
+	impCabezado();
 	printCurso(Encontrado->curso,detalle());
 	while (Lista){
+		printf("\n");
 		printAlumno(Lista->alumno,1);
 		printf("Su nota en este curso es: ");
 		if (Lista->nota != -1.0f)
@@ -814,5 +817,6 @@ void PrintOrdenAlfabeticoAlumnosApellido(void){
 			printf("(sin asignar)\n");
 		Lista = Lista->prox;
 	}
+	printf("\n");
 	system("pause");
 }
