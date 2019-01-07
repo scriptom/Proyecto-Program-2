@@ -305,4 +305,5 @@ void swapCursosA(CursosA **, CursosA **);
 	Imprime una lista de alumnos ordenados alfabeticamente por el apellido
 */
 void PrintOrdenAlfabeticoAlumnosApellido(void);
+
 #endif

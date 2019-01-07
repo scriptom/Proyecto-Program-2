@@ -304,11 +304,11 @@ void InformacionHistoricaMateria(void){
 
 void InformacionDeUnaMateria(void){
 	PromedioCurso *Prom = new PromedioCurso;
-	Prom->Aprobados;
-	Prom->Reprobados;
-	Prom->Retirados;
-	Prom->promedio;
-	Prom->CantidadAlumnos;
+	Prom->Aprobados =0 ;
+	Prom->Reprobados = 0;
+	Prom->Retirados = 0;
+	Prom->promedio = 0;
+	Prom->CantidadAlumnos = 0;
 	int Codigo,ano,SN =1;
 	int CodigoCurso;
 	Materia *MateriaBuscada;
@@ -318,7 +318,7 @@ void InformacionDeUnaMateria(void){
 		printf("\nIntroduzca el codigo de la materia\n");
 		scanf("%i%*c",&Codigo);
 		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
-		printf("Introduzca el año del curso");
+		printf("Introduzca el año del curso: ");
 		scanf("%i%*c",&ano);
 		if (!MateriaBuscada){
 			SN = impSiNo("La materia no existe, ¿Desea introducir otro codigo?");
@@ -335,6 +335,7 @@ void InformacionDeUnaMateria(void){
 		P = ObtenerCursosS(Buscado);
 		CalcularAlumnos(P->alumnos,&Prom);
 		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
+		printf("\n");
 		system("Pause");
 		}
 }
@@ -366,6 +367,7 @@ void AlumnosNotaMaxima(void){
 		if (CursoEncontrado) InsertarListaCursosScabeza(&Lista,CursoEncontrado);
 		T = T->prox;
 	}
+	printf("\n");
 	BuscarNotaMax(Lista);
 	system("Pause");
 }

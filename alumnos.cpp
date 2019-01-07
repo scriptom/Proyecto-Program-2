@@ -737,25 +737,38 @@ void BuscarNotaMax(CursosS *Cab){
 			}
 			P = P->prox;
 		}
+		T = T->prox;
 	}
-	system("Pause");
 }
+
+int EstaOrdenado(CursosA *Lista){
+	CursosA *T = Lista;
+	int Comparacion = 0;
+	while (T->prox){
+		Comparacion =strcmp(T->alumno->apellido,T->prox->alumno->apellido);
+		if (Comparacion > 0) return 0;
+		T = T ->prox;
+	}
+	return 1;
+}
+
 void OrdenarLista(CursosA **Lista){
 	if (*Lista) {
 		CursosA *prox = (*Lista)->prox;
 		while (prox) {
-			if (strcmp(prox->alumno->apellido, (*Lista)->alumno->apellido) > 0)
+			if (strcmp(prox->alumno->apellido, (*Lista)->alumno->apellido) < 0)
 				swapCursosA(Lista, &prox);
 			else
 				prox = prox->prox;
 		}
-		OrdenarLista(&(*Lista)->prox);
+		OrdenarLista(&((*Lista)->prox));
 	}
 }
 
 void swapCursosA(CursosA **A, CursosA **B) {
 	if (*A && *B) {
 		CursosA *aux = new CursosA;
+		aux->alumno = new Alumno;
 		aux->estatus = (*A)->estatus;
 		aux->nota = (*A)->nota;
 		memcpy(aux->alumno, (*A)->alumno, sizeof Alumno);
@@ -765,6 +778,7 @@ void swapCursosA(CursosA **A, CursosA **B) {
 		(*B)->estatus = aux->estatus;
 		(*B)->nota = aux->nota;
 		memcpy((*B)->alumno, aux->alumno, sizeof Alumno);
+		delete aux->alumno;
 		delete aux;
 	}
 }
@@ -772,19 +786,21 @@ void swapCursosA(CursosA **A, CursosA **B) {
 
 void PrintOrdenAlfabeticoAlumnosApellido(void){
 	CursosY *T;
-	int Codigo = 0, salir =0;
+	int Codigo = 0, salir;
 	Curso *CursoBuscado;
 	CursosS *Encontrado;
 	CursosA *Lista = NULL;
 	do{
+		salir = 0;
 		printf("\nIntroduzca el codigo del curso\n");
-		scanf("%i",&Codigo);
+		scanf("%i%*c",&Codigo);
 		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
 		if (!CursoBuscado)
 			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
 	} while(salir);
 	Encontrado = ObtenerCursosS(CursoBuscado);
-	Lista = OrdenarLista(Encontrado->alumnos);
+	Lista = Encontrado->alumnos;
+	OrdenarLista(&Lista); 
 	if (!Lista){
 		printf("\nNo hay alumnos inscritos en este curso");
 		return;
@@ -792,7 +808,12 @@ void PrintOrdenAlfabeticoAlumnosApellido(void){
 	printCurso(Encontrado->curso,detalle());
 	while (Lista){
 		printAlumno(Lista->alumno,1);
-		printf("Su nota en este curso es: %i\n",Lista->nota);
+		printf("Su nota en este curso es: ");
+		if (Lista->nota != -1.0f)
+			printf("%05.2f\n",Lista->nota);
+		else 
+			printf("(sin asignar)\n");
 		Lista = Lista->prox;
 	}
+	system("pause");
 }
