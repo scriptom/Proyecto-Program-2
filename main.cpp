@@ -735,14 +735,16 @@ void menuModificarEstatus(void) {
 		printf("Ingrese el codigo del curso del alumno: ");
 		scanf("%i%*c", &codigo);
 		if (!(curso = obtenerCursoPorCodigo(Cur, codigo))) {
-			printf("No se consiguio ningun curso con el codigo %d", codigo);
+			printf("No se consiguio ningun curso con el codigo %d\n", codigo);
 			salir = !impSiNo("Desea volver a intentar?");
 			continue;
 		}
-		if (EstaInscrito(ubicarListaAlumnos(curso), alumno->cedula))
+		if (EstaInscrito(ubicarListaAlumnos(curso), alumno->cedula)) {
 			modificarEstatusAlumno(alumno, curso);
-		else
-			printf("El alumno %s no se encuentra inscrito en %s (%d)", alumno->nombre, obtenerMateriaPorCodigo(Mat, curso->codMat)->nombre, curso->ano); printf("El alumno %s no se encuentra inscrito en %s (%d)", alumno->nombre, obtenerMateriaPorCodigo(Mat, curso->codMat)->nombre, curso->ano);
+		}
+		else {
+			printf("El alumno %s no se encuentra inscrito en %s (%d)\n", alumno->nombre, obtenerMateriaPorCodigo(Mat, curso->codMat)->nombre, curso->ano); printf("El alumno %s no se encuentra inscrito en %s (%d)", alumno->nombre, obtenerMateriaPorCodigo(Mat, curso->codMat)->nombre, curso->ano);
+		}
 		salir = 1;
 		system("pause");
 	} while (!salir);

@@ -144,7 +144,7 @@ void modificarCurso(Curso **P) {
 				"Editar el numero de lapso",
 				"Editar horario"
 			);
-			scanf("%i", &opt);
+			scanf("%i%*c", &opt);
 			switch (opt) {
 			case 0: break;
 			case 1:
@@ -428,7 +428,7 @@ void ImprimirRecordAcademicoAlumno(){
 	short existe = 0;
 	int Cedula = 0;
 	printf("\nIntroduzca el numero de cedula del alumno a buscar\n");
-	scanf("%i",&Cedula);
+	scanf("%i%*c",&Cedula);
 	while (T){
 		Puntero = BuscarPrimeraCoincidencia(T->cursosDictados,Cedula);
 		if (Puntero) existe = 1;
@@ -497,7 +497,7 @@ void BuscarRepeticionesDeCursos(){
 	do
 	{
 		printf("\nIntroduzca la cedula del alumno al cual desea consultar\n");
-		scanf("%i",&Cedula);
+		scanf("%i%*c",&Cedula);
 		AlumnoBuscado = obtenerAlumnoPorCedula(Al,Cedula);
 		if (!AlumnoBuscado){
 			SN = impSiNo("El alumno no existe, ¿Desea introducir otra cedula?");
@@ -507,7 +507,7 @@ void BuscarRepeticionesDeCursos(){
 	do
 	{
 		printf("\nIntroduzca el codigo de la materia\n");
-		scanf("%i",&Codigo);
+		scanf("%i%*c",&Codigo);
 		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
 		if (!MateriaBuscada){
 			SN = impSiNo("La materia no existe, ¿Desea introducir otro codigo?");
@@ -652,7 +652,7 @@ void DatosDelCurso(void){
 	int salir = 0;
 	do{
 		printf("\nIntroduzca el codigo del curso\n");
-		scanf("%i",&Codigo);
+		scanf("%i%*c",&Codigo);
 		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
 		if (!CursoBuscado)
 			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");

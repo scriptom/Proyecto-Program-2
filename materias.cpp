@@ -174,7 +174,7 @@ int cantidadMaterias(Materia *M) {
 
 Materia *obtenerEnesimaMateria(Materia *M, int n) {
 	if ( M )
-		return n ? obtenerEnesimaMateria(M->prox, n-1) : M;
+		return n != 1 ? obtenerEnesimaMateria(M->prox, n-1) : M;
 	return NULL;
 }
 
@@ -194,7 +194,7 @@ int ObtenerCodigoMateria(Materia *P,char *Nombre){
 	Nombre = minusculas(Nombre);
 	while (T){
 		if (strstr(minusculas(T->nombre),Nombre))
-			insertarMateria(&M,T);
+			insertarMateria(&M, extraerMateria(T, T->codigo));
 		T=T->prox;
 	}
 	if (( cm = cantidadMaterias(M)) > 1) {
@@ -336,7 +336,7 @@ void InformacionDeUnaMateria(void){
 	else{
 		P = ObtenerCursosS(Buscado);
 		CalcularAlumnos(P->alumnos,&Prom);
-		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
+		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i%*c",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
 		printf("\n");
 		system("Pause");
 		}
