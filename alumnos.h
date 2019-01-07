@@ -297,7 +297,10 @@ void BuscarNotaMax(CursosS *);
 /*
 	Ordena una lsita de alumnos por orden alfabetico de apellidos
 */
-CursosA *OrdenarLista(CursosA *);
+void OrdenarLista(CursosA **);
+
+void swapCursosA(CursosA **, CursosA **);
+
 /*
 	Imprime una lista de alumnos ordenados alfabeticamente por el apellido
 */

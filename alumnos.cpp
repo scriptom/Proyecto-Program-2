@@ -740,31 +740,33 @@ void BuscarNotaMax(CursosS *Cab){
 	}
 	system("Pause");
 }
-CursosA *OrdenarLista(CursosA *Lista){
-	int Comparacion;
-	CursosA *Aux = NULL, *Aux2 = NULL;
-	CursosA *T = Lista;
-	CursosA *Str2 = NULL;
-	if (Lista){
-		while (T->prox){
-			Str2 = T->prox;
-			while(Str2){
-				Comparacion = strcmp(((T->alumno)->apellido),((Str2->alumno)->apellido));
-				if (Comparacion >0){
-					Aux = T;
-					Aux2 = Str2->prox;
-					T = Str2;
-					Str2->prox = T->prox;
-					Str2 = Aux;
-					Str2 ->prox = Aux2;
-				}
-				Str2 = Str2->prox;
-			}
-			T = T->prox;
+void OrdenarLista(CursosA **Lista){
+	if (*Lista) {
+		CursosA *prox = (*Lista)->prox;
+		while (prox) {
+			if (strcmp(prox->alumno->apellido, (*Lista)->alumno->apellido) > 0)
+				swapCursosA(Lista, &prox);
+			else
+				prox = prox->prox;
 		}
-	return Lista;
+		OrdenarLista(&(*Lista)->prox);
 	}
-	return NULL;
+}
+
+void swapCursosA(CursosA **A, CursosA **B) {
+	if (*A && *B) {
+		CursosA *aux = new CursosA;
+		aux->estatus = (*A)->estatus;
+		aux->nota = (*A)->nota;
+		memcpy(aux->alumno, (*A)->alumno, sizeof Alumno);
+		(*A)->estatus = (*B)->estatus;
+		(*A)->nota = (*B)->nota;
+		memcpy((*A)->alumno, (*B)->alumno, sizeof Alumno);
+		(*B)->estatus = aux->estatus;
+		(*B)->nota = aux->nota;
+		memcpy((*B)->alumno, aux->alumno, sizeof Alumno);
+		delete aux;
+	}
 }
 
 
