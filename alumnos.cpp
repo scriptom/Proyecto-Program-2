@@ -722,7 +722,8 @@ void CalcularAlumnos(CursosA *ListaAlumnos,PromedioCurso **CursoPromediado){
 		}
 		T = T->prox;
 	}
-	(*CursoPromediado)->promedio /= Alum;
+	if(Alum) (*CursoPromediado)->promedio /= Alum;
+	else (*CursoPromediado)->promedio = -1;
 }
 
 void BuscarNotaMax(CursosS *Cab){
