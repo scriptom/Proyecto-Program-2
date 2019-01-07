@@ -794,9 +794,10 @@ void PrintOrdenAlfabeticoAlumnosApellido(void){
 		printf("\nIntroduzca el codigo del curso\n");
 		scanf("%i%*c",&Codigo);
 		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
-		if (!CursoBuscado)
-			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
-		if (salir) return;
+		if (!CursoBuscado) {
+			salir = !impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
+			if (salir) return;
+		}
 	} while(!salir);
 	Encontrado = ObtenerCursosS(CursoBuscado);
 	Lista = Encontrado->alumnos;
