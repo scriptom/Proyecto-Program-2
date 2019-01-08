@@ -389,8 +389,11 @@ void InformacionDeUnaMateria(void){
 		return;
 	}
 	else{
+		while (Buscado) {
 		P = ObtenerCursosS(Buscado);
 		CalcularAlumnos(P->alumnos,&Prom);
+		Buscado = Buscado->prox;
+		}
 		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i\n",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
 		system("Pause");
 		}

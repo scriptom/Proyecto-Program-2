@@ -68,7 +68,7 @@ void insertarCurso(Curso **, Curso *);
 	Util para crear listas paralelas sin tocar la global
 	Parametros:
 		Curso *C   : Lista de donde buscar un curso
-		int cedula : Codigo de curso a buscar
+		int Codigo : Codigo de curso a buscar
 */
 Curso *extraerCurso(Curso *, int);
 

@@ -739,11 +739,12 @@ void DatosDelCurso(void){
 
 Curso *BuscarCursoPorCodigoYano(int Codigo,int Ano){
 	Curso *T = Cur;
+	Curso *Lista =NULL;
 	while (T){
-		if ((T->codMat == Codigo) && (T->ano ==Ano)) return T;
+		if ((T->codMat == Codigo) && (T->ano ==Ano)) insertarCurso(&Lista,extraerCurso(T,T->codigo));
 		T = T->prox;
 	}
-	return NULL;
+	return Lista;
 }
 
 CursosA *ubicarAlumnoEnCurso(Curso *C, Alumno *A) {
