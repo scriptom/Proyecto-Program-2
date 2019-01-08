@@ -23,7 +23,7 @@ void printCurso(Curso *C, int detalle) {
 	printf("\tNombre de la materia: %s\n", M->nombre);
 	printf("\tCodigo Curso: %i\n", C->codigo);
 	if (detalle) {
-		printf("\tAño: %d\n", 164, C->ano);
+		printf("\tA%co: %d\n", 164, C->ano);
 		printf("\tLapso: %d\n", C->lapso);
 		printf("\tCodigo de la materia: %d\n", C->codMat);
 		printf("\tHorario: %s\n\n", horStr( C->horario ));
@@ -397,7 +397,8 @@ void MostrarNotaAlumno(CursosS *Curso,CursosA *AlumnoBuscado){
 	Materia *MateriaDeseada = NULL;
 	MateriaDeseada =  obtenerMateriaPorCodigo(Mat,(Curso->curso)->codMat);
 	printf("\n Nombre de la materia: %s \n",MateriaDeseada->nombre);
-	printf("\n La nota del alumno en la materia es: %05.2f \n",AlumnoBuscado->nota);
+	if (AlumnoBuscado->estatus =='R') printf("\nLa nota del alumno en la materia es: RE \n");
+	else printf("\n La nota del alumno en la materia es: %05.2f \n",AlumnoBuscado->nota);
 	printCurso(Curso->curso,1);
 }
 
@@ -496,6 +497,7 @@ void BuscarRepeticionesDeCursos(){
 	int SN = 1,existe = 0;
 	CursosS *Curso = NULL;
 	CursosY *T = IndCurso;
+	CursosS *Lista = NULL;
 	do
 	{
 		printf("\nIntroduzca la cedula del alumno al cual desea consultar\n");
@@ -519,12 +521,16 @@ void BuscarRepeticionesDeCursos(){
 	while (T){
 		Curso = obtenerCursos(T->cursosDictados,Codigo);
 
-		if ((Curso) && (BuscarAlumnoCursosA(Curso->alumnos,AlumnoBuscado))){
-			printf("\nCurso del a%co: %hu\n", 164, T->ano);
-			printCurso(Curso->curso,detalle());
-			existe = 1;
-		}
+		if ((Curso) && (BuscarAlumnoCursosA(Curso->alumnos,AlumnoBuscado)))
+			InsertarListaCursosScola(&Lista,Curso);
 		T = T->prox;
+	}
+	while (Lista)
+	{
+		printf("\nCurso del a%co: %hu\n", 164, Lista->curso->ano);
+		printCurso(Lista->curso,1);
+		existe = 1;
+		Lista = Lista->prox;
 	}
 	if (!existe){
 		printf("\nEl alumno no ha cursado esta materia ninguna vez\n");

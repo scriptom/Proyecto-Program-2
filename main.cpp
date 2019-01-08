@@ -435,15 +435,15 @@ void menuParaConsultaCurso(void) {
 
 void menuParaConsultaMateria(void){
 int opt = -1;
-char str[] = "Mostrar la informacion de los alumnos que cursaron la materia en un a%co especifico";
+char str[] = "Mostrar la informacion de los alumnos que cursaron la materia en un             a%co especifico";
 	do {
 		
 		impCabezado();
 		sprintf(str, str, 164);
 		impMenu("Que desea consultar?", 3,
-			"Mostrar la cantidad de alumnos que ha cursado esta materia, el promedio por curso y la cantidad de retirados y reprobados",
+			"Mostrar la cantidad de alumnos que ha cursado esta materia, el                  promedio por curso y la cantidad de retirados y reprobados",
 			str,
-			"Mostrar los alumnos que obtuvieron la calificacion mas alta y la informacion del curso en el que se encuntran"
+			"Mostrar los alumnos que obtuvieron la calificacion mas alta y la                informacion del curso en el que se encuntran"
 			);
 
 	scanf("%i%*c", &opt);

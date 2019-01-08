@@ -365,7 +365,7 @@ void AlumnosNotaMaxima(void){
 	} while (!MateriaBuscada);
 	while (T){
 		CursoEncontrado = obtenerCursos(T->cursosDictados,Codigo);
-		if (CursoEncontrado) InsertarListaCursosScabeza(&Lista,CursoEncontrado);
+		if (CursoEncontrado) InsertarListaCursosScola(&Lista,CursoEncontrado);
 		T = T->prox;
 	}
 	printf("\n");
