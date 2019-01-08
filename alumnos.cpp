@@ -29,7 +29,7 @@ Fecha crearFecha() {
 		printf("\tMes: ");
 		scanf( "%hu%*c", &(fecha.mes) );
 		// solicitamos el año (mayor a 1970)
-		printf("\tAño: ");
+		printf("\tA%co: ", 164);
 		scanf( "%hu%*c", &(fecha.ano) );
 
 		/* 

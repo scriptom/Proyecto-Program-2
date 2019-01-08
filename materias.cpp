@@ -295,8 +295,8 @@ void InformacionHistoricaMateria(void){
 			CantidadCur++;
 			CalcularAlumnos(Lista->alumnos,&Prom);
 			Nota +=Prom->promedio;
-			if (Prom->promedio == -1 ) printf("\nEl promedio de los alumnos del curso del año: %hu, es: No hay notas registradas                                                        en este curso\n",(Lista->curso)->ano);
-			else printf("\nEl promedio de los alumnos del curso del año: %hu, es: %05.2f\n",(Lista->curso)->ano,Prom->promedio);
+			if (Prom->promedio == -1 ) printf("\nEl promedio de los alumnos del curso del a%co: %hu, es: No hay notas registradas en este curso\n", 164, (Lista->curso)->ano);
+			else printf("\nEl promedio de los alumnos del curso del a%co: %hu, es: %05.2f\n", 164, (Lista->curso)->ano,Prom->promedio);
 			Lista = Lista->prox;
 		}
 		if(Prom->CantidadAlumnos) printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\nEl promedio de todos los cursos es %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i\n", Prom->CantidadAlumnos, Nota / CantidadCur, Prom->Reprobados, Prom->Retirados);
@@ -320,7 +320,7 @@ void InformacionDeUnaMateria(void){
 		printf("\nIntroduzca el codigo de la materia\n");
 		scanf("%i%*c",&Codigo);
 		MateriaBuscada = obtenerMateriaPorCodigo(Mat,Codigo);
-		printf("Introduzca el año del curso: ");
+		printf("Introduzca el a%co del curso: ", 164);
 		scanf("%i%*c",&ano);
 		if (!MateriaBuscada){
 			SN = impSiNo("La materia no existe, ¿Desea introducir otro codigo?");

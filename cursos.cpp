@@ -23,7 +23,7 @@ void printCurso(Curso *C, int detalle) {
 	printf("\tNombre de la materia: %s\n", M->nombre);
 	printf("\tCodigo Curso: %i\n", C->codigo);
 	if (detalle) {
-		printf("\tAño: %d\n", C->ano);
+		printf("\tAño: %d\n", 164, C->ano);
 		printf("\tLapso: %d\n", C->lapso);
 		printf("\tCodigo de la materia: %d\n", C->codMat);
 		printf("\tHorario: %s\n\n", horStr( C->horario ));
@@ -65,9 +65,9 @@ Curso *crearCurso() {
 
 		do {
 			// solicitamos el ano de la Curso
-			printf("Año que representa este curso: ");
+			printf("A%co que representa este curso: ", 164);
 			scanf("%hu%*c", &ano);
-			if ( ano < 1970) printf("El año introducido es invalido, introduzca otro\n");
+			if ( ano < 1970) printf("El a%co introducido es invalido, introduzca otro\n", 164);
 		} while ( ano < 1970 );
 
 		// para este punto, el año y el codigo de la materia son validos, asi que podemos generar el codigo del curso
@@ -129,18 +129,20 @@ void modificarCurso(Curso **P) {
 	if (*P) {
 		int opt = -1, codMat = -1, cursoInvalido = -1, codigo = -1;
 		unsigned short ano = -1, horario = -1;
+		char str[] = "Editar el a%co del Curso";
 		Curso *existe = NULL;
 		// salimos cuando la opcion sea 0
 		do {
 			// mostramos el encabezado
 			impCabezado();
 			printCurso(*P);
-			printf("**NOTA: EL AÑO Y EL CODIGO DE LA MATERIA NO SE GUARDARAN HASTA QUE DECIDA SALIR**\n\n");
+			sprintf(str, str, 164);
+			printf("**NOTA: EL A%cO Y EL CODIGO DE LA MATERIA NO SE GUARDARAN HASTA QUE DECIDA SALIR**\n\n", 165);
 			impMenu(
 				"Estas son las opciones disponibles para los Cursos.\nMarque la opcion de acuerdo a la operacion que desea realizar",
 				4,
 				"Editar el Codigo de Materia",
-				"Editar el año del Curso",
+				str,
 				"Editar el numero de lapso",
 				"Editar horario"
 			);
@@ -158,7 +160,7 @@ void modificarCurso(Curso **P) {
 				} while ( !codMat );
 				break;
 			case 2:
-				printf("Introduzca un nuevo año para este curso. Actual: %d: ", (*P)->ano);
+				printf("Introduzca un nuevo a%co para este curso. Actual: %d: ", 164, (*P)->ano);
 				scanf("%4hu%*c", &ano);
 				break;
 			case 3:
@@ -183,7 +185,7 @@ void modificarCurso(Curso **P) {
 				codigo = genCodigoCurso( ano, codMat );
 				existe = obtenerCursoPorCodigo(Cur, codigo);
 				if (existe) {
-					printf("Ya existe un curso de la materia %s en el año %d. Por favor verifique los datos e intente nuevamente\n", obtenerMateriaPorCodigo(Mat, existe->codMat)->nombre, existe->ano);
+					printf("Ya existe un curso de la materia %s en el a%co %d. Por favor verifique los datos e intente nuevamente\n", obtenerMateriaPorCodigo(Mat, existe->codMat)->nombre, 164, existe->ano);
 					cursoInvalido = 1;
 				} else {
 					(*P)->ano = ano;
@@ -518,7 +520,7 @@ void BuscarRepeticionesDeCursos(){
 		Curso = obtenerCursos(T->cursosDictados,Codigo);
 
 		if ((Curso) && (BuscarAlumnoCursosA(Curso->alumnos,AlumnoBuscado))){
-			printf("\nCurso del año: %i\n",T->ano);
+			printf("\nCurso del a%co: %hu\n", 164, T->ano);
 			printCurso(Curso->curso,detalle());
 			existe = 1;
 		}
