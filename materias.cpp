@@ -343,7 +343,8 @@ void InformacionHistoricaMateria(void){
 			}
 	} while (!MateriaBuscada);
 		while (T){
-			CursoEncontrado = obtenerCursos(T->cursosDictados,Codigo);
+			InsertarListaCursosScabeza(&CursoEncontrado, obtenerCursos(T->cursosDictados, Codigo));
+			//CursoEncontrado = obtenerCursos(T->cursosDictados,Codigo);
 			T = T->prox;
 		}
 		while(CursoEncontrado){

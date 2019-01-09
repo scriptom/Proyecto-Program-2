@@ -513,25 +513,29 @@ void ImprimirRecordAcademicoAlumno(){
 }
 
 void InsertarListaCursosScola(CursosS **Cab,CursosS *Nuevo){
-	Nuevo->prox = NULL;
-	if (!(*Cab)) *Cab =Nuevo;
-	else{
-		Nuevo->prox = *Cab;
-		*Cab = Nuevo;
+	if (Nuevo) {
+		Nuevo->prox = NULL;
+		if (!(*Cab)) *Cab =Nuevo;
+		else{
+			Nuevo->prox = *Cab;
+			*Cab = Nuevo;
+		}
 	}
 }
 
 void InsertarListaCursosScabeza(CursosS **Cab,CursosS *Nuevo){
-	Nuevo->prox = NULL;
-	CursosS *T = *Cab;
-	if (!(*Cab)) *Cab =Nuevo;
-	else{
-		while (T->prox) {
-			// prevencion de repetidos
-			if (T->curso->codigo == Nuevo->curso->codigo) return;
-			T = T->prox;
+	if (Nuevo) {
+		Nuevo->prox = NULL;
+		CursosS *T = *Cab;
+		if (!(*Cab)) *Cab =Nuevo;
+		else{
+			while (T->prox) {
+				// prevencion de repetidos
+				if (T->curso->codigo == Nuevo->curso->codigo) return;
+				T = T->prox;
+			}
+			T->prox = Nuevo;
 		}
-		T->prox = Nuevo;
 	}
 }
 
