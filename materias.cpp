@@ -172,6 +172,7 @@ void elimMateria(Materia **P, int codigo) {
 	if (!*P) return; // regresamos si el listado esta vacio
 	Materia *del; // declaramos un auxiliar de eliminacion
 	Curso *C = NULL;
+	int Codigo =0;
 	if ((*P)->codigo == codigo) {
 		// si el codigo coincide con el primer elemento, tenemos que eliminar la cabeza
 		del = *P;
@@ -179,12 +180,15 @@ void elimMateria(Materia **P, int codigo) {
 		if ( impSiNo("Seguro que desea eliminar la materia?") ) {
 			C = Cur;
 				while (C) {
-					if ( C->codMat == del->codigo )
-						elimCurso(&Cur, C->codigo);
-					C = C->prox;
+					if ( C->codMat == del->codigo ){
+						Codigo = C->codigo;
+						C = C->prox;
+						elimCurso(&Cur, Codigo);	
+					}
+					else  C = C->prox;
 				}
-			delete del;
-		}
+				delete del;
+			}
 			
 		return;
 	}
@@ -201,9 +205,12 @@ void elimMateria(Materia **P, int codigo) {
 			if ( impSiNo("Seguro que desea eliminar la materia?") ) {
 					C = Cur;
 				while (C) {
-					if ( C->codMat == del->codigo )
-						elimCurso(&Cur, C->codigo);
-					C = C->prox;
+					if ( C->codMat == del->codigo ){
+						Codigo = C->codigo;
+						C = C->prox;
+						elimCurso(&Cur, Codigo);	
+					}
+					else  C = C->prox;
 				}
 				delete del;
 			}
