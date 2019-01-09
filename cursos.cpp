@@ -355,8 +355,13 @@ CursosS *extraerCursosS(CursosS *objetivo) {
 	}
 
 	// copiamos todos los campos, y nulificamos el puntero a proximo
+	// el curso es imposible que sea nulo
 	memcpy(extraido->curso, objetivo->curso, sizeof Curso);
-	memcpy(extraido->alumnos, objetivo->alumnos, sizeof CursosA);
+	// la lista de alumnos puede ser nula
+	if (objetivo->alumnos)
+		memcpy(extraido->alumnos, objetivo->alumnos, sizeof CursosA);
+	else
+		extraido->alumnos = NULL;
 	extraido->prox = NULL;
 
 	// regresamos

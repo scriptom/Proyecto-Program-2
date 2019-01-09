@@ -324,7 +324,7 @@ void InformacionHistoricaMateria(void){
 	int Codigo, CantidadCur = 0;
 	float Nota = 0.0f;
 	Materia *MateriaBuscada;
-	CursosS *CursoEncontrado;
+	CursosS *CursoEncontrado = NULL;
 	CursosS *Lista = NULL;
 	PromedioCurso *Prom = new PromedioCurso;
 	Prom->Aprobados = 0;
