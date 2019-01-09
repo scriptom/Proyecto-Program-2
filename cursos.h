@@ -68,7 +68,7 @@ void insertarCurso(Curso **, Curso *);
 	Util para crear listas paralelas sin tocar la global
 	Parametros:
 		Curso *C   : Lista de donde buscar un curso
-		int cedula : Codigo de curso a buscar
+		int Codigo : Codigo de curso a buscar
 */
 Curso *extraerCurso(Curso *, int);
 
@@ -119,9 +119,10 @@ void elimCurso(Curso **, int);
 	Parametros:
 		int ano : El año del curso
 		int cod : Codigo de la materia de este curso
+		unsigned short lapso : Lapso del Curso en el año
 	Retorno: int : el nuevo codigo
 */
-int genCodigoCurso(int, int);
+int genCodigoCurso(int, int, unsigned short);
 /*
 	Obtiene e imprime una lista de los cursos de una materia en especifico 
 	Parametros:
@@ -307,5 +308,9 @@ void DatosDelCurso(void);
 		Curso *Buscado: Es el curso que se desea encontrar
 */
 CursosS *ObtenerCursosS(Curso *);
+
+CursosS *extraerCursosS(CursosS *);
+
+Curso *obtenerCursosDeMateria(Materia *);
 
 #endif

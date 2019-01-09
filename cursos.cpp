@@ -49,6 +49,7 @@ Curso *crearCurso() {
 	// declaramos el nuevo Curso a insertar, y un auxiliar para saber si el Curso existe
 	Curso *C = new Curso, *existe = NULL;
 	int codigoCurso = -1, codigoMateria = -1, horario = -1, reintentar = 1;
+	unsigned short lapso = -1;
 	unsigned short ano = 0;
 
 	do {
@@ -64,14 +65,27 @@ Curso *crearCurso() {
 		} while ( !codigoMateria );
 
 		do {
-			// solicitamos el ano de la Curso
+			// solicitamos el ano del Curso
 			printf("A%co que representa este curso: ", 164);
 			scanf("%hu%*c", &ano);
-			if ( ano < 1970) printf("El a%co introducido es invalido, introduzca otro\n", 164);
+			if ( ano < 1970) {
+				printf("El a%co introducido es invalido, introduzca otro\n", 164);
+				if ( ! impSiNo("Desea reintentar?")) return NULL;
+			}
 		} while ( ano < 1970 );
 
+		do {
+			// solicitamos el lapso del Curso
+			printf("Lapso del curso : ");
+			scanf("%hu%*c", &lapso);
+			if ( lapso < 1 || lapso > 4)  {
+				printf("El lapso introducido es invalido, introduzca otro\n");
+				if (!impSiNo("Desea continuar?")) return NULL;
+			}
+		} while ( lapso < 1 || lapso > 4 );
+
 		// para este punto, el año y el codigo de la materia son validos, asi que podemos generar el codigo del curso
-		codigoCurso = genCodigoCurso(ano, codigoMateria);
+		codigoCurso = genCodigoCurso(ano, codigoMateria, lapso);
 		existe = obtenerCursoPorCodigo(Cur, codigoCurso);
 		if (existe) {
 			printf("Un curso con esas caracteristicas ya existe (Codigo %d)\n", existe->codigo);
@@ -82,10 +96,7 @@ Curso *crearCurso() {
 	C->ano = ano;
 	C->codMat = codigoMateria;
 	C->codigo = codigoCurso;
-
-	// solicitamos el numero de lapso que ocupa la Curso
-	printf("Numero de lapso: ");
-	scanf("%hu%*c", &(C->lapso));
+	C->lapso = lapso;
 
 	do {
 		// solicitamos el horario en el que se debe estar para cursar la Curso
@@ -128,7 +139,7 @@ void modificarCurso(Curso **P) {
 	// nada mas actuamos si no tenemos un puntero a nulo
 	if (*P) {
 		int opt = -1, codMat = -1, cursoInvalido = -1, codigo = -1;
-		unsigned short ano = -1, horario = -1;
+		unsigned short ano = -1, horario = -1, lapso = 1, creditos = -1;
 		char str[] = "Editar el a%co del Curso";
 		Curso *existe = NULL;
 		// salimos cuando la opcion sea 0
@@ -165,7 +176,13 @@ void modificarCurso(Curso **P) {
 				break;
 			case 3:
 				printf("Introduzca el nuevo lapso para este curso. Actual: %d: ",  (*P)->lapso);
-				scanf("%hu%*c", &((*P)->lapso));
+				do {
+					scanf("%hu%*c", &lapso);
+					if (lapso < 1 || lapso > 4) {
+						printf("El lapso que se introdujo es invalido.\n El lapso debe estar entre 1 y 4");
+						if (!impSiNo("Desea continuar?")) return;
+					}
+				} while (lapso < 1 || lapso > 4);
 				break;
 			case 4:
 				printf("Seleccione el nuevo turno de horario para este curso. Actual: %s\n", horStr((*P)->horario));
@@ -179,10 +196,11 @@ void modificarCurso(Curso **P) {
 			default:
 				printf("Opcion no reconocida. Vuelva a intentar\n");
 			}
-			if ( ano != -1 || codMat != -1 ) {
+			if ( ano != -1 || codMat != -1 || lapso != -1 ) {
 				if ( ano == -1 ) ano = (*P)->ano;
 				if ( codMat == -1 ) codMat = (*P)->codMat;
-				codigo = genCodigoCurso( ano, codMat );
+				if ( lapso == -1 ) lapso = (*P)->lapso;
+				codigo = genCodigoCurso( ano, codMat, lapso );
 				existe = obtenerCursoPorCodigo(Cur, codigo);
 				if (existe) {
 					printf("Ya existe un curso de la materia %s en el a%co %d. Por favor verifique los datos e intente nuevamente\n", obtenerMateriaPorCodigo(Mat, existe->codMat)->nombre, 164, existe->ano);
@@ -194,6 +212,9 @@ void modificarCurso(Curso **P) {
 					cursoInvalido = 0;
 				}
 			} else cursoInvalido = 0;
+
+			if (cursoInvalido && !impSiNo("Desea continuar editando?")) 
+				return;
 		} while (opt || cursoInvalido);
 	}
 }
@@ -241,10 +262,10 @@ Curso *obtenerCursoPorCodigo(Curso *C, int codigo) {
 	return NULL;
 }
 
-int genCodigoCurso(int ano, int cod) {
+int genCodigoCurso(int ano, int cod, unsigned short lapso) {
 	int codigo = -1;
 	char aux[10];
-	sprintf(aux, "%d%d", ano, cod);
+	sprintf(aux, "%d%d%d", ano, cod, lapso);
 	sscanf(aux, "%d", &codigo);
 
 	return codigo;
@@ -315,6 +336,32 @@ Curso *extraerCurso(Curso *C, int codigo) {
 	extraido->codigo = objetivo->codigo;
 	extraido->lapso = objetivo->lapso;
 	extraido->codMat = objetivo->codMat;
+	extraido->prox = NULL;
+
+	// regresamos
+	return extraido;
+}
+
+CursosS *extraerCursosS(CursosS *objetivo) {
+	// Alumno a extraer de la lista
+	CursosS *extraido = new CursosS;
+	extraido->alumnos = new CursosA;
+	extraido->curso = new Curso;
+
+	// si no obtuvimos nada, limpiamos la memoria reservada y regresamos nulo
+	if (!objetivo) {
+		delete extraido;
+		return NULL;
+	}
+
+	// copiamos todos los campos, y nulificamos el puntero a proximo
+	// el curso es imposible que sea nulo
+	memcpy(extraido->curso, objetivo->curso, sizeof Curso);
+	// la lista de alumnos puede ser nula
+	if (objetivo->alumnos)
+		memcpy(extraido->alumnos, objetivo->alumnos, sizeof CursosA);
+	else
+		extraido->alumnos = NULL;
 	extraido->prox = NULL;
 
 	// regresamos
@@ -402,8 +449,8 @@ void MostrarNotaAlumno(CursosS *Curso,CursosA *AlumnoBuscado){
 	printCurso(Curso->curso,1);
 }
 
-void ImprimirRegistroAlumnoCursosS(CursosS *Cab,int Cedula){
-	CursosS *T= Cab;
+void ImprimirRegistroAlumnoCursosS(CursosS *Lista,int Cedula){
+	CursosS *T= Lista;
 	CursosA *AlumnoBuscado = NULL;
 	while (T){
 		AlumnoBuscado = EstaInscrito(T->alumnos,Cedula);
@@ -425,21 +472,39 @@ CursosS *BuscarPrimeraCoincidencia(CursosS *Cab,int Cedula){
 	return NULL;
 }
 
+void *BuscarTodasLasCoincidencia(CursosS *Cab,int Cedula,CursosS **Lista){
+	CursosS *T = Cab;
+	CursosA *AlumnoBuscado = NULL;
+	while (T){
+		AlumnoBuscado = EstaInscrito(T->alumnos,Cedula);
+		if (AlumnoBuscado) InsertarListaCursosScola(Lista, extraerCursosS(T));
+		T = T->prox;
+	}
+	return NULL;
+}
+
+
 void ImprimirRecordAcademicoAlumno(){
 	CursosY *T = IndCurso;
-	CursosS *Puntero = NULL;
+	CursosS *Puntero = NULL, *Lista = NULL;
 	short existe = 0;
 	int Cedula = 0;
 	printf("\nIntroduzca el numero de cedula del alumno a buscar\n");
 	scanf("%i%*c",&Cedula);
+	if (!obtenerAlumnoPorCedula(Al, Cedula)) {
+		printf("No existe ningun alumno con esa cedula\n");
+		system("pause");
+		return;
+	}
 	while (T){
-		Puntero = BuscarPrimeraCoincidencia(T->cursosDictados,Cedula);
+		BuscarTodasLasCoincidencia(T->cursosDictados,Cedula, &Lista);
 		if (Puntero) existe = 1;
-		if (Puntero){
-			printf("\n Cursos del %i: \n",T->ano);
-			ImprimirRegistroAlumnoCursosS(T->cursosDictados,Cedula);
-		}
 		T = T->prox;
+	}
+	if (Lista){
+		printf("\n Cursos del %i: \n",Lista->curso->ano);
+		ImprimirRegistroAlumnoCursosS(Lista,Cedula);
+		existe = 1;
 	}
 	if (!existe){
 		printf("\nEl alumno no esta inscrito en ningun curso registrado\n");
@@ -448,25 +513,29 @@ void ImprimirRecordAcademicoAlumno(){
 }
 
 void InsertarListaCursosScola(CursosS **Cab,CursosS *Nuevo){
-	Nuevo->prox = NULL;
-	if (!(*Cab)) *Cab =Nuevo;
-	else{
-		Nuevo->prox = *Cab;
-		*Cab = Nuevo;
+	if (Nuevo) {
+		Nuevo->prox = NULL;
+		if (!(*Cab)) *Cab =Nuevo;
+		else{
+			Nuevo->prox = *Cab;
+			*Cab = Nuevo;
+		}
 	}
 }
 
 void InsertarListaCursosScabeza(CursosS **Cab,CursosS *Nuevo){
-	Nuevo->prox = NULL;
-	CursosS *T = *Cab;
-	if (!(*Cab)) *Cab =Nuevo;
-	else{
-		while (T->prox) {
-			// prevencion de repetidos
-			if (T->curso->codigo == Nuevo->curso->codigo) return;
-			T = T->prox;
+	if (Nuevo) {
+		Nuevo->prox = NULL;
+		CursosS *T = *Cab;
+		if (!(*Cab)) *Cab =Nuevo;
+		else{
+			while (T->prox) {
+				// prevencion de repetidos
+				if (T->curso->codigo == Nuevo->curso->codigo) return;
+				T = T->prox;
+			}
+			T->prox = Nuevo;
 		}
-		T->prox = Nuevo;
 	}
 }
 
@@ -481,12 +550,13 @@ void BuscarCursosPorNombre(){
 }
 
 CursosS *obtenerCursos(CursosS *Cab,int codigo){
-	CursosS *T = Cab;
+	CursosS *T = Cab,
+			*cursos = NULL;
 	while (T){
-		if (((T->curso)->codMat)==codigo) return T;
+		if (((T->curso)->codMat)==codigo) InsertarListaCursosScola(&cursos, extraerCursosS(T));
 		T = T->prox;
 	}
-	return NULL;
+	return cursos;
 }
 
 void BuscarRepeticionesDeCursos(){
@@ -520,9 +590,10 @@ void BuscarRepeticionesDeCursos(){
 	} while (!MateriaBuscada);
 	while (T){
 		Curso = obtenerCursos(T->cursosDictados,Codigo);
-
-		if ((Curso) && (BuscarAlumnoCursosA(Curso->alumnos,AlumnoBuscado)))
-			InsertarListaCursosScola(&Lista,Curso);
+		while ((Curso) && (BuscarAlumnoCursosA(Curso->alumnos,AlumnoBuscado))) {
+			InsertarListaCursosScola(&Lista,extraerCursosS(Curso));
+			Curso = Curso->prox;			
+		}
 		T = T->prox;
 	}
 	while (Lista)
@@ -582,7 +653,7 @@ CursosA *ubicarListaAlumnos(Curso *C) {
 	if (C) {
 		CursosS *cursos = ubicarIndiceAnual(C->ano)->cursosDictados;
 		while (cursos->prox) {
-			if (cursos->curso == C) break;
+			if (cursos->curso->codigo == C->codigo) break;
 			cursos = cursos->prox;
 		}
 
@@ -634,16 +705,16 @@ void removerIndCurso(Curso *C) {
 
 CursosS *ObtenerCursosS(Curso *Buscado){
 	CursosY *T = IndCurso;
-	CursosS *Lista;
+	CursosS *Lista = NULL, *copia = NULL;
 	while (T){
-		Lista = T->cursosDictados;
-		while(Lista){
-			if (Lista->curso == Buscado) return Lista;
-			Lista = Lista->prox;
+		copia = T->cursosDictados;
+		while(copia){
+			if (copia->curso->codigo == Buscado->codigo) return copia;
+			copia = copia->prox;
 		}
 		T = T->prox;
 	}
-	return NULL;
+	return copia;
 }
 
 void DatosDelCurso(void){
@@ -664,6 +735,7 @@ void DatosDelCurso(void){
 		CursoBuscado = obtenerCursoPorCodigo(Cur,Codigo);
 		if (!CursoBuscado)
 			salir = impSiNo("El curso que busca no existe, ¿Desea intentarlo de nuevo?");
+			if (salir) return;
 	} while(salir);
 	if (CursoBuscado){
 	Encontrado = ObtenerCursosS(CursoBuscado);
@@ -676,11 +748,12 @@ void DatosDelCurso(void){
 
 Curso *BuscarCursoPorCodigoYano(int Codigo,int Ano){
 	Curso *T = Cur;
+	Curso *Lista =NULL;
 	while (T){
-		if ((T->codMat == Codigo) && (T->ano ==Ano)) return T;
+		if ((T->codMat == Codigo) && (T->ano ==Ano)) insertarCurso(&Lista,extraerCurso(T,T->codigo));
 		T = T->prox;
 	}
-	return NULL;
+	return Lista;
 }
 
 CursosA *ubicarAlumnoEnCurso(Curso *C, Alumno *A) {
@@ -700,5 +773,19 @@ CursosS *ubicarCursosEnAno(unsigned short y) {
 	CursosY *anual = ubicarIndiceAnual(y);
 	if (anual) 
 		return anual->cursosDictados;
+	return NULL;
+}
+
+Curso *obtenerCursosDeMateria(Materia *M) {
+	if (M) {
+		Curso *cursos = NULL,
+			  *global = Cur;
+		while (global)  {
+			if ( global->codMat == M->codigo )
+				insertarCurso(&cursos, extraerCurso(global, global->codigo));
+			global = global->prox;
+		}
+		return cursos;
+	}
 	return NULL;
 }

@@ -37,6 +37,7 @@ void printListaMateria(Materia *M, int detalle) {
 Materia *crearMateria() {
 	// declaramos el nuevo Materia a insertar, y un auxiliar para saber si el Materia existe
 	Materia *M = new Materia, *existe = NULL;
+	unsigned short creditos = -1, semestre = -1;
 
 	// solicitamos el nombre del Materia
 	printf("Nombre del Materia: ");
@@ -56,12 +57,24 @@ Materia *crearMateria() {
 	gets_s(M->area);
 
 	// solicitamos el numero de creditos que ocupa la Materia
-	printf("Numero de creditos: ");
-	scanf("%hu%*c", &(M->creditos));
+	do {
+		printf("Numero de creditos (1-6): ");
+		scanf("%hu%*c", &creditos);
+		if (creditos < 1 || creditos > 6) 
+			printf("La cantidad de creditos es invalida.\nIntroduzca un valor entre 1 y 6\n");
+	} while (creditos < 1 || creditos > 6);
+
+	M->creditos = creditos;
 	
+	do {
 	// solicitamos el semestre en el que se debe estar para cursar la Materia
-	printf("Semestre minimo: ");
-	scanf("%hu%*c", &(M->semestre));
+		printf("Semestre: ");
+		scanf("%hu%*c", &semestre);
+		if (semestre < 1 || semestre > 10) 
+			printf("El semestre es invalido.\nIntroduzca un valor entre 1 y 10\n");
+	} while (semestre < 1 || semestre > 10);
+
+	M->semestre = semestre;
 
 	// inicializamos el proximo elemento de este Materia como nulo
 	M->prox = NULL;
@@ -84,7 +97,9 @@ void modificarMateria(Materia **P) {
 	// nada mas actuamos si no tenemos un puntero a nulo
 	if (*P) {
 		// inicializamos el manejador de opciones a 0
-		int opt = -1;
+		int opt = -1, codigo = -1;
+		unsigned short creditos = -1, semestre = -1;
+		Materia *existe = NULL;
 		// salimos cuando la opcion sea 0
 		do {
 			// mostramos el encabezado
@@ -103,8 +118,16 @@ void modificarMateria(Materia **P) {
 			switch (opt) {
 			case 0: break;
 			case 1:
-				printf("Introduzca el nuevo numero de codigo para %s. Actual: %d: ", (*P)->nombre, (*P)->codigo);
-				scanf("%i%*c", &((*P)->codigo));
+				do {
+					printf("Introduzca el nuevo numero de codigo para %s. Actual: %d: ", (*P)->nombre, (*P)->codigo);
+					scanf("%i%*c", &codigo);
+					if (existe = obtenerMateriaPorCodigo(Mat, codigo)) {
+						printf("Error al cambiar el codigo: Ya existe una materia con ese codigo: %s\n", existe->nombre);
+						if (!impSiNo("Desea continuar editando?"))
+							return;
+					}
+					(*P)->codigo = codigo;
+				} while (existe);
 				break;
 			case 2:
 				printf("Introduzca un nuevo nombre para %s: ", (*P)->nombre);
@@ -116,11 +139,27 @@ void modificarMateria(Materia **P) {
 				break;
 			case 4:
 				printf("Introduzca la nueva cantidad de creditos de %s. Actual: %d: ", (*P)->nombre, (*P)->creditos);
-				scanf("%hu%*c", &((*P)->creditos));
+				do {
+					scanf("%hu%*c", &((*P)->creditos));
+					if ( creditos < 1 || creditos > 6 ) {
+						printf("El numero de creditos es invalido.\n La cantidad de creditos debe ser un numero entre 1 y 6");
+						if (!impSiNo("Desea continuar editando?"))
+							return;
+					}
+				} while ( creditos < 1 || creditos > 6 );
+				(*P)->creditos = creditos;
 				break;
 			case 5:
-				printf("Introduzca el nuevo semestre minimo para %s. Actual: %d: ", (*P)->nombre, (*P)->semestre);
-				scanf("%hu%*c", &((*P)->semestre));
+				do {
+					printf("Introduzca el nuevo semestre minimo para %s. Actual: %d: ", (*P)->nombre, (*P)->semestre);
+					scanf("%hu%*c", &semestre);
+					if ( semestre < 1 || semestre > 10 ) {
+						printf("El semestre introducido es invalido.\n El numero de semestre debe estar entre 1 y 10");
+						if (!impSiNo("Desea continuar editando?"))
+							return;
+					}
+				} while ( semestre < 1 || semestre > 10 );
+				(*P)->semestre = semestre;
 				break;
 			default:
 				printf("Opcion no reconocida. Vuelva a intentar\n");
@@ -132,12 +171,25 @@ void modificarMateria(Materia **P) {
 void elimMateria(Materia **P, int codigo) {
 	if (!*P) return; // regresamos si el listado esta vacio
 	Materia *del; // declaramos un auxiliar de eliminacion
+	Curso *C = NULL;
+	int Codigo =0;
 	if ((*P)->codigo == codigo) {
 		// si el codigo coincide con el primer elemento, tenemos que eliminar la cabeza
 		del = *P;
 		*P = (*P)->prox;
-		if ( impSiNo("Seguro que desea eliminar la materia?") )
-			delete del;
+		if ( impSiNo("Seguro que desea eliminar la materia?") ) {
+			C = Cur;
+				while (C) {
+					if ( C->codMat == del->codigo ){
+						Codigo = C->codigo;
+						C = C->prox;
+						elimCurso(&Cur, Codigo);	
+					}
+					else  C = C->prox;
+				}
+				delete del;
+			}
+			
 		return;
 	}
 
@@ -150,8 +202,19 @@ void elimMateria(Materia **P, int codigo) {
 			// si el codigo del proximo en la lista coincide, entonces tenemos que eliminarlo
 			del = M->prox;
 			M->prox = del->prox;
-			if ( impSiNo("Seguro que desea eliminar la materia?") )
+			if ( impSiNo("Seguro que desea eliminar la materia?") ) {
+					C = Cur;
+				while (C) {
+					if ( C->codMat == del->codigo ){
+						Codigo = C->codigo;
+						C = C->prox;
+						elimCurso(&Cur, Codigo);	
+					}
+					else  C = C->prox;
+				}
 				delete del;
+			}
+				
 			return;
 		}
 
@@ -268,7 +331,7 @@ void InformacionHistoricaMateria(void){
 	int Codigo, CantidadCur = 0;
 	float Nota = 0.0f;
 	Materia *MateriaBuscada;
-	CursosS *CursoEncontrado;
+	CursosS *CursoEncontrado = NULL;
 	CursosS *Lista = NULL;
 	PromedioCurso *Prom = new PromedioCurso;
 	Prom->Aprobados = 0;
@@ -287,17 +350,17 @@ void InformacionHistoricaMateria(void){
 			}
 	} while (!MateriaBuscada);
 		while (T){
-			CursoEncontrado = obtenerCursos(T->cursosDictados,Codigo);
-			if (CursoEncontrado) InsertarListaCursosScola(&Lista,CursoEncontrado);
+			InsertarListaCursosScabeza(&CursoEncontrado, obtenerCursos(T->cursosDictados, Codigo));
+			//CursoEncontrado = obtenerCursos(T->cursosDictados,Codigo);
 			T = T->prox;
 		}
-		while(Lista){
+		while(CursoEncontrado){
 			CantidadCur++;
-			CalcularAlumnos(Lista->alumnos,&Prom);
+			CalcularAlumnos(CursoEncontrado->alumnos,&Prom);
 			Nota +=Prom->promedio;
-			if (Prom->promedio == -1 ) printf("\nEl promedio de los alumnos del curso del a%co: %hu, es: No hay notas registradas en este curso\n", 164, (Lista->curso)->ano);
-			else printf("\nEl promedio de los alumnos del curso del a%co: %hu, es: %05.2f\n", 164, (Lista->curso)->ano,Prom->promedio);
-			Lista = Lista->prox;
+			if (Prom->promedio == -1 ) printf("\nEl promedio de los alumnos del curso del a%co: %hu, es: No hay notas registradas en este curso\n", 164, (CursoEncontrado->curso)->ano);
+			else printf("\nEl promedio de los alumnos del curso del a%co: %hu, es: %05.2f\n", 164, (CursoEncontrado->curso)->ano,Prom->promedio);
+			CursoEncontrado = CursoEncontrado->prox;
 		}
 		if(Prom->CantidadAlumnos) printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\nEl promedio de todos los cursos es %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i\n", Prom->CantidadAlumnos, Nota / CantidadCur, Prom->Reprobados, Prom->Retirados);
 		else printf("No hay alumnos registrados en este curso\n");
@@ -334,8 +397,11 @@ void InformacionDeUnaMateria(void){
 		return;
 	}
 	else{
+		while (Buscado) {
 		P = ObtenerCursosS(Buscado);
 		CalcularAlumnos(P->alumnos,&Prom);
+		Buscado = Buscado->prox;
+		}
 		printf("\nLa cantidad total de alumos que han cursado esta materia es: %i\n El promedio de todos los cursos es: %05.2f\nEl numero de reprobados es: %i\nEl numero de retirados es:%i\n",Prom->CantidadAlumnos,Prom->promedio,Prom->Reprobados,Prom->Retirados);
 		system("Pause");
 		}
