@@ -671,9 +671,9 @@ void PrintPromedio(AlumN *Cab){
 	float Promedio = 0.0f;
 	int CantidadMaterias = 0;
 	while (P){
-		CantidadMaterias++;
 		if (P->estatus == 'R') Retiradas++;
 		else {
+			CantidadMaterias++;
 			if (P->nota != -1.0f) Promedio += P->nota;
 			if (P->nota < 10) Reprobadas++;
 		}
@@ -803,7 +803,8 @@ void PrintOrdenAlfabeticoAlumnosApellido(void){
 	Lista = Encontrado->alumnos;
 	OrdenarLista(&Lista); 
 	if (!Lista){
-		printf("\nNo hay alumnos inscritos en este curso");
+		printf("\nNo hay alumnos inscritos en este curso\n");
+		system ("Pause");
 		return;
 	}
 	impCabezado();

@@ -396,7 +396,7 @@ void menuParaConsultasAlumno(void){
 	do {
 		
 		impCabezado();
-		impMenu("¿Que desea consultar sobre un alumno?", 3,
+		impMenu("Que desea consultar sobre un alumno?", 3,
 			"Mostrar su record academico",
 			"Mostrar las veces que curso una materia especifica",
 			"Calcular su promedio y el numero de materias reprobadas y retiradas"
