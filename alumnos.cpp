@@ -727,6 +727,7 @@ void CalcularAlumnos(CursosA *ListaAlumnos,PromedioCurso **CursoPromediado){
 void BuscarNotaMax(CursosS *Cab){
 	CursosS *T = Cab;
 	CursosA *P;
+	if (!T) printf("No hay alumnos con la maxima nota en esta materia");
 	while (T){
 		P = T->alumnos;
 		while (P){
