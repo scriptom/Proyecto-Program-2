@@ -85,6 +85,7 @@ void main()
 	do {
 		
 		impCabezado();
+		printf("Programa desarrollado por Tom%cs El Fakih y Robert Gonz%clez\n", 160, 160);
 		impMenu("Que desea hacer?", 3, "Mantenimiento", "Inscripciones", "Consultas");
 
 		scanf("%i%*c", &opt);
